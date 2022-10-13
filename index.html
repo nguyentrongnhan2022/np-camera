@@ -20,23 +20,41 @@
                 <img src="images/logo.png" alt="site icon">
                 <span class="text-uppercase fw-lighter ms-2">NP Camera</span>
             </a>
-            
-            <div class="order-lg-2 nav-btns ">
-                <button type="button" class="btn position-relative"  style="border:1px solid black; border-radius: 20px;">
-                    <div class="search-box">
-                        <input type="text" class="search-txt" style="border:none;outline: none;" placeholder="Tìm kiếm....">
-                        <a href="" class="search-btn"></a>
-                        <i class="fa fa-search"></i>
+        <div class="search_wrapper nav-btns order-lg-2 me-5">
+            <div class="search" onclick="searchToggle();"> 
+                <i class="fa fa-search"></i>
+            </div>
+            <div class="wrapper">
+                <div class="search_input">
+                    <input type="text"placeholder="Tìm kiếm......" style="margin-left:10px;margin-right:10px;">
+                    <div class="autocom-box">
+                        <li>Máy ảnh Sony A6400</li>
+                        <li>Máy ảnh Sony A7 Mark 3</li>
+                        <li>Ống kính FE 55mm Cz F1.8</li>
+                        <li>Ống kính FE 24-70GM F2.8</li>
                     </div>
-                </button>
+                </div>
+            </div>
+        </div>
+            <div class="order-lg-2 nav-btns me-5">
                 <button type="button" class="btn position-relative">
                     <i class="fa fa-shopping-cart"></i>
                 </button>
-                <button type="button" class="btn position-relative">
-                    <i class="fa fa-user"></i>
-                </button>
             </div>
-
+            <div class="action nav-btns order-lg-2">
+                <div class="profile" onclick="menuToggle();">
+                    <i class="fa fa-user"></i>
+                </div>
+                <div class="action_menu">
+                    <ul>
+                        <li><i class="fa-solid fa-user"></i> <a href="#">Thông tin người dùng</a></li>
+                        <li><i class="fa-solid fa-pen-to-square"></i> <a href="#">Chỉnh sửa thông tin</a></li>
+                        <li><i class="fa-solid fa-gear"></i> <a href="#">Cài đặt</a></li>
+                        <li><i class="fa-solid fa-circle-question"></i> <a href="#">Hỗ trợ</a></li>
+                        <li><i class="fa-solid fa-right-from-bracket"></i> <a href="#">Đăng xuất</a></li>
+                    </ul>
+                </div>
+            </div>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle = "collapse" data-bs-target = "#navMenu">
                 <span class=" navbar-toggler-icon"></span>
             </button>
@@ -93,25 +111,27 @@
                     <h2 class="position-relative d-inline-block ">Product</h2>
                 </div>
                 <div class="row g-0">
-                    <div class="d-flex flex-wrap justify-content-center  filter-button-group" id="select">
+                    <div class="d-flex flex-wrap justify-content-center  filter-button-group">
                         <button type ="button" class="btn m-2 text-dark active-filter-btn" data-filter="*">Tất cả</button>
                         <button type ="button" class="btn m-2 text-dark" data-filter =".best">Máy Ảnh</button>
                         <button type ="button" class="btn m-2 text-dark" data-filter =".feat">Ống kính</button>
-                        <button type ="button" class="btn m-2 text-dark" data-filter =".new">Best Saler</button> 
+                    <section id="select">
                         <button type ="button" class="btn m-2 text-dark" id="LowToHigh">Giá
                             <i class="fa-solid fa-caret-up"></i>
                         </button> 
                         <button type ="button" class="btn m-2 text-dark" id="HighToLow">Giá
                             <i class="fa-solid fa-caret-down"></i>
                         </button> 
+                    </section>
                     </div>
                     
                     <div class="collection-list mt-xl-0 row gx-0 gy-0">
                         <div class="collection-list__list col-md-6 col-lg-4 col-xl-3 p-5 best">
-                            <div class="collection-img" >
+                            <a href="product.html" style="text-decoration:none;" class=" text-dark">
+                            <div class="collection-img">
                                 <img src="images/SonyA6000.png" class="collection-img_img">
                             </div>
-                            <div class="collection-list_price text-center">
+                            <div class="collection-list_price text-center" data-price="">
                                 <div class="rating mt-3">
                                     <span class="text-primary"><i class="fas fa-star"></i></span>
                                     <span class="text-primary"><i class="fas fa-star"></i></span>
@@ -123,8 +143,10 @@
                                 <span class="collection-price fw-bold" data-price="8.000.000">$ 8.000.000 VNĐ</span>
                                 <a href="#" class="btn btn-primary mt-3">Thêm vào giỏ hàng</a>
                             </div>
+                            </a>
                         </div>
                         <div class="collection-list__list col-md-6 col-lg-4 col-xl-3 p-5 best">
+                            <a href="product.html" style="text-decoration:none;" class=" text-dark">
                             <div class="collection-img">
                                 <img src="images/SonyA6300.png" class="collection-img_img">
                             </div>
@@ -140,8 +162,10 @@
                                 <span class="collection-price fw-bold" data-price="12.000.000">$ 12.000.000 VNĐ</span>
                                 <a href="#" class="btn btn-primary mt-3">Thêm vào giỏ hàng</a>
                             </div>
+                            </a>
                         </div>
-                        <div class="collection-list__list col-md-6 col-lg-4 col-xl-3 p-5 best new">
+                        <div class="collection-list__list col-md-6 col-lg-4 col-xl-3 p-5 best">
+                            <a href="product.html" style="text-decoration:none;" class=" text-dark">
                             <div class="collection-img">
                                 <img src="images/A6400.png" class="collection-img_img">
                             </div>
@@ -157,8 +181,10 @@
                                 <span class="collection-price fw-bold"data-price="18.000.000">$ 18.000.000 VNĐ</span>
                                 <a href="#" class="btn btn-primary mt-3">Thêm vào giỏ hàng</a>
                             </div>
+                            </a>
                         </div>
                         <div class="col-md-6 col-lg-4 col-xl-3 p-5 best">
+                            <a href="product.html" style="text-decoration:none;" class=" text-dark">
                             <div class="collection-img">
                                 <img src="images/A6500.png" class="collection-img_img">
                             </div>
@@ -174,8 +200,10 @@
                                 <span class="collection-price fw-bold"data-price="15.000.000">$ 15.000.000 VNĐ</span>
                                 <a href="#" class="btn btn-primary mt-3">Thêm vào giỏ hàng</a>
                             </div>
+                            </a>
                         </div>
                         <div class="col-md-6 col-lg-4 col-xl-3 p-5 best">
+                            <a href="product.html" style="text-decoration:none;" class=" text-dark">
                             <div class="collection-img">
                                 <img src="images/SonyA72.png" class="collection-img_img">
                             </div>
@@ -191,8 +219,10 @@
                                 <span class="collection-price fw-bold"data-price="14.000.000">$ 14.000.000 VNĐ</span>
                                 <a href="#" class="btn btn-primary mt-3">Thêm vào giỏ hàng</a>
                             </div>
+                            </a>
                         </div>
-                        <div class="col-md-6 col-lg-4 col-xl-3 p-5 best new">
+                        <div class="col-md-6 col-lg-4 col-xl-3 p-5 best">
+                            <a href="product.html" style="text-decoration:none;" class=" text-dark">
                             <div class="collection-img">
                                 <img src="images/SonyA73.png" class="collection-img_img">
                             </div>
@@ -208,8 +238,10 @@
                                 <span class="collection-price fw-bold"data-price="32.000.000">$ 32.000.000 VNĐ</span>
                                 <a href="#" class="btn btn-primary mt-3">Thêm vào giỏ hàng</a>
                             </div>
+                            </a>
                         </div>
                         <div class="col-md-6 col-lg-4 col-xl-3 p-5 feat">
+                            <a href="product.html" style="text-decoration:none;" class=" text-dark">
                             <div class="collection-img">
                                 <img src="images/FE85.png" class="collection-img_img">
                             </div>
@@ -225,8 +257,10 @@
                                 <span class="collection-price fw-bold"data-price="10.000.000">$ 10.000.000 VNĐ</span>
                                 <a href="#" class="btn btn-primary mt-3">Thêm vào giỏ hàng</a>
                             </div>
+                            </a>
                         </div>
                         <div class="col-md-6 col-lg-4 col-xl-3 p-5 feat">
+                            <a href="product.html" style="text-decoration:none;" class=" text-dark">
                             <div class="collection-img">
                                 <img src="images/Sony50mm.png" class="collection-img_img">
                             </div>
@@ -242,8 +276,10 @@
                                 <span class="collection-price fw-bold"data-price="4.000.000">$ 4.000.000 VNĐ</span>
                                 <a href="#" class="btn btn-primary mt-3">Thêm vào giỏ hàng</a>
                             </div>
+                            </a>
                         </div>
                         <div class="col-md-6 col-lg-4 col-xl-3 p-5 feat">
+                            <a href="product.html" style="text-decoration:none;" class=" text-dark">
                             <div class="collection-img">
                                 <img src="images/Sony55.png" class="collection-img_img">
                             </div>
@@ -259,8 +295,10 @@
                                 <span class="collection-price fw-bold"data-price="18.500.000">$ 18.500.000 VNĐ</span>
                                 <a href="#" class="btn btn-primary mt-3">Thêm vào giỏ hàng</a>
                             </div>
+                            </a>
                         </div>
                         <div class="col-md-6 col-lg-4 col-xl-3 p-5 feat">
+                            <a href="product.html" style="text-decoration:none;" class=" text-dark">
                             <div class="collection-img">
                                 <img src="images/SEL50F18.png" class="collection-img_img">
                             </div>
@@ -276,8 +314,10 @@
                                 <span class="collection-price fw-bold"data-price="4.000.000">$ 4.000.00 VNĐ</span>
                                 <a href="#" class="btn btn-primary mt-3">Thêm vào giỏ hàng</a>
                             </div>
+                            </a>
                         </div>
-                        <div class="col-md-6 col-lg-4 col-xl-3 p-5 best new">
+                        <div class="col-md-6 col-lg-4 col-xl-3 p-5 best">
+                            <a href="product.html" style="text-decoration:none;" class=" text-dark">
                             <div class="collection-img">
                                 <img src="images/SonyZV1.png" class="collection-img_img">
                             </div>
@@ -293,8 +333,10 @@
                                 <span class="collection-price fw-bold"data-price="17.000.000">$ 17.000.000 VNĐ</span>
                                 <a href="#" class="btn btn-primary mt-3">Thêm vào giỏ hàng</a>
                             </div>
+                            </a>
                         </div>
-                        <div class="col-md-6 col-lg-4 col-xl-3 p-5 feat new">
+                        <div class="col-md-6 col-lg-4 col-xl-3 p-5 feat">
+                            <a href="product.html" style="text-decoration:none;" class=" text-dark">
                             <div class="collection-img">
                                 <img src="images/FE2470.png" class="collection-img_img">
                             </div>
@@ -310,6 +352,7 @@
                                 <span class="collection-price fw-bold" data-price="14.000.000">$ 40.000.000 VNĐ</span>
                                 <a href="#" class="btn btn-primary mt-3">Thêm vào giỏ hàng</a>
                             </div>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -327,6 +370,7 @@
                 </div>
             <div class="special-list row g-0">
                 <div class="col-md-6 col-lg-4 col-xl-3 p-5">
+                    <a href="product.html" style="text-decoration:none;" class=" text-dark">
                     <div class="special-img">
                                 <img src="images/A6400.png" class="special-img_img" style="height: 210px; ;width: 200px;">
                     </div>
@@ -342,8 +386,10 @@
                                 <span class="fw-bold d-block"data-price="18.000.000">$ 18.000.000 VNĐ</span>
                                 <a href="#" class="btn btn-primary mt-3">Thêm vào giỏ hàng</a>
                         </div>  
+                        </a>
                 </div> 
                 <div class="col-md-6 col-lg-4 col-xl-3 p-5">
+                    <a href="product.html" style="text-decoration:none;" class=" text-dark">
                     <div class="special-img">
                                 <img src="images/Sony55.png" class="special-img_img" style="height: 210pxpx;width: 200px;">
                     </div>
@@ -358,9 +404,11 @@
                                 <p class="text-capitalize mt-1 mb-1">FE 55mm cz F1.8</p>
                                 <span class="fw-bold d-block"data-price="18.500.000">$ 18.500.000 VNĐ</span>
                                 <a href="#" class="btn btn-primary mt-3">Thêm vào giỏ hàng</a>
-                        </div>  
+                        </div>
+                        </a>  
                 </div>  
                 <div class="col-md-6 col-lg-4 col-xl-3 p-5">
+                    <a href="product.html" style="text-decoration:none;" class=" text-dark">
                     <div class="special-img">
                                 <img src="images/SonyA73.png" class="special-img_img" style="height:210px;width: 200px;">
                     </div>
@@ -376,8 +424,10 @@
                                 <span class="fw-bold d-block"data-price="32.000.000">$ 32.000.000 VNĐ</span>
                                 <a href="#" class="btn btn-primary mt-3">Thêm vào giỏ hàng</a>
                         </div>  
+                        </a>
                 </div>  
                 <div class="col-md-6 col-lg-4 col-xl-3 p-5">
+                    <a href="product.html" style="text-decoration:none;" class=" text-dark">
                     <div class="special-img">
                                 <img src="images/FE2470.png" class="special-img_img" style="height:210px;width: 200px;">
                     </div>
@@ -392,7 +442,8 @@
                                 <p class="text-capitalize mt-1 mb-1">FE 24-70GM F2.8</p>
                                 <span class="fw-bold d-block"data-price="40.000.000">$ 40.000.000 VNĐ</span>
                                 <a href="#" class="btn btn-primary mt-3">Thêm vào giỏ hàng</a>
-                        </div>  
+                        </div> 
+                        </a> 
                 </div>     
             </div>
         </div> 
@@ -501,7 +552,6 @@
     </footer>
     <!--end of footer-->
 
-
     <!--jquery-->
     <script src="JS/jquery-3.6.1.js"></script>
     <!--isotope js-->
@@ -511,5 +561,6 @@
     <!--custom js-->
     <script src="JS/script.js"></script>
     <script src="JS/index.js"></script>
+    <script src="JS/suggestions.js"></script>
 </body>
 </html>
