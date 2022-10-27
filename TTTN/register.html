@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NP Camera</title>
+   <!-- Owl-carousel CDN -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha256-UhQQ4fxEeABh4JrcmAJ1+16id/1dnlOEVCFOxDef9Lw=" crossorigin="anonymous" />
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" integrity="sha256-kksNxjDRxd/5+jGurZUJd1sdR2v+ClrCl3svESBaJqw=" crossorigin="anonymous" />
+   <!--font awesome cdn-->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+   <!--bootstrap css-->
+   <link rel="stylesheet" href="bootstrap-5.0.2-dist/css/bootstrap.min.css">
+   <!--custom css-->
+   <link rel="stylesheet" href="css/main.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .hero {
+            display: flex;
+            justify-content: center;
+            place-items: center;
+            height: 100%;
+            width: 100%;
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url("./images/BackGround.jpg");
+            background-position: center;
+            background-size: cover;
+            position: absolute;
+        }
+        .form-box {
+            border-radius: 15px;
+            width: 380px;
+            height: 520px;
+            position: relative;
+            background: #FFFF;
+            padding: 5px;
+            overflow: hidden;
+        }
+        .button-box {
+            width: 280px;
+            margin: 35px auto;
+            position: relative;
+            border-radius: 30px;
+        }
+        .toggle-btn {
+            padding: 10px 30px;
+            cursor: pointer;
+            background: transparent;
+            border: 0;
+            outline: none;
+            position: relative;
+        }
+        #btn {
+            top: 0;
+            left: 0;
+            position: absolute;
+            width: 140px;
+            height: 100%;
+            background: linear-gradient(to right, #e0c3fc, #8ec5fc);
+            border-radius: 30px;
+            transition: .5s;
+        }
+        .input-group {
+            top: 40px;
+            position: absolute;
+            width: 280px;
+            transition: .5s;
+        }
+        .input-field {
+            width: 100%;
+            padding: 10px 0;
+            margin: 5px 0;
+            border-top: 0;
+            border-right: 0;
+            border-bottom: 1px solid #999;
+            border-left: 0;
+            outline: none;
+            background: transparent;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px 30px;
+            cursor: pointer;
+            display: block;
+            margin: auto;
+            background: linear-gradient(to right, #e0c3fc, #8ec5fc);
+            border: 0;
+            outline: none;
+            border-radius: 30px!important;
+        }
+        span {
+            color: #777;
+            font-size: 12px;
+        }
+        #register {
+            left: 50px;
+        }
+    </style>
+    </head>
+    <body>
+    <div class="hero">
+        <div class="form-box">
+            <form id="register" class="input-group py-1">
+                <img src="images/logo.png" alt="site icon" style="margin-left:25px ;">
+                <h3 class="fw-lighter ms-2 mt-3">NP Camera</h3>
+                <input type="text" class="input-field mt-2" placeholder="First name" style="font-size:13px;" required>
+                <input type="text" class="input-field mt-2" placeholder="Last name"style="font-size:13px;" required>
+                <input type="text" class="input-field mt-2" placeholder="Email/User name"style="font-size:13px;" required>
+                <input type="password" id="id_password_1" class="input-field mt-2" placeholder="Password" style="font-size:13px;"required>
+                <i class="far fa-eye" id="togglePassword_1" style="margin-left: -30px; cursor: pointer; margin-top:22px; color: #999; font-size: 13px;"></i>
+                <input type="password" id="id_password_2" class="input-field mt-2" placeholder="Confirm password"style="font-size:13px;" required>
+                <i class="far fa-eye" id="togglePassword_2" style="margin-left: -30px; cursor: pointer; margin-top:22px; color: #999; font-size: 13px;"></i>
+                <input type="checkbox" class="me-2 mt-2"><span class="py-2 mt-2">Tôi đồng ý với các điều khoản và dịch vụ</span>
+                <button type="submit" class="submit-btn mt-2">Đăng ký</button>
+            </form> 
+        </div>  
+    </div>
+    <!--jquery-->
+    <script src="JS/jquery-3.6.1.js"></script>
+    <!--isotope js-->
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.js"></script>
+    <!-- Owl Carousel Js file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha256-pTxD+DSzIwmwhOqTFN+DB+nHjO4iAsbgfyFq5K5bcE0=" crossorigin="anonymous"></script>
+    <!--bootstrap js-->
+    <script src="bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
+    <!--custom js-->
+    <script src="JS/script.js"></script>
+    <script src="JS/index.js"></script>
+    <script src="JS/suggestions.js"></script>
+</body>
+</html>
