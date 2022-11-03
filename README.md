@@ -9,7 +9,7 @@
       - Chạy: <b>composer install</b> để cài đặt các phần còn thiếu của framework <br>
       - Tạo: file <b>.env</b> bằng cách copy file <b>.env.example</b> và sửa tên lại <br>
       - Chạy: <b>php artisan key:generate</b> để tạo APP_KEY trong file <b>.env</b> <br>
-      - Thay đổi <b>DB_DATABASE</b> thành <b>SunnyFlowerShop</b> <br>
+      - Thay đổi <b>DB_DATABASE</b> thành <b>NPCamera</b> <br>
       - Chạy: <b>php artisan migrate</b> hoặc <b>php artisan migrate --seed</b> để tạo dữ liệu seed kèm theo database <br>
       - Nếu trong quá trình chạy migrate gặp vấn đề mà muốn refresh lại thì chỉ cần thêm <b>:refresh</b> hoặc <b>:fresh</b> ở phía sau <b>....migrate...</b> là được.<br>
       - Về phần ảnh ở local (được lưu trong storage) thì cần phải chạy thêm lệnh <b>php artisan storage:link</b> để tạo <b>shortcut</b> trong thư mục public.<br>
