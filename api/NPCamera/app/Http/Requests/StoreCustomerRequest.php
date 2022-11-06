@@ -40,16 +40,16 @@ class StoreCustomerRequest extends FormRequest
                 "required",
                 "email",
             ],
-            "avatar" => [
-                // "file",
-                // "image"
-            ],
             "password" => [
                 "required",
                 "string",
                 "min:6",
                 "max:24",
             ],
+            "subscribed" => [
+                "required",
+                "boolean",
+            ]
             // "phoneNumber" => [
             //     "required",
             //     "string",
