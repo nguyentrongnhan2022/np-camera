@@ -36,7 +36,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // ***** Admin ***** \\
-// Route::get("/admin/setup", [AdminAuthController::class, "setup"]);
+Route::get("/admin/setup", [AdminAuthController::class, "setup"]);
 Route::post("/admin/login", [AdminAuthController::class, "login"]);
 Route::get("/admin/retrieveToken", [AdminAuthController::class, "retrieveToken"]);
 Route::middleware("auth:sanctum")->group(function () {
@@ -46,6 +46,7 @@ Route::middleware("auth:sanctum")->group(function () {
         Route::get("/profile", [AdminAuthController::class, "profile"]);
         Route::put("/update", [AdminAuthController::class, "update"]);
         Route::put("/avatar/upload", [AdminAuthController::class, "upload"]);
+        Route::delete("/avatar/destroy", [AdminAuthController::class, "destroyAvatar"]);
         Route::post("/logout", [AdminAuthController::class, "logout"]);
     });
 
@@ -77,6 +78,7 @@ Route::middleware("auth:sanctum")->group(function () {
             Route::put("{customer}/update", [CustomerController::class, "updateValue"]); // Update information for specific customer from admin site
             Route::delete("/{customer}/disable={state}", [CustomerController::class, "disable"]); // Disable customer account
             Route::put("{customer}/avatar/upload", [CustomerController::class, "upload"]);
+            Route::delete("{customer}/avatar/destroy", [CustomerController::class, "destroyAvatar"]);
 
             // Address from User info
             Route::get("/{customer}/addresses", [AddressCustomerController::class, "index"]);
@@ -195,6 +197,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // Route::put("/update_og", [UserAuthController::class, "update"]); // Update user information
         Route::put("/update", [UserAuthController::class, "updateValue"]); // Update user information (no restrict)
         Route::put("/avatar/upload", [UserAuthController::class, "upload"]);
+        Route::delete("/avatar/destroy", [UserAuthController::class, "destroyAvatar"]);
 
         // Create-Read-Update(Reduce quantity)-Delete Proudct from cart
         Route::get("/cart", [CartController::class, "index"]);

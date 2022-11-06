@@ -20,6 +20,42 @@ class AdminAuthController extends Controller
         $this->middleware("auth:sanctum", ["except" => ["setup", "login", "retrieveToken"]]);
     }
 
+    public function setup()
+    {
+        $admin = Admin::where("email", "=", "admin@email.com")->exists();
+        $superAdmin = Admin::where("email", "=", "sadmin@email.com")->exists();
+
+        if ($admin && $superAdmin) {
+            return response()->json([
+                "success" => false,
+                "errors" => "Admin and Super Admin account have already created"
+            ]);
+        }
+
+        $data = [
+            'user_name' => 'admin',
+            'email' => 'admin@email.com',
+            'password' => Hash::make('123'),
+            'level' => '0',
+        ];
+
+        AdminAuth::create($data);
+
+        $data = [
+            'user_name' => 'Super Admin',
+            'email' => 'sadmin@email.com',
+            'password' => Hash::make('123'),
+            'level' => '1',
+        ];
+
+        AdminAuth::create($data);
+
+        return response()->json([
+            "success" => true,
+            "message" => "Created Admin and Super Admin account successfully"
+        ]);
+    }
+
     public function login(Request $request)
     {
         if (!Auth::guard("admin")->attempt(['email' => $request->email, 'password' => $request->password])) {
@@ -148,7 +184,13 @@ class AdminAuthController extends Controller
 
     public function profile(Request $request)
     {
-        return $request->user();
+        return response()->json([
+            "userName" => $request->user()->user_name,
+            "email" => $request->user()->email,
+            "avatar" => $request->user()->avatar,
+            "defaultAvatar" => $request->user()->default_avatar,
+            "level" => $request->user()->level
+        ]);
     }
 
     // Use when user first enter website (Admin site)
@@ -171,53 +213,10 @@ class AdminAuthController extends Controller
         ]);
     }
 
-    /** UPLOAD AVATAR **/
-    public function moveAndRenameImageName($request)
+    public function upload(Request $request)
     {
-        $user_name = $request->userName ?? $request->user()->user_name;
-
-        $destination = "avatars/admin/" . time() . "_" . $request->user()->id;
-
-        // Delete all image relate to this product first before put new image in public file
-        $check = Storage::disk('public')->deleteDirectory($destination);
-        $oldPath = Storage::disk("public")->putFile($destination, $request->avatar);
-
-        /** 
-         * These below code basically did this:
-         * - Create new image name through explode function
-         * - Create new destination image (in case if needed in future)
-         * - Then move and rename old existed image to new (old) existed name image
-         */
-        $imageName = explode("/", $oldPath);
-        $imageType = explode('.', end($imageName));
-
-        $newImageName = time() . "_" . $request->user()->id . "." . end($imageType);
-        $newDestination = "";
-
-        for ($i = 0; $i < sizeof($imageName) - 1; $i++) {
-            if (rtrim($newDestination) === "") {
-                $newDestination = $imageName[$i];
-                continue;
-            }
-            $newDestination = $newDestination . "/" . $imageName[$i];
-        }
-
-        $newDestination = $newDestination . "/" . $newImageName;
-
-        // $checkPath return True/ False value
-        $checkPath = Storage::disk("public")->move($oldPath, $destination . "/" . $newImageName);
-
-        // Check existend Path (?)
-        if (!$checkPath) {
-            return false;
-        }
-
-        return $newImageName;
-    }
-
-    public function upload(Request $request) {
         $data = Validator::make($request->all(), [
-            // "avatar" => "required|file|image"
+            "avatar" => "required|string"
         ]);
 
         if ($data->fails()) {
@@ -238,18 +237,7 @@ class AdminAuthController extends Controller
         }
 
         $admin = $query->first();
-
-        // If in column value is not default then proceed to delete old value in order to put new one in
-        if ($admin->avatar !== "admin_default.png") {
-            $image = explode('.', $admin->avatar);
-            $dir = "avatars/admin/" . $image[0];
-
-            // Delete all old file before add new one
-            Storage::disk('public')->deleteDirectory($dir);
-        }
-
-        $newImageName = $this->moveAndRenameImageName($request);
-        $admin->avatar = $newImageName;
+        $admin->avatar = $request->avatar;
 
         $result = $admin->save();
 
@@ -260,14 +248,31 @@ class AdminAuthController extends Controller
                 "errors" => "An unexpected error has occurred"
             ]);
         }
-        
+
         return response()->json([
             "success" => true,
             "message" => "Uploaded avatar successfully"
         ]);
     }
 
-    public function destroyAvatar() {
-        // Delete already existed (not default value) to default value (avatar)
+    public function destroyAvatar(Request $request)
+    {
+        $admin = Admin::find($request->user()->id);
+
+        $admin->avatar = null;
+        $result = $admin->save();
+
+        // If result is false, that means save process has occurred some issues
+        if (!$result) {
+            return response()->json([
+                'success' => false,
+                "errors" => "An unexpected error has occurred"
+            ]);
+        }
+
+        return response()->json([
+            "success" => true,
+            "message" => "Remove avatar successfully"
+        ]);
     }
 }

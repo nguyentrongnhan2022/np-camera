@@ -20,8 +20,9 @@ class CustomerOverviewResource extends JsonResource
             "firstName" => $this->first_name,
             "lastName" => $this->last_name,
             "avatar" => $this->avatar,
+            "default_avatar" => $this->default_avatar,
             "email" => $this->email,
-            "phoneNumber" => $this->phone_number
+            "subscribed" => $this->subscribed
         ];
     }
 }
