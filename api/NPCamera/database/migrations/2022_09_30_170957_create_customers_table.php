@@ -24,7 +24,6 @@ return new class extends Migration
             // this "default_avatar" column is temporary
             $table->string("default_avatar")->default("https://i.kym-cdn.com/photos/images/facebook/001/921/416/50b");
             // $table->string("phone_number");
-            $table->boolean("subscribed")->comment("SubscribeValueEnum");
             $table->boolean("disabled")->nullable()->comment("Default value is NULL, 0 for disable");
             // $table->rememberToken();
             $table->timestamps();
