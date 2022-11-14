@@ -46,10 +46,6 @@ class StoreCustomerRequest extends FormRequest
                 "min:6",
                 "max:24",
             ],
-            "subscribed" => [
-                "required",
-                "boolean",
-            ]
             // "phoneNumber" => [
             //     "required",
             //     "string",
