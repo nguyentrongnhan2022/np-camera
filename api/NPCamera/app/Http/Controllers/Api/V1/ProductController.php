@@ -87,7 +87,8 @@ class ProductController extends Controller
             ]);
         }
 
-        $filtered = $request->except(['deletedAt', "percentSale"]);
+        $filtered = $request->except(["percentSale"]);
+        $filtered['percent_sale'] = $request->percent_sale ?? 0; // Just in case percent_sale doesn't get filled
 
         $data = Product::create($filtered);
 
@@ -123,7 +124,7 @@ class ProductController extends Controller
     {
         // Main Data use for blueprint
         $bulk = collect($request->all())->map(function ($arr, $key) {
-            return Arr::except($arr, ["category", "percentSale", "deletedAt"]);
+            return Arr::except($arr, ["category", "percentSale"]);
         });
 
         // Data use for searching in category table to insert to intermediate (category_product) table - $data is an array
@@ -244,7 +245,7 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, $productId)
     {
-        $data = $request->except(['category', 'deletedAt', "percentSale"]);
+        $data = $request->except(['category', "percentSale"]);
 
         // Checking Product ID
         $product = Product::find($productId);
@@ -368,6 +369,18 @@ class ProductController extends Controller
 
     public function destroyCategory(Category $category, Product $product)
     {
+        $count = DB::table("category_product")
+            ->where("product_id", "=", $product->id)
+            ->get()
+            ->count();
+
+        if ($count === 1) {
+            return response()->json([
+                "success" => false,
+                "errors" => "Can't delete all categories from product (remain category left from this product: 1)"
+            ]);
+        }
+
         $result = $product->categories()->detach($category);
 
         if (empty($result)) {

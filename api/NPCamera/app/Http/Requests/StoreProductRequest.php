@@ -41,9 +41,8 @@ class StoreProductRequest extends FormRequest
                 "integer",
             ],
             "percentSale" => [
-                "required",
                 "integer",
-                "min:1",
+                "min:0",
                 "max:100",
             ],
             "img" => [
@@ -68,7 +67,6 @@ class StoreProductRequest extends FormRequest
         $this->merge([
             // 'category_id' => $this->categoryId,
             'percent_sale' => $this->percentSale,
-            'deleted_at' => $this->deletedAt,
         ]);
     }
 }

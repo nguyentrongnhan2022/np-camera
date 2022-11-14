@@ -31,7 +31,6 @@ class UserAuthController extends Controller
             "email" => "required|email",
             "password" => "required|min:6|max:24",
             "confirmPassword" => "required|string",
-            "subscribed" => "required|boolean"
         ]);
 
         if ($data->fails()) {
@@ -66,7 +65,6 @@ class UserAuthController extends Controller
                 'last_name' => $request->lastName,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'subscribed' => $request->subscribed,
             ]);
 
             // token abilities will be detemined later - i mean will be consider to be deleted or not
@@ -145,7 +143,6 @@ class UserAuthController extends Controller
                 "email" => $customer->email,
                 "avatar" => $customer->avatar,
                 "defaultAvatar" => $customer->default_avatar,
-                "subscribed" => $customer->subscribed,
             ]
         ]);
     }
@@ -228,7 +225,6 @@ class UserAuthController extends Controller
             "lastName" => "string|min:2|max:50",
             "email" => "email",
             "password" => "string|min:6|max:24",
-            "subscribed" => "boolean"
         ]);
 
         if ($data->fails()) {
@@ -273,7 +269,6 @@ class UserAuthController extends Controller
         $customer_get['first_name'] = $request->firstName ?? $customer_get['first_name'];
         $customer_get['last_name'] = $request->lastName ?? $customer_get['last_name'];
         $customer_get['email'] = $request->email ?? $customer_get['email'];
-        $customer_get['subscribed'] = $request->subscribed ?? $customer_get['subscribed'];
 
         /* Check password and avatar first */
         // Create check for password
@@ -314,8 +309,8 @@ class UserAuthController extends Controller
 
         return response()->json([
             "success" => true,
-            "token" => $request->bearerToken() ?? null,
-            "tokenType" => "Bearer Token"
+            "token" => $request->bearerToken(),
+            "tokenType" => "Bearer Token",
         ]);
     }
 
