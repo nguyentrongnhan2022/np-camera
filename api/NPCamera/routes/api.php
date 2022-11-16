@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Api\UserAuthController;
 use App\Http\Controllers\Api\AdminAuthController;
+use App\Http\Controllers\Api\V1\AddressAdminController;
 use App\Http\Controllers\Api\V1\AddressController;
 use App\Http\Controllers\Api\V1\AddressCustomerController;
+use App\Http\Controllers\Api\V1\AdminController;
 use App\Http\Controllers\Api\V1\CartController;
 use App\Http\Controllers\Api\V1\CartAdminController;
 use App\Http\Controllers\Api\V1\CategoryController;
@@ -46,7 +48,8 @@ Route::get("/admin/retrieveToken", [AdminAuthController::class, "retrieveToken"]
 Route::middleware("auth:sanctum")->group(function () {
 
     // Route for admin
-    Route::group(["prefix" => "admin"], function() {
+    Route::group(["prefix" => "admin"], function () {
+        Route::get("/userInfo", [AdminAuthController::class, "userInfo"]);
         Route::get("/dashboard", [AdminAuthController::class, "dashboard"]);
         Route::get("/profile", [AdminAuthController::class, "profile"]);
         Route::put("/update", [AdminAuthController::class, "update"]);
@@ -66,6 +69,7 @@ Route::middleware("auth:sanctum")->group(function () {
             Route::put('/{id}/edit', [ProductController::class, "update"]); // Update detail of a specific product
             Route::delete('/destroy/category={category}&product={product}', [ProductController::class, "destroyCategory"]); // Delete a category from product
             Route::delete('/{id}/destroy={state}', [ProductController::class, "destroy"]); // (Soft) Delete product from database
+            Route::delete('/destroyBulk={state}', [ProductController::class, "destroyBulk"]); // (Soft) Delete product from database
             /** Need to add fucntion
              * Adjust products value function for each products
              * Favourite - Still figure this one out
@@ -80,7 +84,14 @@ Route::middleware("auth:sanctum")->group(function () {
          * Update (low level) admin information
          * Delete (or Soft ?) (low level) admin account
          */
-    
+        Route::group(['prefix' => "admins"], function () {
+            Route::get("/", [AdminController::class, "index"]);
+            Route::post("/create", [AdminController::class, "store"]);
+            Route::get("/{admin}", [AdminController::class, "show"]);
+            Route::put("/{admin}/update", [AdminController::class, "update"]);
+            Route::delete("/{admin}/delete", [AdminController::class, "destroy"]);
+        });
+
         // Route for User
         Route::group(['prefix' => "users"], function () {
             // User info
@@ -88,7 +99,7 @@ Route::middleware("auth:sanctum")->group(function () {
             Route::get("/{customer}", [CustomerController::class, "show"]); // Show detail information from specific customer
             Route::post("/create", [CustomerController::class, "store"]); // Create account from admin site
             Route::put("{customer}/update_og", [CustomerController::class, "update"]); // Update information for specific customer from admin site
-            Route::put("{customer}/update", [CustomerController::class, "updateValue"]); // Update information for specific customer from admin site
+            // Route::put("{customer}/update", [CustomerController::class, "updateValue"]); // Update information for specific customer from admin site
             Route::delete("/{customer}/disable={state}", [CustomerController::class, "disable"]); // Disable customer account
             Route::put("{customer}/avatar/upload", [CustomerController::class, "upload"]);
             Route::delete("{customer}/avatar/destroy", [CustomerController::class, "destroyAvatar"]);
@@ -122,39 +133,45 @@ Route::middleware("auth:sanctum")->group(function () {
          * Create-Update-(Soft)Delete function for each orders from admin site
          * Update state for orders
          */
-        Route::group(['prefix' => 'orders'], function() {
-            Route::get("/", [OrderAdminController::class, "all"]);
+        Route::group(['prefix' => 'orders'], function () {
+            Route::get("/", [OrderAdminController::class, "index"]);
+            Route::get("/{order}", [OrderAdminController::class, "show"]);
+            Route::put("/{order}/update/status={state}", [OrderAdminController::class, "updateStatus"]);
+            Route::delete("/{order}/destroy={state}", [OrderAdminController::class, "destroy"]);
         });
-    
+
         /** Address
          * Overview addresses
          * Detail address from which customer
          * Create-Update-Delete Address from admin site
          */
-        Route::group(['prefix' => 'addresses'], function() {
-            Route::get("/", [AddressCustomerController::class, "all"]);
+        Route::group(['prefix' => 'addresses'], function () {
+            Route::get("/", [AddressAdminController::class, "index"]);
+            Route::get("/{address}", [AddressAdminController::class, "show"]);
+            // Update Address ??
+            Route::delete("/{address}/destroy", [AddressAdminController::class, "destroy"]);
         });
-    
+
         /** Category
          * Overview category
          * Detail category and its appearance in which products
          * Create-Update-(Soft)Delete fucntion for each categories from admin site
          */
-        Route::group(['prefix' => 'categories'], function() {
+        Route::group(['prefix' => 'categories'], function () {
             Route::get("/", [CategoryController::class, "index"]);
             Route::get("/{id}", [CategoryController::class, "show"]);
             Route::post("/create", [CategoryController::class, "store"]);
             Route::put("/{id}/update", [CategoryController::class, "update"]);
             Route::delete("/{id}/destroy", [CategoryController::class, "destroy"]);
         });
-    
+
         /** Voucher
          * Overview all vouchers has been created so far
          * Filter for vouhcer_expired_date (Maybe for front-end side)
          * Detail for its vouhcer and its appearance in which orders
          * Create-Update-(Soft)Delete function for each vouchers
          */
-        Route::group(['prefix' => 'vouchers'], function() {
+        Route::group(['prefix' => 'vouchers'], function () {
             Route::get("/", [VoucherController::class, "index"]);
             Route::get("/{id}", [VoucherController::class, "show"]);
             Route::post("/create", [VoucherController::class, "store"]);
@@ -163,11 +180,12 @@ Route::middleware("auth:sanctum")->group(function () {
         });
 
         /** Feedback
-         * Overview feedback
          * Create-Update-Delete feedback from admin site (?)
          */
-        Route::group(['prefix' => 'feedbacks'], function() {
+        Route::group(['prefix' => 'feedbacks'], function () {
             Route::get("/", [FeedBackAdminController::class, "all"]);
+            Route::get("/{id}", [FeedBackAdminController::class, "show"]);
+            // Delete Feedback ??
         });
 
         /** Cart
@@ -175,39 +193,38 @@ Route::middleware("auth:sanctum")->group(function () {
          * Detail cart from a specific customers
          * Update-Delete Cart (?)
          */
-        Route::group(['prefix' => 'carts'], function() {
+        Route::group(['prefix' => 'carts'], function () {
             Route::get("/", [CartAdminController::class, "all"]);
             // Check state before show (to determine whether it was viewed from admin POV or Customer POV)
             Route::get("/{id}", [CartAdminController::class, "index"]);
             Route::delete("/{id}/remove/{productId}", [CartAdminController::class, "removedProduct"]);
             Route::delete("/{id}/empty", [CartAdminController::class, "emptyCart"]);
             Route::put("/{id}/update", [CartAdminController::class, "update"]);
-        });     
-    
+        });
+
         /** Email
          * Manage Send Email function
          * Manage email template
          * Create forgot password function
-         */
-    
-        /** Query for products appearance in front page
-         * Trending product
-         * New products
-         * Best Seller
-         * Sale products
-         * All of them are top 10
          */
     });
 });
 
 
 // ***** CUSTOMER ***** \\
-Route::get('/products', [ProductController::class, "index"]); // Show all products
+Route::get('/products', [ProductQueryController::class, "index"]); // Show all products
+Route::get('/products/{id}', [ProductQueryController::class, "show"]); // Show detail of a specific product
+/** Query for products appearance in front page
+ * Trending product
+ * New products
+ * Best Seller
+ * Sale products
+ * All of them are top 10
+ */
 Route::get('/products/newArrival', [ProductQueryController::class, "arrival"]); // Show all products
 Route::get('/products/saleProduct', [ProductQueryController::class, "sale"]); // Show all products
 Route::get('/products/bestSeller', [ProductQueryController::class, "best"]); // Show all products
 Route::get('/products/trending/day={day}', [ProductQueryController::class, "trending"]); // Show all products
-Route::get('/products/{id}', [ProductController::class, "show"]); // Show detail of a specific product
 
 Route::post("/register", [UserAuthController::class, "register"]); // Register
 Route::post("/login", [UserAuthController::class, "login"]); // Login
@@ -216,9 +233,10 @@ Route::get("/retrieveToken", [UserAuthController::class, "retrieveToken"]);
 Route::middleware('auth:sanctum')->group(function () {
     Route::group(['prefix' => "user"], function () {
         // View profile
+        Route::get("/userInfo", [UserAuthController::class, "userInfo"]);
         Route::get("/profile", [UserAuthController::class, "profile"]); // May only be use for editing info in user profile page (Only for login user)
-        // Route::put("/update_og", [UserAuthController::class, "update"]); // Update user information
-        Route::put("/update", [UserAuthController::class, "updateValue"]); // Update user information (no restrict)
+        Route::put("/update_og", [UserAuthController::class, "update"]); // Update user information
+        // Route::put("/update", [UserAuthController::class, "updateValue"]); // Update user information (no restrict)
         Route::put("/avatar/upload", [UserAuthController::class, "upload"]);
         Route::delete("/avatar/destroy", [UserAuthController::class, "destroyAvatar"]);
 
@@ -253,7 +271,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Create-Review-Delete Products from Favorite
         Route::get("/favorite", [FavoriteController::class, "viewFavorite"]);
-        Route::get("/favorite/{id}", [FavoriteController::class, "storeFavorite"]); // Using {id} to add product to favorite. May need to reconsider about GET Method
+        // Should use POST or GET for Adding product to Favorite (??)
+        Route::post("/favorite/{id}", [FavoriteController::class, "storeFavorite"]); // Using {id} to add product to favorite. May need to reconsider about GET Method
         Route::delete("/favorite/destroy/{id}", [FavoriteController::class, "destroyFavorite"]);
     });
     Route::post("/logout", [UserAuthController::class, "logout"]);
