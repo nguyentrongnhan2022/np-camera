@@ -4,7 +4,7 @@ namespace App\Http\Resources\V1;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CustomerOverviewResource extends JsonResource
+class AdminDetailResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,18 +14,22 @@ class CustomerOverviewResource extends JsonResource
      */
     public function toArray($request)
     {
+        if ($this->level === 0) {
+            $display_level = "Admin";
+        }
+        else {
+            $display_level = "Super Admin";
+        }
+
         return [
-            // "currentPage" => $this->current_page,
             "id" => $this->id,
-            "firstName" => $this->first_name,
-            "lastName" => $this->last_name,
+            "userName" => $this->user_name,
+            "email" => $this->email,
             "avatar" => $this->avatar,
             "defaultAvatar" => $this->default_avatar,
-            "email" => $this->email,
-            "subscribed" => $this->subscribed,
-            "disabled" => $this->disabled,
+            "level" => $display_level,
             "createdAt" => date_format($this->created_at, "Y-m-d H:i:s"),
-            "updatedAt" => date_format($this->updated_at, "Y-m-d H:i:s"),
+            "updatedAt" => date_format($this->updated_at, "Y-m-d H:i:s")
         ];
     }
 }

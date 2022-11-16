@@ -2,26 +2,44 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\QualityStatusEnum;
 use App\Models\Customer;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreFeedBackRequest;
-use App\Http\Requests\UpdateFeedBackRequest;
-use App\Http\Resources\V1\FeedBackDetailCollection;
-use App\Http\Resources\V1\FeedBackDetailResource;
+use App\Http\Requests\Customer\Delete\DeleteCustomerRequest;
+use App\Http\Requests\Customer\Get\GetCustomerBasicRequest;
+use App\Http\Requests\Customer\Store\StoreFeedBackRequest;
+use App\Http\Requests\Customer\Update\UpdateFeedBackRequest;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 class FeedBackController extends Controller
 {
     // **** Feedback **** \\
-    public function viewFeedBack(Request $request)
+    public function paginator($arr, $request)
     {
-        $customer = Customer::find($request->user()->id);
+        $total = count($arr);
+        $per_page = 10;
+        $current_page = $request->input("page") ?? 1;
 
+        $starting_point = ($current_page * $per_page) - $per_page;
+
+        $arr = array_slice($arr, $starting_point, $per_page, true);
+
+        $arr = new LengthAwarePaginator($arr, $total, $per_page, $current_page, [
+            'path' => $request->url(),
+            'query' => $request->query(),
+        ]);
+
+        return $arr;
+    }
+
+    public function viewFeedBack(GetCustomerBasicRequest $request)
+    {
         $feedbacks = DB::table("customer_product_feedback")
-            ->where("customer_id", "=", $customer->id)
+            ->where("customer_id", "=", $request->user()->id)
             ->exists();
 
         if (!$feedbacks) {
@@ -31,13 +49,37 @@ class FeedBackController extends Controller
             ]);
         }
 
-        return response()->json([
-            "success" => true,
-            "data" => new FeedBackDetailCollection($customer->customer_product_feedback)
-        ]);
+        $customer_product_feedback = Customer::with("customer_product_feedback")->where("id", "=", $request->user()->id)->get();
+
+        $data = [];
+
+        // Second loop for Products
+        for ($j = 0; $j < sizeof($customer_product_feedback[0]['customer_product_feedback']); $j++) {
+            $data[$j]['id'] = $customer_product_feedback[0]['customer_product_feedback'][$j]['pivot']->id;
+            $data[$j]['productId'] = $customer_product_feedback[0]['customer_product_feedback'][$j]->id;
+            $data[$j]['productName'] = $customer_product_feedback[0]['customer_product_feedback'][$j]->name;
+            $data[$j]['img'] = $customer_product_feedback[0]['customer_product_feedback'][$j]->img;
+
+            // $categories = DB::table("category_product")
+            //     ->where("product_id", "=", $customer_product_feedback[0]['customer_product_feedback'][$j]->id)
+            //     ->get();
+
+            // for ($k = 0; $k < sizeof($categories); $k++) {
+            //     $category = Category::where("id", "=", $categories[$k]->id)->first();
+            //     $data[0]['products'][$j]['categories'][$k]['id']= $category->id;
+            //     $data[0]['products'][$j]['categories'][$k]['name']= $category->name;
+            // }
+
+            
+            $data[$j]['quality'] = $customer_product_feedback[0]['customer_product_feedback'][$j]['pivot']->quality;
+            $data[$j]['rating'] = QualityStatusEnum::getQualityAttribute($data[$j]['quality']);
+            $data[$j]['comment'] = $customer_product_feedback[0]['customer_product_feedback'][$j]['pivot']->comment;
+        }
+
+        return $this->paginator($data, $request);
     }
 
-    public function feedbackDetail(Request $request)
+    public function feedbackDetail(GetCustomerBasicRequest $request)
     {
         // $request->id is Feedback ID in customer_product_feedback table
         $customer = Customer::find($request->user()->id);
@@ -52,9 +94,36 @@ class FeedBackController extends Controller
             ]);
         }
 
+        $customer_product_feedback = $query->first();
+
+        $customer = Customer::where("id", "=", $customer_product_feedback->pivot->customer_id);
+        $product = Product::where("id", "=", $customer_product_feedback->pivot->product_id);
+
+        if (!$customer->exists() || !$product->exists()) {
+            return response()->json([
+                "success" => false,
+                "errors" => "Feedback has some invalid information, please double check database before displaying"
+            ]);
+        }
+
+        $customer = $customer->first();
+        $product = $product->first();
+
+        $data = [
+            "customerId" => $customer->id,
+            "firstName" => $customer->first_name,
+            "lastName" => $customer->last_name,
+            "productId" => $product->id,
+            "productName" => $product->name,
+            "img" => $product->img,
+            "quality" => $customer_product_feedback->pivot->quality,
+            "rating" => QualityStatusEnum::getQualityAttribute($customer_product_feedback->pivot->quality),
+            "comment" => $customer_product_feedback->pivot->comment,
+        ];
+
         return response()->json([
             "success" => true,
-            "data" => new FeedBackDetailResource($query->first())
+            "data" => $data
         ]);
     }
 
@@ -126,7 +195,7 @@ class FeedBackController extends Controller
         ]);
     }
 
-    public function destroyFeedBack(Request $productId)
+    public function destroyFeedBack(DeleteCustomerRequest $productId)
     {
         // REMEMBER: This is a real delete not a soft delete.
 

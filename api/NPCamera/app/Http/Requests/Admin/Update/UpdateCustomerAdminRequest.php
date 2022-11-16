@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin\Update;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreProductRequest extends FormRequest
+class UpdateCustomerAdminRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,8 +13,11 @@ class StoreProductRequest extends FormRequest
      */
     public function authorize()
     {
-        // Will fix later
-        return true;
+        $user = $this->user();
+
+        $tokenCan = $user->tokenCan('admin') || $user->tokenCan('super_admin');
+
+        return $user != null && $tokenCan;
     }
 
     /**
@@ -25,40 +28,31 @@ class StoreProductRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => [
+            "firstName" => [
                 "required",
                 "string",
                 "min:2",
-                "max:100",
+                "max:50",
             ],
-            "description" => [
+            "lastName" => [
                 "required",
                 "string",
-                "min:10",
+                "min:2",
+                "max:50",
             ],
-            "price" => [
+            "email" => [
                 "required",
-                "integer",
+                "email",
             ],
-            "percentSale" => [
-                "integer",
-                "min:0",
-                "max:100",
-            ],
-            "img" => [
-                "required",
+            "password" => [
                 "string",
+                "min:6",
+                "max:24",
             ],
-            "quantity" => [
-                "required",
-                "integer"
-            ],
-            "category" => [
-                "*.id" => [
-                    "required",
-                    "integer",
-                ]
-            ],
+            // "phoneNumber" => [
+            //     "required",
+            //     "string",
+            // ],
         ];
     }
 
@@ -66,7 +60,9 @@ class StoreProductRequest extends FormRequest
     {
         $this->merge([
             // 'category_id' => $this->categoryId,
-            'percent_sale' => $this->percentSale,
+            'first_name' => $this->firstName,
+            'last_name' => $this->lastName,
+            // 'phone_number' => $this->phoneNumber
         ]);
     }
 }
