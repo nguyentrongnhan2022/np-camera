@@ -76,7 +76,7 @@ class CustomerController extends Controller
         ]);
     }
 
-    public function disable(Customer $customer, DeleteAdminRequest $request)
+    public function disable(Customer $customer, DeleteAdminBasicRequest $request)
     {
         $customer = Customer::find($customer->id);
 
