@@ -1,5 +1,8 @@
 <h1>BACKEND</h1> <br>
 <h3>** Đây là phiên bản Laravel 9 **</h3> <br>
+
+Để chạy localhost thì chỉ cần sử dụng lệnh <b>php artisan serv</b><br>
+
 <b>Đối với Laravel thì cần thực hiện những việc sau trước khi chạy dự án:</b><br>
 <b>CHÚ Ý: Nếu đã cài đặt composer cho PHP 8.1.10 thì bỏ qua 2 bước đầu tiên</b><br>
       - Tải PHP 8.1.10 phiên bản non threaded và composer <br>
