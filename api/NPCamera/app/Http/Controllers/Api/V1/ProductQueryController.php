@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\ProductDetailResource;
 use App\Http\Resources\V1\ProductListCollection;
+use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 class ProductQueryController extends Controller
@@ -175,33 +177,11 @@ class ProductQueryController extends Controller
             ]);
         }
 
-        // Will change later, this is just temporary
-        if (!empty($request->get("q"))) {
-            $check = (int)$request->get("q");
-            $column = "";
-            $operator = "";
-            $value = "";
+        if (!empty($request->get('orderBy'))) {
+            $order_type = $request->get('orderBy');
 
-            if ($check == 0) {
-                $column = "name";
-                $operator = "like";
-                $value = "%" . $request->get("q") . "%";
-            } else {
-                $column = "id";
-                $operator = "=";
-                $value = $request->get("q");
-            }
-
-            $search = Product::where("$column", "$operator", "$value")->get();
+            $data = $data->orderBy("price", $order_type);
         }
-
-        $count = DB::table("products")->count();
-
-        // return response()->json([
-        //     "success" => true,
-        //     "total" => $count,
-        //     "data" => new ProductListCollection($data)
-        // ]);
 
         return new ProductListCollection($data->paginate(8)->appends($request->query()));
     }
@@ -261,5 +241,121 @@ class ProductQueryController extends Controller
             "success" => true,
             "data" => new ProductDetailResource($data)
         ]);
+    }
+
+    // Use for searching bar
+    public function paginator($arr, $request)
+    {
+        $total = count($arr);
+        $per_page = 8;
+        $current_page = $request->input("page") ?? 1;
+
+        $starting_point = ($current_page * $per_page) - $per_page;
+
+        $arr = array_slice($arr, $starting_point, $per_page, true);
+
+        $arr = new LengthAwarePaginator($arr, $total, $per_page, $current_page, [
+            'path' => $request->url(),
+            'query' => $request->query(),
+        ]);
+
+        return $arr;
+    }
+
+    public function searchProduct(Request $request)
+    {
+        $value = "%" . $request->value . "%";
+
+        $search = Product::where("name", "like", "$value");
+
+        if ($search->get()->count() === 0) {
+            $category_value = "%" . $request->value . "%";
+
+            $search_category = Category::where("name", "like", "$category_value")->get();
+
+            if ($search_category->count() !== 0) {
+                $data = [];
+                $index = 0;
+
+                for ($i = 0; $i < sizeof($search_category); $i++) {
+                    $products = DB::table("category_product")
+                        ->where("category_id", "=", $search_category[$i]->id)
+                        ->get();
+
+                    for ($j = 0; $j < sizeof($products); $j++) {
+                        $product = Product::where("id", "=", $products[$j]->id)->first();
+                        $data[$index] = $product;
+                        $index++;
+                    }
+                }
+                return new ProductListCollection($this->paginator($data, $request));
+            }
+
+            return response()->json([
+                "success" => false,
+                "errors" => "No products was found base on your keywords"
+            ]);
+        }
+
+        return new ProductListCollection($search->paginate(8));
+    }
+
+    public function searchTopBar(Request $request)
+    {
+        $value = "%" . $request->value . "%";
+
+        $search = Product::where("name", "like", "$value");
+
+        if ($search->get()->count() === 0) {
+            $category_value = "%" . $request->value . "%";
+
+            $search_category = Category::where("name", "like", "$category_value")->get();
+
+            if ($search_category->count() !== 0) {
+                $data = [];
+                $index = 0;
+
+                for ($i = 0; $i < sizeof($search_category); $i++) {
+                    $products = DB::table("category_product")
+                        ->where("category_id", "=", $search_category[$i]->id)
+                        ->get();
+
+                    for ($j = 0; $j < sizeof($products); $j++) {
+                        $product = Product::where("id", "=", $products[$j]->id)->first();
+                        $data[$index] = $product;
+                        $index++;
+                    }
+                }
+
+                if (sizeof($data) <= 5) {
+                    $display_more = null;
+                } else {
+                    $data = array_slice($data, 0, 5, true);
+                    $display_more = route("filter.search", ['value' => $request->value]);
+                }
+
+
+                return [
+                    "data" => new ProductListCollection($data),
+                    "moreProduct" => $display_more
+                ];
+            }
+
+            return response()->json([
+                "success" => false,
+                "errors" => "No products was found base on your keywords"
+            ]);
+        }
+
+        if (sizeof($search->get()) <= 5) {
+            $display_more = null;
+        } else {
+            $display_more = route("filter.search", ['value' => $request->value]);
+        }
+
+        return [
+            "data" => new ProductListCollection($search->take(5)->get()),
+            "moreProduct" => $display_more
+        ];
     }
 }

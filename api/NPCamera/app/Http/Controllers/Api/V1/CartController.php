@@ -90,10 +90,10 @@ class CartController extends Controller
 
         $product = Product::find($request->product_id);
 
-        if (empty($customer) || empty($product)) {
+        if (empty($product)) {
             return response()->json([
                 "success" => false,
-                "errors" => "Please recheck Customer ID and Product ID"
+                "errors" => "Please recheck Product ID"
             ]);
         }
 
