@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\Get\GetAdminBasicRequest;
 use App\Http\Requests\Admin\Store\StoreAdminRequest;
 use App\Http\Requests\Admin\Store\StoreAvatarAdminRequest;
 use App\Http\Requests\Admin\Update\UpdateAdminIndividualRequest;
+use App\Http\Requests\Admin\Update\UpdatePasswordAdminRequest;
 use App\Http\Resources\V1\OrderListCollection;
 use App\Models\Admin;
 use App\Models\AdminAuth;
@@ -223,6 +224,34 @@ class AdminAuthController extends Controller
         return response()->json([
             "success" => true,
             "message" => "Change admin information successfully"
+        ]);
+    }
+
+    // Use this api to change password Admin
+    public function changePassword(UpdatePasswordAdminRequest $request)
+    {
+        $admin = Admin::where("id", "=", $request->user()->id)->first();
+
+        if (Hash::check($request->password, $admin->password)) {
+            return response()->json([
+                "success" => false,
+                "errors" => "Can't replace password with the same old one"
+            ]);
+        }
+
+        $admin->password = Hash::make($request->password);
+        $result = $admin->save();
+
+        if (empty($result)) {
+            return response()->json([
+                "success" => false,
+                "errors" => "An unexpected error has occurred"
+            ]);
+        }
+
+        return response()->json([
+            "success" => true,
+            "message" => "Successfully changed password"
         ]);
     }
 

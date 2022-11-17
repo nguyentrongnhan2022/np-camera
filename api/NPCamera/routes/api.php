@@ -53,6 +53,7 @@ Route::middleware("auth:sanctum")->group(function () {
         Route::get("/dashboard", [AdminAuthController::class, "dashboard"]);
         Route::get("/profile", [AdminAuthController::class, "profile"]);
         Route::put("/update", [AdminAuthController::class, "update"]);
+        Route::put("/changePassword", [AdminAuthController::class, "changePassword"]);
         Route::put("/avatar/upload", [AdminAuthController::class, "upload"]);
         Route::delete("/avatar/destroy", [AdminAuthController::class, "destroyAvatar"]);
         Route::post("/logout", [AdminAuthController::class, "logout"]);
@@ -98,8 +99,8 @@ Route::middleware("auth:sanctum")->group(function () {
             Route::get("/", [CustomerController::class, "index"]); // Show all user available
             Route::get("/{customer}", [CustomerController::class, "show"]); // Show detail information from specific customer
             Route::post("/create", [CustomerController::class, "store"]); // Create account from admin site
-            Route::put("{customer}/update_og", [CustomerController::class, "update"]); // Update information for specific customer from admin site
-            // Route::put("{customer}/update", [CustomerController::class, "updateValue"]); // Update information for specific customer from admin site
+            Route::put("{customer}/update", [CustomerController::class, "update"]); // Update information for specific customer from admin site
+            Route::put("{customer}/changePassword", [CustomerController::class, "changePassword"]); // Update information for specific customer from admin site
             Route::delete("/{customer}/disable={state}", [CustomerController::class, "disable"]); // Disable customer account
             Route::put("{customer}/avatar/upload", [CustomerController::class, "upload"]);
             Route::delete("{customer}/avatar/destroy", [CustomerController::class, "destroyAvatar"]);
@@ -214,6 +215,8 @@ Route::middleware("auth:sanctum")->group(function () {
 // ***** CUSTOMER ***** \\
 Route::get('/products', [ProductQueryController::class, "index"]); // Show all products
 Route::get('/products/{id}', [ProductQueryController::class, "show"]); // Show detail of a specific product
+Route::get('/products/filter/search={value}', [ProductQueryController::class, "searchProduct"])->name("filter.search"); // Show detail of a specific product
+Route::get('/products/topBar/search={value}', [ProductQueryController::class, "searchTopBar"]); // Show detail of a specific product
 /** Query for products appearance in front page
  * Trending product
  * New products
@@ -235,10 +238,11 @@ Route::middleware('auth:sanctum')->group(function () {
         // View profile
         Route::get("/userInfo", [UserAuthController::class, "userInfo"]);
         Route::get("/profile", [UserAuthController::class, "profile"]); // May only be use for editing info in user profile page (Only for login user)
-        Route::put("/update_og", [UserAuthController::class, "update"]); // Update user information
-        // Route::put("/update", [UserAuthController::class, "updateValue"]); // Update user information (no restrict)
+        Route::put("/update", [UserAuthController::class, "update"]); // Update user information
+        Route::put("/changePassword", [UserAuthController::class, "changePassword"]); // Update user information (no restrict)
         Route::put("/avatar/upload", [UserAuthController::class, "upload"]);
         Route::delete("/avatar/destroy", [UserAuthController::class, "destroyAvatar"]);
+        Route::get("/vipCustomer", [UserAuthController::class, "vipCustomerCheck"]); // Use for after placing order to check how many order has customer ordered to create special Voucher for only that customer
 
         // Create-Read-Update(Reduce quantity)-Delete Proudct from cart
         Route::get("/cart", [CartController::class, "index"]);
@@ -253,6 +257,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post("/order/placeorder", [OrderController::class, "store"]); // Placeorder
         Route::delete("/order/placeorder&cancel={id}", [OrderController::class, "destroy"]); // {id} is order_id; Cancel order
         Route::put("/order/{id}/status", [OrderController::class, "updateStatus"]); // Customer only allow to confirm "Completed" state for order
+
 
         // Create-Review-Update-Delete (May be reconsider about soft delete instead) Feedback function
         Route::get("/feedback", [FeedBackController::class, "viewFeedBack"]); // Overview all feedback (still reconsider about this one)
