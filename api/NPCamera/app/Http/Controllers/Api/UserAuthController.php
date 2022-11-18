@@ -13,6 +13,7 @@ use App\Models\Customer;
 use App\Models\CustomerAuth;
 use App\Models\Order;
 use App\Models\Token;
+use App\Models\Voucher;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -189,11 +190,101 @@ class UserAuthController extends Controller
     }
 
     // Generate after placeorder (for front-end)
+    public function filledNumber($count) {
+        // create order count display
+        if ($count < 10) {
+            $order_count_display = "00" . $count;
+        } else if ($count >= 10 && $count < 100) {
+            $order_count_display = "0" . $count;
+        } else {
+            $order_count_display = $count;
+        }
+
+        return $order_count_display;
+    }
+
     public function vipCustomerCheck(GetCustomerBasicRequest $request)
     {
         $order_count = Order::where("customer_id", "=", $request->user()->id)->get();
+        $voucher_name = "";
+        $order_count_display = "";
+        $count = 10;
+        $discount = 2; // for 10 order count
 
         if ($order_count->count() >= 10) {
+            if ($order_count->count() === 25) {
+                $count = 25;
+                $discount = 5;
+            } else if ($order_count->count() === 50) {
+                $count = 50;
+                $discount = 8;
+            } else if ($order_count->count() === 100) {
+                $count = 100;
+                $discount = 10;
+            } else if ($order_count->count() === 200) {
+                $count = 200;
+                $discount = 20;
+            } else {
+                $count = 500;
+                $discount = 30;
+            }
+
+            $order_count_display = $this->filledNumber($count);
+            $discount_display = $this->filledNumber($discount);
+
+            $voucher = strtoupper($request->user()->first_name) . strtoupper($request->user()->last_name) . "_OD" . $order_count_display;
+            $exists = Voucher::where("name", "like", "%" . $voucher . "%")->exists(); // Check exist voucher
+
+            if ($exists) { // If so then return and do nothing further
+                return;
+            }
+
+            // Create voucher to add to database
+            $current_day = date("d");
+            $current_month = date("m");
+            $current_year = date("Y");
+            $current_time = date("H:i:s");
+
+            // Check if current month is exceeded december or not
+            if ($current_month === 12) {
+                $new_month = "01";
+                $new_year = (int) $current_year + 1;
+            } else {
+                $new_month = (int) $current_month + 1;
+                $new_year = (int) $current_year;
+            }
+
+            // Create expired date for voucher which next month after voucher is created
+            $expired_date = $new_year . "-" . $new_month . "-" . $current_day . " " . $current_time;
+
+            // attach discount display to complete voucher name
+            $voucher = $voucher . "_P" . $discount_display;
+
+            $result = Voucher::create([
+                "name" => $voucher,
+                "percent" => $discount,
+                "usage" => 1,
+                "expired_date" => $expired_date,
+                "created_at" => date("Y-m-d H:i:s"),
+                "updated_at" => date("Y-m-d H:i:s")
+            ]);
+
+            if (empty($result->id)) {
+                return response()->json([
+                    "success" => false,
+                    "errors" => "An unexpected error has occurred"
+                ]);
+            }
+            
+            return response()->json([
+                "success" => true,
+                "data" => [
+                    "name" => $voucher,
+                    "usage" => "You only have 1 usage",
+                    "percent" => $discount,
+                    "expiredDate" => $expired_date
+                ]
+            ]);
         }
     }
 
