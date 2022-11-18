@@ -116,8 +116,8 @@ class UserAuthController extends Controller
         }
 
         // Token ability base from admin perspective, "none" for not allow to do anything what admin can
-        $token = Crypt::encrypt(base64_encode($customer->createToken("Customer - " . $customer->id, ["none"])->plainTextToken));
-        // $token = $customer->createToken("Customer - " . $customer->id, ["none"])->plainTextToken;
+        $token = $customer->createToken("Customer - " . $customer->id, ["none"])->plainTextToken;
+        $token_encrypt = Crypt::encryptString($token);
 
         // Use normal model to check User to store token
         $customer_token = Customer::where('email', "=", $request->email)->first();
@@ -140,8 +140,9 @@ class UserAuthController extends Controller
 
         return response()->json([
             "success" => true,
-            "tokenType" => "Bearer",
-            "token" => $token,
+            "tokenType" => "Encrypted",
+            // "token" => $token,
+            "encryptedToken" => $token_encrypt,
             // "data" => new CustomerDetailResource($customer)
             "data" => [
                 "customerId" => $customer->id,
@@ -173,7 +174,8 @@ class UserAuthController extends Controller
         return new CustomerDetailResource($request->user());
     }
 
-    public function userInfo(GetCustomerBasicRequest $request) {
+    public function userInfo(GetCustomerBasicRequest $request)
+    {
         return response()->json([
             "success" => true,
             "data" => [
@@ -187,11 +189,11 @@ class UserAuthController extends Controller
     }
 
     // Generate after placeorder (for front-end)
-    public function vipCustomerCheck(GetCustomerBasicRequest $request) {
+    public function vipCustomerCheck(GetCustomerBasicRequest $request)
+    {
         $order_count = Order::where("customer_id", "=", $request->user()->id)->get();
 
         if ($order_count->count() >= 10) {
-
         }
     }
 
@@ -270,8 +272,9 @@ class UserAuthController extends Controller
     // Use when user first enter website
     public function retrieveToken(Request $request)
     {
+        $decrypt_token = Crypt::decryptString($request->token);
         // Checking token existence
-        $token = Token::where("token", "=", $request->bearerToken())->first();
+        $token = Token::where("token", "=", $decrypt_token)->first();
 
         if ($token === null) {
             return response()->json([
@@ -282,9 +285,28 @@ class UserAuthController extends Controller
 
         return response()->json([
             "success" => true,
-            "token" => $request->bearerToken(),
+            "token" => $token->token,
             "tokenType" => "Bearer Token",
         ]);
+    }
+
+    public function encryptToken(Request $request)
+    {
+        // Checking token existence
+        // $token = Token::where("token", "=", $request->bearerToken())->first();
+
+        // if ($token === null) {
+        //     return response()->json([
+        //         "success" => false,
+        //         "errors" => "No token found"
+        //     ]);
+        // }
+
+        // return response()->json([
+        //     "success" => true,
+        //     "token" => $request->bearerToken(),
+        //     "tokenType" => "Bearer Token",
+        // ]);
     }
 
     public function upload(StoreAvatarCustomerRequest $request)

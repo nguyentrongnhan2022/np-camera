@@ -17,6 +17,7 @@ use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -105,6 +106,8 @@ class AdminAuthController extends Controller
             $token = $admin->createToken("Super-admin", ['super_admin'])->plainTextToken;
         }
 
+        $token_encrypt = Crypt::encryptString($token);
+
         // Update token in admin_token table
         $admin_token = Admin::where('email', "=", $request->email)->first();
 
@@ -133,8 +136,9 @@ class AdminAuthController extends Controller
 
         return response()->json([
             "success" => true,
-            "token_type" => "Bearer",
-            "token" => $token,
+            "token_type" => "Encrypted",
+            // "token" => $token,
+            "encryptedToken" => $token_encrypt,
             "data" => [
                 "id" => $admin->id,
                 "userName" => $admin->user_name,
@@ -284,7 +288,8 @@ class AdminAuthController extends Controller
     public function retrieveToken(Request $request)
     {
         // Checking token existence
-        $token = AdminToken::where("token", "=", $request->bearerToken())->first();
+        $decrypt_token = Crypt::decryptString($request->token); // Decrypt first
+        $token = AdminToken::where("token", "=", $decrypt_token)->first();
 
         if ($token === null) {
             return response()->json([
@@ -295,7 +300,7 @@ class AdminAuthController extends Controller
 
         return response()->json([
             "success" => true,
-            "token" => $request->bearerToken() ?? null,
+            "token" => $token->token,
             "tokenType" => "Bearer Token"
         ]);
     }
