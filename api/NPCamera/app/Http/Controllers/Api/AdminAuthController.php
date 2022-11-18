@@ -103,7 +103,7 @@ class AdminAuthController extends Controller
         if ($admin->level == 0) {
             $token = $admin->createToken("Admin - " . $admin->id, ['admin'])->plainTextToken;
         } else {
-            $token = $admin->createToken("Super-admin", ['super_admin'])->plainTextToken;
+            $token = $admin->createToken("Super admin", ['super_admin'])->plainTextToken;
         }
 
         $token_encrypt = Crypt::encryptString($token);
