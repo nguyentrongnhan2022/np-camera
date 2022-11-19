@@ -9,6 +9,8 @@ use App\Http\Requests\Customer\Get\GetCustomerBasicRequest;
 use App\Http\Requests\Customer\Update\UpdateCustomerRequest;
 use App\Http\Requests\Customer\Update\UpdatePasswordRequest;
 use App\Http\Resources\V1\CustomerDetailResource;
+use App\Mail\ForgotPasswordMail;
+use App\Mail\ResetPasswordSuccessMail;
 use App\Models\Customer;
 use App\Models\CustomerAuth;
 use App\Models\Order;
@@ -18,7 +20,9 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -332,7 +336,7 @@ class UserAuthController extends Controller
         ]);
     }
 
-    // Use this api to change password Customer
+    /** Use this api to change password Customer */
     public function changePassword(UpdatePasswordRequest $request)
     {
         $customer = Customer::where("id", "=", $request->user()->id)->first();
@@ -344,6 +348,15 @@ class UserAuthController extends Controller
             ]);
         }
 
+        // Check confirm password and password are the same or not
+        if ($request->password !== $request->confirmPassword) {
+            return response()->json([
+                "success" => false,
+                "errors" => "Passwords are not the same"
+            ]);
+        }
+
+        $userName = $customer->first_name . " " . $customer->last_name;
         $customer->password = Hash::make($request->password);
         $result = $customer->save();
 
@@ -353,6 +366,10 @@ class UserAuthController extends Controller
                 "errors" => "An unexpected error has occurred"
             ]);
         }
+        
+        // Send email
+        $title = "Mật khẩu của quý khách đã được thay đổi";
+        Mail::to($customer)->send(new ResetPasswordSuccessMail($userName, $title, $title));
 
         return response()->json([
             "success" => true,

@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\FavoriteController;
 use App\Http\Controllers\Api\V1\FavoriteProductCustomerController;
 use App\Http\Controllers\Api\V1\FeedBackAdminController;
+use App\Http\Controllers\api\v1\ForgotPasswordController;
 use App\Http\Controllers\Api\V1\OrderAdminController;
 use App\Http\Controllers\Api\V1\OrderCustomerController;
 use App\Http\Controllers\Api\V1\VoucherController;
@@ -117,6 +118,7 @@ Route::middleware("auth:sanctum")->group(function () {
             Route::get("/{customer}/orders/{order}", [OrderCustomerController::class, "show"]);
             Route::put("/{customer}/orders/{order}/update", [OrderCustomerController::class, "update"]);
             Route::put("/{customer}/orders/{order}/update/status={state}", [OrderCustomerController::class, "updateStatus"]); // Update only status of order
+            Route::get("/{customer}/orders/{order}/notifyOrder={state}", [OrderCustomerController::class, "notifyOrder"]); // Update only status of order
             Route::delete("/{customer}/orders/{order}/destroy={state}", [OrderCustomerController::class, "destroy"]);
 
             // Voucher from User info
@@ -231,6 +233,9 @@ Route::get('/products/trending/day={day}', [ProductQueryController::class, "tren
 
 Route::post("/register", [UserAuthController::class, "register"]); // Register
 Route::post("/login", [UserAuthController::class, "login"]); // Login
+Route::post("/forgotPassword", [ForgotPasswordController::class, "forgot"]);
+Route::post("/checkCode", [ForgotPasswordController::class, "checkCode"]);
+Route::post("/resetPassword", [ForgotPasswordController::class, "reset"]);
 Route::post("/retrieveToken", [UserAuthController::class, "retrieveToken"]); // Decrypt token to authenticate function
 
 Route::middleware('auth:sanctum')->group(function () {

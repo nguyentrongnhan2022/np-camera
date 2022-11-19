@@ -8,11 +8,14 @@ use App\Http\Requests\Admin\Get\GetAdminBasicRequest;
 use App\Http\Requests\Admin\Update\UpdateOrderCustomerRequest;
 use App\Http\Resources\V1\OrderListCollection;
 use App\Http\Resources\V1\ProductDetailResource;
+use App\Mail\OrderDeliveredNotify;
+use App\Mail\OrderDeliveredState;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class OrderCustomerController extends Controller
 {
@@ -226,6 +229,56 @@ class OrderCustomerController extends Controller
         return response()->json([
             "success" => true,
             "message" => "Successfully Updated Order with ID = " . $order->id .  " to " . $order_state . " state"
+        ]);
+    }
+
+    // Use for order has already been delivered to customer
+    public function mail($customer, $order, $listProducts)
+    {
+    }
+
+    public function notifyOrder(GetAdminBasicRequest $request, Customer $customer, Order $order)
+    {
+        // Check order (Soft) Delete state and Order status
+        if ($order->deleted_by !==  null || $order->status === 2) {
+            return response()->json([
+                "success" => false,
+                "errors" => "Can't Update Status when Order got cancelled or Order is in Completed state"
+            ]);
+        }
+
+        $query = Order::where("id", "=", $order->id)
+            ->where("customer_id", "=", $customer->id);
+
+        // Check Connection between Customer and Order
+        if (!$query->exists()) {
+            return response()->json([
+                "success" => false,
+                "errors" => "Customer don't have this Order with ID = " . $order->id
+            ]);
+        }
+
+        $order_data = $query->first();
+
+        // Send
+        $userName = $customer->first_name . " " . $customer->last_name;
+        $priceOrder = $order->total_price;
+        $idDelivery = $order->id_delivery;
+        
+        // If state is 1, then Send Notify to customer that Order has been delivered
+        if ((int) $request->state === 1) {
+            $title = "Đơn hàng đã được giao thành công";
+            Mail::to($customer->email)->send(new OrderDeliveredState($title, $userName, $idDelivery, $priceOrder));
+        }
+        // If state is 0, then send Notify to Customer to Click "Completed" button to completed order state.
+        else {
+            $title = "Vui lòng xác nhận đơn hàng đã được giao";
+            Mail::to($customer->email)->send(new OrderDeliveredNotify($title, $userName, $idDelivery, $priceOrder));
+        }
+
+        return response()->json([
+            "success" => true,
+            "message" => "Successfully Send Notification to Customer"
         ]);
     }
 
