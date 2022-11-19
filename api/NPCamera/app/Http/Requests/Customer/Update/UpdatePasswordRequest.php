@@ -34,6 +34,12 @@ class UpdatePasswordRequest extends FormRequest
                 "min:6",
                 "max:24",
             ],
+            "confirmPassword" => [
+                "required",
+                "string",
+                "min:6",
+                "max:24",
+            ],
         ];
     }
 }
