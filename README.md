@@ -15,3 +15,8 @@
       - Thay đổi <b>DB_DATABASE</b> thành <b>NPCamera</b> <br>
       - Chạy: <b>php artisan migrate</b> hoặc <b>php artisan migrate --seed</b> để tạo dữ liệu seed kèm theo database <br>
       - Nếu trong quá trình chạy migrate gặp vấn đề mà muốn refresh lại thì chỉ cần thêm <b>:refresh</b> hoặc <b>:fresh</b> ở phía sau <b>....migrate...</b> là được.<br>
+      
+<strong>Về phần gửi Mail</strong>
+      - Để test gửi mail, trước tiền bạn cần phải vào trang <b>mailtrap.io</b> và đăng nhập, sau đó vào STMP Setting ở phần Sandbox và chọn <b>Laravel 7+</b><br>
+      - Vào file <b>.env</b> và điền theo giống với những gì mà trang mailtrap cung cấp vào trong file đó ở phần <b>MAIL_...</b><br>
+      - Còn phần MAIL_FROM_ADDRESS thì điền bất cứ nào cũng được và không nhất thiết là mail đã tồn tại và đổi tên phần <b>APP_NAME</b> thành tên gì theo ý muốn (Nếu muốn thêm dấu cách thì nên thêm dấu "" vào để tránh gây báo lỗi)
