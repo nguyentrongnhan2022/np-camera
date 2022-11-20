@@ -19,5 +19,5 @@
 <strong>Về phần gửi Mail</strong><br>
       - Để test gửi mail, trước tiền bạn cần phải vào trang <b>mailtrap.io</b> và đăng nhập, sau đó vào SMTP Setting ở phần Sandbox<br>
       - Ở phần <b>Integrations</b> chọn <b>Laravel 7+</b><br>
-      - Vào file <b>.env</b> và điền theo giống với những gì mà trang mailtrap cung cấp ở phần dưới <b>Integrations</b> vào trong file đó ở phần <b>MAIL_...</b><br>
+      - Vào file <b>.env</b> và điền theo giống với những gì mà trang <b>mailtrap.io</b> cung cấp ở phần dưới <b>Integrations</b> vào trong file đó ở phần <b>MAIL_...</b><br>
       - Còn phần MAIL_FROM_ADDRESS thì điền bất cứ nào cũng được và không nhất thiết là mail đã tồn tại và đổi tên phần <b>APP_NAME</b> thành tên gì theo ý muốn (Nếu muốn thêm dấu cách thì nên thêm dấu "" vào để tránh gây báo lỗi)
