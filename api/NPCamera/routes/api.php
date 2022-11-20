@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\AdminController;
 use App\Http\Controllers\Api\V1\CartController;
 use App\Http\Controllers\Api\V1\CartAdminController;
 use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\CheckoutController;
 use App\Http\Controllers\Api\V1\CustomerController;
 use App\Http\Controllers\Api\V1\FeedBackController;
 use App\Http\Controllers\Api\V1\OrderController;
@@ -240,6 +241,9 @@ Route::post("/retrieveToken", [UserAuthController::class, "retrieveToken"]); // 
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::group(['prefix' => "user"], function () {
+        
+        Route::get('/suggestedProducts', [ProductQueryController::class, "suggestedProducts"]); // Show detail of a specific product
+
         // View profile
         Route::get("/userInfo", [UserAuthController::class, "userInfo"]);
         Route::get("/profile", [UserAuthController::class, "profile"]); // May only be use for editing info in user profile page (Only for login user)
@@ -260,10 +264,18 @@ Route::middleware('auth:sanctum')->group(function () {
         // Create-Review-Cancel Order function
         Route::get("/order", [OrderController::class, "index"]); // Show all order from current login user
         Route::get("/order/{id}", [OrderController::class, "show"]); // {id} is order_id; Show detail of order from current login user
-        Route::post("/order/placeorder", [OrderController::class, "store"]); // Placeorder
+        Route::post("/order/placeorder", [CheckoutController::class, "store"]); // Placeorder
+        Route::get("/order/{id}/payment", [CheckoutController::class, "redirect"])->name("redirect.page");
+
+        // After payment completed
+        Route::get(
+            "/order/{id}/payment?partnerCode={partnerCode}&orderId={orderId}&requestId={requestId}&amount={amount}&orderInfo={orderInfo}&orderType={orderType}&transId={transId}&resultCode={resultCode}&message={message}&payType={payType}&responseTime={responseTime}&extraData={extraData}&signature={signature}",
+            [CheckoutController::class, "redirect"]
+        )->name("return.page");
+        Route::post("/order/{id}/complete/payment", [CheckoutController::class, "redirect"]); // Use this when front-end can't get header redirect URL
+
         Route::delete("/order/placeorder&cancel={id}", [OrderController::class, "destroy"]); // {id} is order_id; Cancel order
         Route::put("/order/{id}/status", [OrderController::class, "updateStatus"]); // Customer only allow to confirm "Completed" state for order
-
 
         // Create-Review-Update-Delete (May be reconsider about soft delete instead) Feedback function
         Route::get("/feedback", [FeedBackController::class, "viewFeedBack"]); // Overview all feedback (still reconsider about this one)

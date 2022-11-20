@@ -35,7 +35,6 @@ class ProductSeeder extends Seeder
                 'name' => $json_data[$i]['name'],
                 'description' => $json_data[$i]['description'],
                 'price' => $json_data[$i]['price'],
-                'percent_sale' => $json_data[$i]['percentSale'],
                 'img' => $json_data[$i]['img'],
                 'quantity' => $json_data[$i]['quantity']
             ];

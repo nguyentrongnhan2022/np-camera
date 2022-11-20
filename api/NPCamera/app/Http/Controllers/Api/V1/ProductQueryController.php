@@ -29,6 +29,32 @@ class ProductQueryController extends Controller
         return new ProductListCollection($products_sale);
     }
 
+    public function suggestedProducts(Request $request) {
+        $orders = Order::where("customer_id", "=", $request->user()->id)->get();
+
+        $arr_products = [];
+        $index = 0;
+
+        $products_filter = DB::table("order_product")
+                ->select("product_id", DB::raw('count(product_id) as count'))
+                ->groupBy('product_id')
+                ->orderBy('count', 'DESC')
+                ->get();
+
+        return $products_filter;
+
+        for ($i = 0; $i < sizeof($products_filter); $i++) {
+            for ($j = 0; $j < sizeof($orders); $j++) {
+                if ($orders[$j]->id === $products_filter[$i]->order_id) {
+                    $arr_products[$index] = $orders[$j];
+                    $index++;
+                }
+            }
+        }
+
+        return $arr_products;
+    }
+
     public function best()
     {
         // Count duplicate products

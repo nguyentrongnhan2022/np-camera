@@ -3,16 +3,13 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Order;
-use App\Http\Requests\Customer\Store\StoreOrderRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\Delete\DeleteCustomerRequest;
 use App\Http\Requests\Customer\Get\GetCustomerBasicRequest;
 use App\Http\Resources\V1\OrderListCollection;
 use App\Http\Resources\V1\ProductDetailResource;
-use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Voucher;
-use App\Notifications\PlaceOrderNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -44,34 +41,7 @@ class OrderController extends Controller
         // ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreOrderRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-
-    public function store(StoreOrderRequest $request)
-    {
-        /** ##### IF CONDITION SECTION ##### */
-        $customer = Customer::find($request->user()->id); // Later use for detach value from intermediate table
-
-        $data = DB::table("customer_product_cart")
-            ->where("customer_id", "=", $customer->id)->get();
-
-        if ($data->count() === 0) {
-            return response()->json([
-                "success" => false,
-                "errors" => "Your cart is empty or Your Order is currently in progress"
-            ]);
-        }
-
-        $order = new Order();
-
-        $result = $order->placeOrder($request, $data, $customer);
-
-        return $result;
-    }
+    /** END OF PLACE ORDER FUNCTION */
 
     /**
      * Display the specified resource.
@@ -87,16 +57,8 @@ class OrderController extends Controller
 
         // Check Order isExists
         $query = Order::where("orders.id", "=", $request->id)
-            ->addSelect(
-                "orders.*",
-                "vouchers.id as voucher_id",
-                "vouchers.name",
-                "vouchers.percent",
-                "vouchers.expired_date",
-                "vouchers.deleted"
-            )
-            ->where("customer_id", "=", $request->user()->id)
-            ->join("vouchers", "orders.voucher_id", "=", "vouchers.id");
+            ->where("customer_id", "=", $request->user()->id);
+
 
         if (!$query->exists()) {
             return response()->json([
@@ -106,6 +68,21 @@ class OrderController extends Controller
         }
 
         $data = $query->first();
+
+        if ($data->voucher_id !== null) {
+            $voucher = Voucher::where("id", "=", $data->voucher_id)->first();
+            
+            $voucher_data = [
+                "voucherId" => $voucher->voucher_id,
+                "percent" => $voucher->percent,
+                "name" => $voucher->name,
+                "expiredDate" => $voucher->expired_date,
+                "deleted" => $voucher->deleted,
+            ];
+        }
+        else {
+            $voucher_data = null;
+        }
 
         // Create product array
         $pivot_table = Order::find($request->id);
@@ -123,13 +100,7 @@ class OrderController extends Controller
                     "avatar" => $request->user()->avatar,
                     "defaultAvatar" => $request->user()->default_avatar,
                 ],
-                "voucher" => [
-                    "voucherId" => $data->voucher_id,
-                    "percent" => $data->percent,
-                    "name" => $data->name,
-                    "expiredDate" => $data->expired_date,
-                    "deleted" => $data->deleted,
-                ],
+                "voucher" => $voucher_data,
                 "order" => [
                     "id" => $data->id,
                     "idDelivery" => $data->id_delivery,
@@ -141,8 +112,8 @@ class OrderController extends Controller
                     "status" => $data->status,
                     "paidType" => $data->paid_type,
                     "deleted_by" => $data->deleted_by,
-                    "createdAt" => date_format($data->created_at, "Y-m-d H:i:s"),
-                    "updatedAt" => date_format($data->updated_at, "Y-m-d H:i:s"),
+                    "createdAt" => date_format($data->created_at, "d/m/Y H:i:s"),
+                    "updatedAt" => date_format($data->updated_at, "d/m/Y H:i:s"),
                 ],
                 "products" => ProductDetailResource::collection($data->products)
             ]
