@@ -40,16 +40,7 @@ class OrderCustomerController extends Controller
     {
         // Check existence of Customer and Order via Customer ID and Order ID
         $query = Order::where("orders.id", "=", $order->id)
-            ->addSelect(
-                "orders.*",
-                "vouchers.id as voucher_id",
-                "vouchers.name",
-                "vouchers.percent",
-                "vouchers.expired_date",
-                "vouchers.deleted"
-            )
-            ->where("customer_id", "=", $customer->id)
-            ->join("vouchers", "orders.voucher_id", "=", "vouchers.id");
+            ->where("customer_id", "=", $customer->id);
 
         if (!$query->exists()) {
             return response()->json([
@@ -59,6 +50,21 @@ class OrderCustomerController extends Controller
         }
 
         $data = $query->first();
+
+        if ($data->voucher_id !== null) {
+            $voucher = Voucher::where("id", "=", $data->voucher_id)->first();
+            
+            $voucher_data = [
+                "voucherId" => $voucher->voucher_id,
+                "percent" => $voucher->percent,
+                "name" => $voucher->name,
+                "expiredDate" => $voucher->expired_date,
+                "deleted" => $voucher->deleted,
+            ];
+        }
+        else {
+            $voucher_data = null;
+        }
 
         // Create product array
         $pivot_table = Order::find($order->id);
@@ -76,13 +82,7 @@ class OrderCustomerController extends Controller
                     "avatar" => $customer->avatar,
                     "defaultAvatar" => $customer->default_avatar,
                 ],
-                "voucher" => [
-                    "voucherId" => $data->voucher_id,
-                    "percent" => $data->percent,
-                    "name" => $data->name,
-                    "expiredDate" => $data->expired_date,
-                    "deleted" => $data->deleted,
-                ],
+                "voucher" => $voucher_data,
                 "order" => [
                     "id" => $data->id,
                     "idDelivery" => $data->id_delivery,
@@ -94,8 +94,8 @@ class OrderCustomerController extends Controller
                     "status" => $data->status,
                     "paidType" => $data->paid_type,
                     "deleted_by" => $data->deleted_by,
-                    "createdAt" => date_format($data->created_at, "Y-m-d H:i:s"),
-                    "updatedAt" => date_format($data->updated_at, "Y-m-d H:i:s"),
+                    "createdAt" => date_format($data->created_at, "d/m/Y H:i:s"),
+                    "updatedAt" => date_format($data->updated_at, "d/m/Y H:i:s"),
                 ],
                 "products" => ProductDetailResource::collection($data->products)
             ]

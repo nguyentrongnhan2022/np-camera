@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\CheckoutController;
 use Illuminate\Support\Facades\Route;
 use App\Mail\PlaceOrderMail;
 
@@ -16,9 +17,4 @@ use App\Mail\PlaceOrderMail;
 
 Route::get('/', function () {
     return view('welcome');
-});
-
-Route::get('/email', function () {
-    
-    // return new PlaceOrderMail("Nice", "alo", "Phong Du", "1000", $arr);
 });
