@@ -67,7 +67,7 @@ class CartController extends Controller
             $arr[$i]['price'] = $products_in_cart[$i]['price'];
             $arr[$i]['percentSale'] = $products_in_cart[$i]['percentSale'];
             $arr[$i]['img'] = $products_in_cart[$i]['img'];
-            $arr[$i]['quantity'] = $products_in_cart[$i]['quantity'];
+            $arr[$i]['quantity'] = $products_in_cart[$i]['pivot']->quantity;
             $arr[$i]['status'] = $products_in_cart[$i]['status'];
             $arr[$i]['deletedAt'] = $products_in_cart[$i]['deleted_at'];
             $categories = DB::table("category_product")
