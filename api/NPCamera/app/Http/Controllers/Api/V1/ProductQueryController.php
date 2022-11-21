@@ -29,30 +29,33 @@ class ProductQueryController extends Controller
         return new ProductListCollection($products_sale);
     }
 
-    public function suggestedProducts(Request $request) {
-        $orders = Order::where("customer_id", "=", $request->user()->id)->get();
+    public function mostfavoriteProducts()
+    {
+        // Count duplicate products
+        $products_filter = DB::table("customer_product_favorite")
+            ->select("product_id", DB::raw('count(product_id) as count'))
+            ->groupBy('product_id')
+            ->orderBy('count', 'DESC')
+            ->get()
+            ->take(8);
 
-        $arr_products = [];
-        $index = 0;
-
-        $products_filter = DB::table("order_product")
-                ->select("product_id", DB::raw('count(product_id) as count'))
-                ->groupBy('product_id')
-                ->orderBy('count', 'DESC')
-                ->get();
-
-        return $products_filter;
+        $products_most_favorite = [];
 
         for ($i = 0; $i < sizeof($products_filter); $i++) {
-            for ($j = 0; $j < sizeof($orders); $j++) {
-                if ($orders[$j]->id === $products_filter[$i]->order_id) {
-                    $arr_products[$index] = $orders[$j];
-                    $index++;
-                }
-            }
+            $product = Product::where("id", "=", $products_filter[$i]->product_id)->first();
+
+            if ($product->status === 0 || $product->deleted_at !== null) continue;
+
+            $products_most_favorite[$i]["productId"] = $product->id;
+            $products_most_favorite[$i]["name"] = $product->name;
+            $products_most_favorite[$i]["description"] = $product->description;
+            $products_most_favorite[$i]["price"] = $product->price;
+            $products_most_favorite[$i]["percentSale"] = $product->percent_sale;
+            $products_most_favorite[$i]["img"] = $product->img;
+            $products_most_favorite[$i]["quantity"] = $product->quantity;
         }
 
-        return $arr_products;
+        return $products_most_favorite;
     }
 
     public function best()
@@ -189,7 +192,7 @@ class ProductQueryController extends Controller
         return $arr_products_filter;
     }
 
-    // Display on main page (when login into website)
+    /** Display on main page (when login into website) */
     public function index(Request $request)
     {
         // $data = Product::with("categories")->paginate();
