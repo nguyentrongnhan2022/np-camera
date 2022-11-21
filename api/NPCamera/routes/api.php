@@ -231,6 +231,7 @@ Route::get('/products/newArrival', [ProductQueryController::class, "arrival"]); 
 Route::get('/products/saleProduct', [ProductQueryController::class, "sale"]); // Show all products
 Route::get('/products/bestSeller', [ProductQueryController::class, "best"]); // Show all products
 Route::get('/products/trending/day={day}', [ProductQueryController::class, "trending"]); // Show all products
+Route::get('/mostfavoriteProducts', [ProductQueryController::class, "mostfavoriteProducts"]); // Show detail of a specific product
 
 Route::post("/register", [UserAuthController::class, "register"]); // Register
 Route::post("/login", [UserAuthController::class, "login"]); // Login
@@ -242,7 +243,6 @@ Route::post("/retrieveToken", [UserAuthController::class, "retrieveToken"]); // 
 Route::middleware('auth:sanctum')->group(function () {
     Route::group(['prefix' => "user"], function () {
         
-        Route::get('/suggestedProducts', [ProductQueryController::class, "suggestedProducts"]); // Show detail of a specific product
 
         // View profile
         Route::get("/userInfo", [UserAuthController::class, "userInfo"]);
