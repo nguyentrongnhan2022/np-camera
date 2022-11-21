@@ -9,107 +9,51 @@
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha256-UhQQ4fxEeABh4JrcmAJ1+16id/1dnlOEVCFOxDef9Lw=" crossorigin="anonymous" />
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" integrity="sha256-kksNxjDRxd/5+jGurZUJd1sdR2v+ClrCl3svESBaJqw=" crossorigin="anonymous" />
    <!--font awesome cdn-->
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+   integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+   crossorigin="anonymous" referrerpolicy="no-referrer" />
    <!--bootstrap css-->
    <link rel="stylesheet" href="bootstrap-5.0.2-dist/css/bootstrap.min.css">
    <!--custom css-->
    <link rel="stylesheet" href="css/main.css">
 </head>
+<style>
 
+</style>
 <body>
     <!--navbar-->
     <nav class="navbar navbar-expand-lg navbar-light bg-white py-1 fixed-top">
         <div class="container">
             <a class="navbar-brand d-flex justify-content-between align-items-center order-lg-0" href="index.html">
                 <img src="images/logo.png" alt="site icon">
-                <span class="text-uppercase fw-lighter ms-2">NP Camera</span>
+                <span class="text-uppercase fw-lighter ms-2 mt-1">NP Camera</span>
             </a>
-        <div class="search_wrapper nav-btns order-lg-2 me-5">
-            <div class="search" onclick="searchToggle();"> 
-                <i class="fa fa-search"></i>
-            </div>
-            <div class="wrapper">
-                <div class="search_input">
-                    <input type="text" placeholder="Tìm kiếm......" style="margin-left:10px;margin-right:10px;">
-                    <div class="autocom-box">
-                        <li>Máy ảnh Sony A6400</li>
-                        <li>Máy ảnh Sony A7 Mark 3</li>
-                        <li>Ống kính FE 55mm Cz F1.8</li>
-                        <li>Ống kính FE 24-70GM F2.8</li>
+            <div class="search_wrapper nav-btns order-lg-2 me-5">
+                <div class="search" onclick="searchToggle();">
+                    <i class="fa fa-search"></i>
+                </div>
+                <div class="wrapper">
+                    <div class="search_input">
+                        <input id="input_search" type="text" placeholder="Tìm kiếm......"
+                            style="margin-left:10px;margin-right:10px;">
+                        <div class="autocom-box">
+                            <li>Máy ảnh Sony A6400</li>
+                            <li>Máy ảnh Sony A7 Mark 3</li>
+                            <li>Ống kính FE 55mm Cz F1.8</li>
+                            <li>Ống kính FE 24-70GM F2.8</li>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
             <div class="cart_header order-lg-2 nav-btns me-5">
-                <div class="cart"  onclick="cartToggle();">
+                <div class="cart" onclick="cartToggle();">
                     <i class="fa fa-shopping-cart"></i>
-                    <span class="position-absolute  translate-middle badge bg-primary" style="margin-left: 7px;font-size: 10px;">0</span>
+                    <span id="cartNumber"class="position-absolute translate-middle badge bg-primary" style="margin-left: 7px;font-size: 10px;">0</span>
                 </div>
                 <div class="cart-list">
-                    <!--Empty cart-->
-
-                    <div style="width:240px;">
-                        <!-- <h4 class="text-dark p-2" style="font-weight:500; font-size: 16px; text-align: center;">Sản phẩm đã thêm</h4> -->
-                        <img src="images/4076503.png" style=" width: 60%;height: auto; margin: 0 48px;" class="pb-3 pt-3">
-                        <h3 class="text-dark p-2" style="font-weight:100; font-size:12px;text-align: center;">Giỏ hàng trống</h4>
-                    </div>
-
-                    <!--end of empty cart-->
-                    
-                    <!-- <h4 class="text-dark" style="font-weight:500; font-size: 16px;">Sản phẩm đã thêm</h4>
-                    <ul class="cart-list-item">
-                        <li class="cart-item">
-                            <img src="images/SonyA73.png" class="cart-item-img">
-                            <div class="cart-item-info" style=" width: 100%; margin-right: 10px;">
-                            <div class="cart-item-head" style="display:flex; justify-content: space-between; width: 100%; padding-top: 23px;">
-                                <h5 style="font-size:14px;font-weight: 500;">Máy ảnh Sony A7 Mark 3</h5>
-                                <span id="sum-price" style="font-size: 10px; font-weight: 500;">$ 32.000.000 VNĐ&nbsp;&nbsp; x1</span>
-                            </div>
-                            <div class="cart-item-body" style="display: flex; justify-content: space-between;" >
-                                <span style="font-size: 10px;">Phân loại: Máy ảnh</span>
-                                <span class="cart-item-body_delete" style="font-size: 10px; font-weight: 800;">Xóa</span>
-                            </div>
-                        </div>
-                        </li>
-                    </ul>
-                    <ul class="cart-list-item">
-                        <li class="cart-item">
-                            <img src="images/SonyA6000.png" class="cart-item-img">
-                            <div class="cart-item-info" style=" width: 100%; margin-right: 10px;">
-                            <div class="cart-item-head" style="display:flex; justify-content: space-between; width: 100%; padding-top: 23px;">
-                                <h5 style="font-size:14px;font-weight: 500;">Máy ảnh Sony A6000</h5>
-                                <span id="sum-price" style="font-size: 10px; font-weight: 500;">$ 8.000.000 VNĐ&nbsp;&nbsp; x1</span>
-                            </div>
-                            <div class="cart-item-body" style="display: flex; justify-content: space-between;" >
-                                <span style="font-size: 10px;">Phân loại: Máy ảnh</span>
-                                <span class="cart-item-body_delete" style="font-size: 10px; font-weight: 800;">Xóa</span>
-                            </div>
-                        </div>
-                        </li>
-                    </ul>
-                    <ul class="cart-list-item">
-                        <li class="cart-item">
-                            <img src="images/27-70GM.png" class="cart-item-img">
-                            <div class="cart-item-info" style=" width: 100%; margin-right: 10px;">
-                            <div class="cart-item-head" style="display:flex; justify-content: space-between; width: 100%; padding-top: 23px;">
-                                <h5 style="font-size:14px;font-weight: 500;">FE 24-70GM F2.8</h5>
-                                <span id="sum-price" style="font-size: 10px; font-weight: 500;">$ 40.000.000 VNĐ&nbsp;&nbsp; x1</span>
-                            </div>
-                            <div class="cart-item-body" style="display: flex; justify-content: space-between;" >
-                                <span style="font-size: 10px;">Phân loại: Ống kính</span>
-                                <span class="cart-item-body_delete" style="font-size: 10px; font-weight: 800;">Xóa</span>
-                            </div>
-                        </div>
-                        </li>
-                    </ul>
-                    <div style="text-align:center;">
-                        <a href="cart.html">
-                            <button class="cart-list_view m-2 text-dark checkout hidden">Xem giỏ hàng</button>
-                        </a>
-                    </div> -->
 
                 </div>
-                
+
             </div>
             <div class="action nav-btns order-lg-2">
                 <div class="profile" onclick="menuToggle();">
@@ -117,30 +61,22 @@
                 </div>
                 <div class="action_menu">
                     <ul>
-                        <li><i class="fa-solid fa-right-from-bracket"></i> <a href="login.html">Đăng nhập</a></li>
-                        <li><i class="fa-solid fa-right-from-bracket"></i> <a href="register.html">Đăng ký</a></li>
-                        <!-- <li><i class="fa-solid fa-user"></i> <a href="#">Tài khoản của tôi</a></li>
-                        <li><i class="fa-solid fa-pen-to-square"></i> <a href="#">Đơn hàng</a></li>
-                        <li><i class="fa-solid fa-right-from-bracket"></i> <a href="#">Đăng xuất</a></li> -->
                     </ul>
                 </div>
             </div>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle = "collapse" data-bs-target = "#navMenu">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
                 <span class=" navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse order-lg-1" id="navMenu">
                 <ul class="navbar-nav mx-auto text-center">
                     <li class="nav-item px-3 py-2">
-                        <a class="nav-link text-uppercase text-dark" href="#header">trang chủ</a>
+                        <a class="nav-link text-uppercase text-dark" href="index.html">trang chủ</a>
                     </li>
                     <li class="nav-item px-3 py-2">
-                        <a class="nav-link text-uppercase text-dark" href="#collection">sản phẩm</a>
+                        <a class="nav-link text-uppercase text-dark" href="productPage.html">sản phẩm</a>
                     </li>
                     <li class="nav-item px-3 py-2">
-                        <a class="nav-link text-uppercase text-dark" href="#specials">specials</a>
-                    </li>
-                    <li class="nav-item px-3 py-2">
-                        <a class="nav-link text-uppercase text-dark" href="#blogs">AMONG US</a>
+                        <a class="nav-link text-uppercase text-dark" href="aboutus.html">giới thiệu</a>
                     </li>
                 </ul>
             </div>
@@ -151,122 +87,27 @@
     <!-- end of navbar-->
 
     <!--   product  -->
-    <section id="product" class="py-5 my-3 mt-5">
+    <section id="product" class="py-5 mt-4">
             <div class="container">
-                <div class="row my-3">
-                    <div class="col-sm-6" style="text-align: center;">
-                        <img src="images/SonyA73.png" alt="product" class="mt-5"  style="width:45%;">
-                        <div class="form-row" style="margin-top:13%;">
-                            <div class="col" >
-                                <button type="submit" class="btn m-1 text-dark " style="width:40%;">Mua hàng</button>
-                            </div>
-                            <div class="col">
-                                <button type="submit" class="btn m-1 text-dark " style="width: 40%;">Thêm vào giỏ hàng</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-5 py-6 mt-5">
-                        <h5 class="#" style="font-size:25px;">Sony A7 Mark 3</h5>
-                        <div class="d-flex">
-                            <div class="rating text-warning font-size-12">
-                                <span><i class="fas fa-star"></i></span>
-                                <span><i class="fas fa-star"></i></span>
-                                <span><i class="fas fa-star"></i></span>
-                                <span><i class="fas fa-star"></i></span>
-                                <span><i class="fas fa-star"></i></span>
-                              </div>
-                              <a href="#" class="px-2 text-dark" style="text-decoration:none;">20,534 đánh giá | 1000+ phản hồi</a>
-                        </div>
-                        <hr class="m-1">
-
-                        <!---    product price       -->
-                            <table class="my-3">
-                                <tr class="font-rale font-size-14">
-                                    <td>Giá cũ :</td>
-                                    <td>&nbsp;&nbsp;<strike>$ 35.000.000 VNĐ</strike></td>
-                                </tr>
-                                <tr class="font-rale font-size-14">
-                                    <td>Giá mới :</td>
-                                    <td class="font-size-20 text-danger"><span>&nbsp;&nbsp;$ 32.000.000 VNĐ</td>
-                                </tr>
-                            </table>
-                            <hr class="m-1">
-                        <!---    !product price       -->
-                        <div class="qty d-flex my-3">
-                            <h6 class="font-baloo">Số lượng </h6>
-                            <div class="px-4 d-flex font-rale">
-                                <button class="qty-up border bg-light" data-id="pro1"><i class="fas fa-angle-up" style="font-size:12px;"></i></button>
-                                <input type="text" data-id="pro1" class="qty_input border px-2 w-25 bg-light"style="text-align:center; "disabled value="1" placeholder="1">
-                                <button data-id="pro1" class="qty-down border bg-light"><i class="fas fa-angle-down" style="font-size:12px;"></i></button>
-                            </div>
-                        </div>
-                         <!--    #policy -->
-                            <div id="policy">
-                                <div class="d-flex">
-                                    <div class="return text-center p-2">
-                                        <div class="font-size-20 my-2 color-second">
-                                            <span class="fas fa-retweet border p-3 rounded-pill"></span>
-                                        </div>
-                                        <a href="#" class="text-dark" style="text-decoration: none;">10 Ngày <br> Đổi trả</a>
-                                    </div>
-                                    <div class="return text-center p-2">
-                                        <div class="font-size-20 my-2 color-second">
-                                            <span class="fas fa-truck  border p-3 rounded-pill"></span>
-                                        </div>
-                                        <a href="#" class="text-dark" style="text-decoration: none;">Miễn Phí<br>Giao hàng</a>
-                                    </div>
-                                    <div class="return text-center p-2">
-                                        <div class="font-size-20 my-2 color-second">
-                                            <span class="fas fa-check-double border p-3 rounded-pill"></span>
-                                        </div>
-                                        <a href="#" class="text-dark" style="text-decoration: none;">2 Năm <br>Bảo hành</a>
-                                    </div>
-                                </div>
-                            </div>
-                          <!--    !policy -->
-                            <hr>
-
-                        <!-- order-details -->
-                            <div id="order-details" class="font-rale d-flex flex-column text-dark">
-                                <small class="p-1"><i class="fa-brands fa-facebook"></i> <a href="#" class="text-dark"style="text-decoration: none;"> &nbsp;&nbsp;NP Camera </a></small>
-                                <small class="p-1"><i class="fa-solid fa-phone"></i> &nbsp;&nbsp;0378774013</small>
-                                <small class="p-1"> <i class="fas fa-map-marker-alt"></i> &nbsp;&nbsp; ĐIạ chỉ : 71/9 Nguyễn Văn Thương, P25, quận Bình Thạnh,TP Hồ Chí Mình</small>
-                            </div>
-                         <!-- !order-details -->
-
-                         <div class="row">
-                             <div class="col-6">
-                             </div>
-                             <div class="col-6">
-                               <!-- product qty section -->  
-                                <!-- !product qty section -->  
-                             </div>
-                         </div>
-
-                    </div>
-
-                    <div class="col-12 py-5">
-                        <h6 class="font-rubik">Mô tả sản phẩm</h6>
-                        <hr>
-                        <p class="font-rale font-size-14">Chụp thật nhiều khoảnh khắc quyết định nhờ α7 III của Sony trang bị cảm biến CMOS full-frame chiếu sáng sau mới phát triển và những cải tiến về hình ảnh nâng cao khác, phản ứng nhanh, dễ thao tác và bền bỉ sẵn sàng cho những nhu cầu chụp ảnh khác nhau.</p>
-                        <p class="font-rale font-size-14">Với khả năng chụp ảnh vượt trội và hiệu suất tốc độ cao được trang bị trong thân máy nhỏ gọn, chiếc α7 III đem đến cho bạn sức mạnh, độ chính xác và tính linh hoạt khi chụp những khoảnh khắc chỉ có một lần trong đời theo ý muốn của bạn.</p>
-                    </div>
+                <div class="row mt-4 product_view">
+                </div>
                     <!--Comment-->
+                <div>
                     <div class="title text-center pt-5 pb-4">
                         <h2>Câu hỏi về sản phẩm</h2>
                     </div>
                     <div class="comment_form" style="display:flex;flex-wrap: wrap;">
                         <div class="comment_input" style="width: 100%;padding: 5px;">
-                            <textarea class="txt" id="inputComment" placeholder="Mời bạn để lại bình luận..." style="width:100%; outline: none;"></textarea>
+                            <textarea class="txt" id="inputComment" placeholder="Mời bạn để lại bình luận..." style="width:100%; outline: none; border: 0.5px solid rgba(0, 0, 0, 0.3); border-radius: 12px;"></textarea>
                         </div>
                         <div class="comment_input" style="width: 33.3%;padding: 5px;">
-                            <input class="txt" type="text" id="inputCommentName" placeholder="Họ tên....." style="outline:none;">
+                            <input class="txt" type="text" id="inputCommentName" placeholder="Họ tên....." style="outline:none;border: 0.5px solid rgba(0, 0, 0, 0.3); border-radius: 12px;">
                         </div>
                         <div class="comment_input" style="width: 33.3%;padding: 5px;">
-                            <input class="txt" type="text" id="inputCommentPhone" placeholder="Số điện thoại....." style="outline:none;">
+                            <input class="txt" type="text" id="inputCommentPhone" placeholder="Số điện thoại....." style="outline:none;border: 0.5px solid rgba(0, 0, 0, 0.3); border-radius: 12px;">
                         </div>
                         <div class="comment_input" style="width: 33.3%;padding: 5px;">
-                            <input class="txt" type="text" id="inputCommentEmail" placeholder="Địa chỉ email....." style="outline:none;">
+                            <input class="txt" type="text" id="inputCommentEmail" placeholder="Địa chỉ email....." style="outline:none;border: 0.5px solid rgba(0, 0, 0, 0.3); border-radius: 12px;">
                         </div>
                         <div class="send_input" style="padding: 8px 40px;width:100%;text-align:right ;">
                             <button type="submit" class="btn text-dark " >Gửi</button>
@@ -284,10 +125,10 @@
                 <div class="title text-center pt-5 pb-4">
                     <h2 class="position-relative d-inline-block">Sản phẩm yêu thích</h2>
                 </div>
-            <div class="owl-carousel owl-theme special-list row g-0">
-                <div class="p-5 special-list_list">
-                    <a href="product.html" style="text-decoration:none;" class=" text-dark">
-                    <div class="special-img">
+            <div class="owl-carousel owl-theme special-list row g-0 ">
+                <div class="p-5 special-list_list ">
+                    <a href="product.html" style="text-decoration:none;text-align: center !important;" class=" text-dark">
+                    <div class="special-img" >
                                 <img src="images/A6400.png" class="special-img_img">
                     </div>
                         <div class="text-center">
@@ -444,83 +285,74 @@
 
     <!--footer-->
     <footer class="bg-dark py-5">
-    <div class="container">
-        <div class="row text-white g-4">
-            <div class="col-md-6 col-lg-3">
-                <a href="index.html" class="text-uppercase text-decoration-none brand text-white">NP Camera</a>
-                <p class="text-white text-muted mt-3">“Nhiếp ảnh thật là rộng lớn. Trong đó có đủ chỗ cho mọi người.”</p>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <h5 class="fw-light">Links</h5>
-                <ul class="list-unstyled">
-                    <li class="my-3">
-                        <a href="#header" class="text-white text-decoration-none text-muted">Trang Chủ</a>
-                    </li>
-
-                    <li class="my-3">
-                        <a href="#collection" class="text-white text-decoration-none text-muted">Sản Phẩm</a>
-                    </li>
-
-                    <li class="my-3">
-                        <a href="#specials" class="text-white text-decoration-none text-muted">Specials</a>
-                    </li>
-
-                    <li class="my-3">
-                        <a href="#blogs" class="text-white text-decoration-none text-muted">Blogs</a>
-                    </li>
-                </ul>
-            </div>
-        
-            <div class="col-md-6 col-lg-3">
-                <h5 class="fw-light mb-3">Liên Hệ với chúng tôi</h5>
-                <div class="d-flex justify-content-start align-items-start my-2 text-muted">
-                    <span class="me-3">
-                        <i class="fas fa-map-marked-alt"></i>
-                    </span>
-                    <span class="fw-light">71/9 Nguyễn văn Thương, P25, Bình Thạnh,TP.HCM</span>
+        <div class="container">
+            <div class="row text-white g-4">
+                <div class="col-md-6 col-lg-3">
+                    <a href="index.html" class="text-uppercase text-decoration-none brand text-white">NP Camera</a>
+                    <p class="text-white text-muted mt-3">“Nhiếp ảnh thật là rộng lớn. Trong đó có đủ chỗ cho mọi người.”</p>
                 </div>
-                <div class="d-flex justify-content-start align-items-start my-2 text-muted">
-                    <span class="me-3">
-                        <i class="fas fa-envelope"></i>
-                    </span>
-                    <span class="fw-light">npcamera2022@gmail.com</span>
-                </div>
-                <div class="d-flex justify-content-start align-items-start my-2 text-muted">
-                    <span class="me-3">
-                        <i class="fas fa-phone-alt"></i>
-                    </span>
-                    <span class="fw-light">0378 774 013</span>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <h5 class="fw-light mb-3">Follow Us</h5>
-                <div>
-                    <ul class="list-unstyled d-flex">
-                        <li>
-                            <a href="https://www.facebook.com/profile.php?id=100085898531752" class="text-white text-decoration-none text-muted fs-4 me-4">
-                                <i class="fa-brands fa-facebook"></i>
-                            </a>
+                <div class="col-md-6 col-lg-3">
+                    <h5 class="fw-light">Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="my-3">
+                            <a href="index.html" class="text-white text-decoration-none text-muted">Trang Chủ</a>
                         </li>
-                        <li>
-                            <a href="#" class="text-white text-decoration-none text-muted fs-4 me-4">
-                                <i class="fab fa-twitter"></i>
-                            </a>
+
+                        <li class="my-3">
+                            <a href="productPage.html" class="text-white text-decoration-none text-muted">Sản Phẩm</a>
                         </li>
-                        <li>
-                            <a href="https://www.instagram.com/trongnhan30112k1/" class="text-white text-decoration-none text-muted fs-4 me-4">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="text-white text-decoration-none text-muted fs-4 me-4">
-                                <i class="fab fa-pinterest"></i>
-                            </a>
+
+                        <li class="my-3">
+                            <a href="aboutus.html" class="text-white text-decoration-none text-muted">Giới Thiệu</a>
                         </li>
                     </ul>
                 </div>
+            
+                <div class="col-md-6 col-lg-3">
+                    <h5 class="fw-light mb-3">Liên Hệ với chúng tôi</h5>
+                    <div class="d-flex justify-content-start align-items-start my-2 text-muted">
+                        <span class="me-3">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </span>
+                        <span class="fw-light">71/9 Nguyễn văn Thương, P25, Bình Thạnh,TP.HCM</span>
+                    </div>
+                    <div class="d-flex justify-content-start align-items-start my-2 text-muted">
+                        <span class="me-3">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                        <span class="fw-light">npcamera2022@gmail.com</span>
+                    </div>
+                    <div class="d-flex justify-content-start align-items-start my-2 text-muted">
+                        <span class="me-3">
+                            <i class="fas fa-phone-alt"></i>
+                        </span>
+                        <span class="fw-light">0378 774 013</span>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <h5 class="fw-light mb-3">Follow Us</h5>
+                    <div>
+                        <ul class="list-unstyled d-flex">
+                            <li>
+                                <a href="https://www.facebook.com/profile.php?id=100085898531752" class="text-white text-decoration-none text-muted fs-4 me-4">
+                                    <i class="fa-brands fa-facebook"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://twitter.com/NguyenNhan3011" class="text-white text-decoration-none text-muted fs-4 me-4">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/trongnhan30112k1/" class="text-white text-decoration-none text-muted fs-4 me-4">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
     </footer>
     <!--end of footer-->
 
@@ -534,7 +366,7 @@
     <script src="bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
     <!--custom js-->
     <script src="JS/script.js"></script>
-    <script src="JS/index.js"></script>
     <script src="JS/suggestions.js"></script>
+    <script src="JS/product.js"></script>
 </body>
 </html>
