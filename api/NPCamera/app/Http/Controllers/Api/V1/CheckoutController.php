@@ -16,10 +16,6 @@ use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
-    private $order_data = [];
-    private $voucher_data = [];
-    private $products_in_cart = [];
-
     // MOMO PAYMENT
     public function execPostRequest($url, $data)
     {
@@ -371,7 +367,7 @@ class CheckoutController extends Controller
         // dd($currentOrder);
 
         // Change usage value of voucher, But first need to check VoucherCode field
-        if (!empty($this->voucher_data)) {
+        if (!empty($request->voucher_code)) {
             if ($voucher_data->usage === 1) { // If voucher usage is = 1, then change its value to 0 and change deleted value
                 $voucher_data->usage = 0;
                 $voucher_data->deleted = 1;
@@ -430,7 +426,7 @@ class CheckoutController extends Controller
         }
 
         // If paid is 0, then procceed to store order
-        return $this->completeOrderProcess($arr, $order, $customer->id);
+        return $this->completeOrderProcess($arr, $order, $customer);
     }
 
     public function store(StoreOrderRequest $request)
