@@ -1,8 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\V1\CheckoutController;
 use Illuminate\Support\Facades\Route;
-use App\Mail\PlaceOrderMail;
 
 /*
 |--------------------------------------------------------------------------
