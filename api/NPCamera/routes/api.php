@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\CartController;
 use App\Http\Controllers\Api\V1\CartAdminController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CheckoutController;
+use App\Http\Controllers\Api\V1\CheckoutPaypalController;
 use App\Http\Controllers\Api\V1\CustomerController;
 use App\Http\Controllers\Api\V1\FeedBackController;
 use App\Http\Controllers\Api\V1\OrderController;
@@ -265,6 +266,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/order", [OrderController::class, "index"]); // Show all order from current login user
         Route::get("/order/{id}", [OrderController::class, "show"]); // {id} is order_id; Show detail of order from current login user
         Route::post("/order/placeorder", [CheckoutController::class, "store"]); // Placeorder
+        Route::post("/order/placeorderPaypal", [CheckoutPaypalController::class, "store"]); // Placeorder
         Route::get("/order/{id}/payment", [CheckoutController::class, "redirect"])->name("redirect.page");
 
         // After payment completed
