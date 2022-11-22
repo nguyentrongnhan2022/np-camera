@@ -14,105 +14,8 @@ use App\Models\Voucher;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
-class CheckoutController extends Controller
+class CheckoutPaypalController extends Controller
 {
-    // MOMO PAYMENT
-    public function execPostRequest($url, $data)
-    {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt(
-            $ch,
-            CURLOPT_HTTPHEADER,
-            array(
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen($data)
-            )
-        );
-        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-        //execute post
-        $result = curl_exec($ch);
-        //close connection
-        curl_close($ch);
-        return $result;
-    }
-
-    public function checkoutMomo($currentOrder, $id_delivery, $amount, $requestType)
-    {
-        $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
-
-        $file = explode("\\", dirname(__FILE__));
-        $path_get = $file[0];
-        for ($i = 1; $i < sizeof($file) - 2; $i++) {
-            $path_get = $path_get . "\\" . $file[$i];
-        }
-
-        $path = $path_get . "\\" . "config.json";
-
-        $json = file_get_contents($path);
-
-        // Decode the JSON file
-        $json_data = json_decode($json, true);
-
-        $partnerCode = $json_data['partnerCode'];
-        $accessKey = $json_data['accessKey'];
-        $secretKey = $json_data['secretKey'];
-        $orderInfo = "Thanh toán MoMo qua QR";
-        // $redirectUrl = route("redirect.page", [
-        //     'id' => $currentOrder
-        // ]);
-        $redirectUrl = "http://127.0.0.1:5500/paySucces.html";
-        // $redirectUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
-        $ipnUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
-        $extraData = "";
-
-        if ((int) $requestType === 1) {
-            $requestType = "payWithATM";
-        }
-        // If paid is 2, then it is QR payment
-        else if ((int) $requestType === 2) {
-            $requestType = "captureWallet";
-        }
-
-        // $extraData = $_POST["extraData"];
-
-        $requestId = time() . "";
-        // $extraData = ($_POST["extraData"] ? $_POST["extraData"] : "");
-        //before sign HMAC SHA256 signature
-        $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $id_delivery . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
-        $signature = hash_hmac("sha256", $rawHash, $secretKey);
-        $data = array(
-            'partnerCode' => $partnerCode,
-            'partnerName' => "Test",
-            "storeId" => "MomoTestStore",
-            'requestId' => $requestId,
-            'amount' => $amount,
-            'orderId' => $id_delivery,
-            'orderInfo' => $orderInfo,
-            'redirectUrl' => $redirectUrl,
-            'ipnUrl' => $ipnUrl,
-            'lang' => 'vi',
-            'extraData' => $extraData,
-            'requestType' => $requestType,
-            'signature' => $signature
-        );
-        $result = $this->execPostRequest($endpoint, json_encode($data));
-        $jsonResult = json_decode($result, true);  // decode json
-
-        //Just a example, please check more in there
-
-        return [
-            "data" => $data,
-            "link" => $jsonResult
-        ];
-
-        // return $jsonResult['payUrl'];
-    }
-
-    /** PLACE ORDER FUNCTION */
     public function mail($customer, $order, $listProducts)
     {
         $title = "Quý khách đã đặt hàng thành công";
@@ -132,76 +35,24 @@ class CheckoutController extends Controller
         return $idDelivery;
     }
 
-    public function redirect(GetCustomerBasicRequest $request)
+    public function store(StoreOrderRequest $request)
     {
-        // Get Order, Customer and Momo (table) info
-        $order = Order::where("id", '=', $request->id)->first();
-        $customer = Customer::where("id", "=", $request->user()->id)->first();
-        // $customer = Customer::where("id", "=", $order->customer_id)->first();
-        $momo = Momo::where("order_id", "=", $order->id)->first();
+        /** ##### IF CONDITION SECTION ##### */
+        $customer = Customer::find($request->user()->id); // Later use for detach value from intermediate table
 
-        // Check if order and momo (order detail) has reached enough condition to continue payment progress
-        if ($order->deleted_by !== null || $momo->status === -1) {
+        $data = DB::table("customer_product_cart")
+            ->where("customer_id", "=", $customer->id)->get();
+
+        if ($data->count() === 0) {
             return response()->json([
                 "success" => false,
-                "errors" => "Oops! Something went wrong. This order has already been cancelled"
+                "errors" => "Your cart is empty or Your Order is currently in progress"
             ]);
         }
-        
-        // If request message is "Successful." Then proceed to add the rest of products in cart to intermediate table "order_product"
-        if ($request->message === "Successful." || $request->message === "Giao dịch thành công.") {
-            $arr = [];
-            $productsFromCart = DB::table("customer_product_cart")
-                ->where("customer_id", "=", $order->customer_id)
-                ->get();
 
-            for ($i = 0; $i < sizeof($productsFromCart); $i++) {
-                $value = Product::where("id", "=", $productsFromCart[$i]->product_id)->first();
+        $result = $this->placeOrerPaypal($request, $data, $customer);
 
-                $arr[$i]['product_id'] = $value->id;
-                $arr[$i]['quantity'] = $productsFromCart[$i]->quantity;
-                $arr[$i]['price'] = $value->price;
-                $arr[$i]['percent_sale'] = $value->percent_sale;
-            }
-
-            $momo->partner_code = $request->partnerCode;
-            $momo->order_type = $request->orderType;
-            $momo->trans_id = $request->transId;
-            $momo->pay_type = $request->payType;
-            $momo->status = 1;
-            $momo->signature = $request->signature;
-            $momo->save();
-
-            return $this->completeOrderProcess($arr, $order, $customer);
-        // if customer cancels order, change deleted_by value to 0 (order cancelled by customer) and change momo order status to -1
-        } else {            
-            $order->deleted_by = 0;
-            $order->save();
-
-            $momo->status = -1;
-            $momo->save();
-
-            $json_return = [
-                "success" => false,
-                "errors" => "Transaction has been cancelled by customer"
-            ];
-
-            // Restore voucher usage
-            if (empty($order->voucher_id)) {
-                return response()->json($json_return); 
-            }
-
-            $voucher_query = Voucher::where("id", "=", $order->voucher_id);
-            if (!$voucher_query->exists()) {
-                return response()->json($json_return);
-            }
-
-            $voucher = $voucher_query->first();
-            $voucher->usage = $voucher->usage + 1;
-            $voucher->save();
-
-            return response()->json($json_return);
-        }
+        return $result;
     }
 
     public function completeOrderProcess($arr, $order, $customer)
@@ -249,8 +100,8 @@ class CheckoutController extends Controller
             "message" => "Placed order successfully"
         ]);
     }
-
-    public function placeOrder($request, $data, $customer)
+    
+    public function placeOrerPaypal($request, $data, $customer)
     {
         // Set to Vietnam timezone
         // date_default_timezone_set('Asia/Ho_Chi_Minh');
@@ -399,54 +250,6 @@ class CheckoutController extends Controller
             ]);
         }
 
-        // If paid type is not 0, then it's online payment
-        if ((int) $request->paidType !== 0) {
-            $momo = $this->checkoutMomo($currentOrder, $id_delivery, $filtered["total_price"], $request->paidType);
-
-            // Add to momo Table
-            $data = [
-                "order_id" => $order->id,
-                "partner_code" => $momo['data']['partnerCode'],
-                "status" => 0,
-                "signature" => $momo['data']['signature']
-            ];
-
-            $result = Momo::create($data);
-
-            if (empty($result->id)) {
-                return response()->json([
-                    "success" => false,
-                    "erorrs" => "An unexpected error has occurred"
-                ]);
-            }
-
-            // return momo link to continue payment process
-            // return $momo['data']['partnerCode'];
-            return $momo;
-        }
-
-        // If paid is 0, then procceed to store order
         return $this->completeOrderProcess($arr, $order, $customer);
     }
-
-    public function store(StoreOrderRequest $request)
-    {
-        /** ##### IF CONDITION SECTION ##### */
-        $customer = Customer::find($request->user()->id); // Later use for detach value from intermediate table
-
-        $data = DB::table("customer_product_cart")
-            ->where("customer_id", "=", $customer->id)->get();
-
-        if ($data->count() === 0) {
-            return response()->json([
-                "success" => false,
-                "errors" => "Your cart is empty or Your Order is currently in progress"
-            ]);
-        }
-
-        $result = $this->placeOrder($request, $data, $customer);
-
-        return $result;
-    }
-    /** END OF PLACE ORDER FUNCTION */
 }
