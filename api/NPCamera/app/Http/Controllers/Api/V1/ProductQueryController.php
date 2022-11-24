@@ -14,6 +14,25 @@ use Illuminate\Support\Facades\DB;
 
 class ProductQueryController extends Controller
 {
+    // Use for Paginate
+    public function paginator($arr, $request)
+    {
+        $total = count($arr);
+        $per_page = 8;
+        $current_page = $request->input("page") ?? 1;
+
+        $starting_point = ($current_page * $per_page) - $per_page;
+
+        $arr = array_slice($arr, $starting_point, $per_page, true);
+;
+        $arr = new LengthAwarePaginator($arr, $total, $per_page, $current_page, [
+            'path' => $request->url(),
+            'query' => $request->query(),
+        ]);
+
+        return $arr;
+    }
+
     public function arrival()
     {
         $products = Product::orderBy("created_at", "DESC")->take(10)->get();
@@ -193,26 +212,61 @@ class ProductQueryController extends Controller
     }
 
     /** Display on main page (when login into website) */
-    public function index(Request $request)
-    {
-        // $data = Product::with("categories")->paginate();
-        $data = Product::with("categories");
-        $count = $data->get()->count();
+    // public function index(Request $request)
+    // {
+    //     // $data = Product::with("categories")->paginate();
+    //     $data = Product::with("categories");
+    //     $count = $data->get()->count();
 
-        if (empty($count)) {
-            return response()->json([
-                "success" => false,
-                "errors" => "Product list is empty"
-            ]);
-        }
+    //     if (empty($count)) {
+    //         return response()->json([
+    //             "success" => false,
+    //             "errors" => "Product list is empty"
+    //         ]);
+    //     }
+
+    //     if (!empty($request->get('orderBy'))) {
+    //         $order_type = $request->get('orderBy');
+
+    //         $data = $data->orderBy("price", $order_type);
+    //     }
+
+    //     return new ProductListCollection($data->paginate(8)->appends($request->query()));
+    // }
+
+    public function indexCustomer(Request $request)
+    {
+        $data = Product::with("categories")->get();
 
         if (!empty($request->get('orderBy'))) {
             $order_type = $request->get('orderBy');
 
-            $data = $data->orderBy("price", $order_type);
+            $data = Product::with("categories")->orderBy("price", $order_type)->get();
         }
 
-        return new ProductListCollection($data->paginate(8)->appends($request->query()));
+        $arr = [];
+        // $arr['customer_id'] = $customer->id;
+
+        for ($i = 0; $i < sizeof($data); $i++) {
+            if ($data[$i]->deleted_at !== null) {
+                continue;
+            }
+            $arr[$i]['id'] = $data[$i]->id;
+            $arr[$i]['name'] = $data[$i]->name;
+            $arr[$i]['description'] = $data[$i]->description;
+            $arr[$i]['price'] = $data[$i]->price;
+            $arr[$i]['percentSale'] = $data[$i]->percent_sale;
+            $arr[$i]['img'] = $data[$i]->img;
+            $arr[$i]['quantity'] = $data[$i]->quantity;
+            $arr[$i]['status'] = $data[$i]->status;
+
+            for ($j = 0; $j < sizeof($data[$i]->categories); $j++) {
+                $arr[$i]['categories'][$j]['id'] = $data[$i]->categories[$j]->id;
+                $arr[$i]['categories'][$j]['name'] = $data[$i]->categories[$j]->name;
+            }
+        }
+
+        return $this->paginator($arr, $request);
     }
 
     public function show(Request $request)
@@ -273,24 +327,6 @@ class ProductQueryController extends Controller
     }
 
     // Use for searching bar
-    public function paginator($arr, $request)
-    {
-        $total = count($arr);
-        $per_page = 8;
-        $current_page = $request->input("page") ?? 1;
-
-        $starting_point = ($current_page * $per_page) - $per_page;
-
-        $arr = array_slice($arr, $starting_point, $per_page, true);
-
-        $arr = new LengthAwarePaginator($arr, $total, $per_page, $current_page, [
-            'path' => $request->url(),
-            'query' => $request->query(),
-        ]);
-
-        return $arr;
-    }
-
     public function searchProduct(Request $request)
     {
         $value = "%" . $request->value . "%";
