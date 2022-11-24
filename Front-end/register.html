@@ -103,25 +103,23 @@
     <body>
     <div class="hero">
         <div class="form-box">
-            <form id="register" class="input-group py-1" onsubmit="myFunction()">
+            <form id="register" class="input-group py-1">
                 <img src="images/logo.png" alt="site icon" style="margin-left:25px ;">
                 <h3 class="fw-lighter ms-2 mt-3">NP Camera</h3>
-                <input type="text" class="input-field mt-2" placeholder="First name" style="font-size:13px;" required>
-                <input type="text" class="input-field mt-2" placeholder="Last name"style="font-size:13px;" required>
-                <input type="text" class="input-field mt-2" placeholder="Email/User name"style="font-size:13px;" required>
-                <input type="password" id="id_password_1" class="input-field mt-2" placeholder="Password" style="font-size:13px;"required>
-                <input type="password" id="id_password_2" class="input-field mt-2" placeholder="Confirm password"style="font-size:13px;" required>
-                <input type="checkbox" class="me-2 mt-2"><span class="py-2 mt-2">Tôi đồng ý với các điều khoản và dịch vụ</span>
-                <button type="submit" class="submit-btn mt-2">Đăng ký</button>
+                <input type="text"name="firstName" class="input-field mt-2" placeholder="First name" style="font-size:13px;" required>
+                <input type="text" name="lastName"class="input-field mt-2" placeholder="Last name"style="font-size:13px;" required>
+                <input type="text"name="email" class="input-field mt-2" placeholder="Email/User name"style="font-size:13px;" required>
+                <input type="password" name="password"id="id_password_1" class="input-field mt-2" placeholder="Password" style="font-size:13px;"required>
+                <input type="password" name="confirmPassword" id="id_password_2" class="input-field mt-2" placeholder="Confirm password"style="font-size:13px;" required>
+                <span id="message"class="mt-2 mb-1 w-100" style="color:red;"></span>
+                <div>
+                    <input type="checkbox" style="position:absolute; margin-top: 7px;" required>
+                    <span style="margin-left:20px;">Tôi đồng ý với các điều khoản và dịch vụ</span>
+                </div>
+                <button type="submit" class="submit-btn mt-3">Đăng ký</button>
             </form> 
         </div>  
     </div>
-
-    <script>
-    function myFunction() {
-        alert("Đăng ký thành công !");
-        }
-    </script>
     <!--jquery-->
     <script src="JS/jquery-3.6.1.js"></script>
     <!--isotope js-->
@@ -132,7 +130,7 @@
     <script src="bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
     <!--custom js-->
     <script src="JS/script.js"></script>
-    <script src="JS/index.js"></script>
+    <script src="JS/register.js"></script>
     <script src="JS/suggestions.js"></script>
 </body>
 </html>

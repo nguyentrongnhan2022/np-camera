@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NP Camera</title>
+    <!-- Owl-carousel CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+        integrity="sha256-UhQQ4fxEeABh4JrcmAJ1+16id/1dnlOEVCFOxDef9Lw=" crossorigin="anonymous" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+        integrity="sha256-kksNxjDRxd/5+jGurZUJd1sdR2v+ClrCl3svESBaJqw=" crossorigin="anonymous" />
+    <!--font awesome cdn-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!--bootstrap css-->
+    <link rel="stylesheet" href="bootstrap-5.0.2-dist/css/bootstrap.min.css">
+    <!--custom css-->
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<style>
+    .social-link {
+        width: 30px;
+        height: 30px;
+        border: 1px solid #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        border-radius: 50%;
+        transition: all 0.3s;
+        font-size: 0.9rem;
+    }
+
+    .social-link:hover,
+    .social-link:focus {
+        background: #ddd;
+        text-decoration: none;
+        color: #555;
+    }
+
+    #header {
+        background: url(../images/BackGround2.jpg) top/cover no-repeat;
+    }
+</style>
+
+<body>
+    <!--navbar-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white py-1 fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex justify-content-between align-items-center order-lg-0" href="index.html">
+                <img src="images/logo.png" alt="site icon">
+                <span class="text-uppercase fw-lighter ms-2">NP Camera</span>
+            </a>
+            <div class="search_wrapper nav-btns order-lg-2 me-5">
+                <div class="search" onclick="searchToggle();">
+                    <i class="fa fa-search"></i>
+                </div>
+                <div class="wrapper">
+                    <div class="search_input">
+                        <input id="input_search" type="text" placeholder="Tìm kiếm......"
+                            style="margin-left:10px;margin-right:10px;">
+                        <div class="autocom-box">
+                            <li>Máy ảnh Sony A6400</li>
+                            <li>Máy ảnh Sony A7 Mark 3</li>
+                            <li>Ống kính FE 55mm Cz F1.8</li>
+                            <li>Ống kính FE 24-70GM F2.8</li>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cart_header order-lg-2 nav-btns me-5">
+                <div class="cart" onclick="cartToggle();">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="position-absolute  translate-middle badge bg-primary"
+                        style="margin-left: 7px;font-size: 10px;">0</span>
+                </div>
+                <div class="cart-list">
+                    <!--Empty cart-->
+
+                    <!-- <div style="width:240px;">
+                        <h4 class="text-dark p-2" style="font-weight:500; font-size: 16px; text-align: center;">Sản phẩm đã thêm</h4>
+                        <img src="images/4076503.png" style=" width: 60%;height: auto; margin: 0 48px;" class="pb-3 pt-3">
+                        <h3 class="text-dark p-2" style="font-weight:100; font-size:12px;text-align: center;">Giỏ hàng trống</h4>
+                    </div> -->
+
+                    <!--end of empty cart-->
+
+                    <h4 class="text-dark" style="font-weight:500; font-size: 16px;">Sản phẩm đã thêm</h4>
+                    <ul class="cart-list-item">
+                        <li class="cart-item">
+                            <img src="images/SonyA73.png" class="cart-item-img">
+                            <div class="cart-item-info" style=" width: 100%; margin-right: 10px;">
+                                <div class="cart-item-head"
+                                    style="display:flex; justify-content: space-between; width: 100%; padding-top: 23px;">
+                                    <h5 style="font-size:14px;font-weight: 500;">Máy ảnh Sony A7 Mark 3</h5>
+                                    <span id="sum-price" style="font-size: 10px; font-weight: 500;">$ 32.000.000
+                                        VNĐ&nbsp;&nbsp; x1</span>
+                                </div>
+                                <div class="cart-item-body" style="display: flex; justify-content: space-between;">
+                                    <span style="font-size: 10px;">Phân loại: Máy ảnh</span>
+                                    <span class="cart-item-body_delete"
+                                        style="font-size: 10px; font-weight: 800;">Xóa</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="cart-list-item">
+                        <li class="cart-item">
+                            <img src="images/SonyA6000.png" class="cart-item-img">
+                            <div class="cart-item-info" style=" width: 100%; margin-right: 10px;">
+                                <div class="cart-item-head"
+                                    style="display:flex; justify-content: space-between; width: 100%; padding-top: 23px;">
+                                    <h5 style="font-size:14px;font-weight: 500;">Máy ảnh Sony A6000</h5>
+                                    <span id="sum-price" style="font-size: 10px; font-weight: 500;">$ 8.000.000
+                                        VNĐ&nbsp;&nbsp; x1</span>
+                                </div>
+                                <div class="cart-item-body" style="display: flex; justify-content: space-between;">
+                                    <span style="font-size: 10px;">Phân loại: Máy ảnh</span>
+                                    <span class="cart-item-body_delete"
+                                        style="font-size: 10px; font-weight: 800;">Xóa</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="cart-list-item">
+                        <li class="cart-item">
+                            <img src="images/27-70GM.png" class="cart-item-img">
+                            <div class="cart-item-info" style=" width: 100%; margin-right: 10px;">
+                                <div class="cart-item-head"
+                                    style="display:flex; justify-content: space-between; width: 100%; padding-top: 23px;">
+                                    <h5 style="font-size:14px;font-weight: 500;">FE 24-70GM F2.8</h5>
+                                    <span id="sum-price" style="font-size: 10px; font-weight: 500;">$ 40.000.000
+                                        VNĐ&nbsp;&nbsp; x1</span>
+                                </div>
+                                <div class="cart-item-body" style="display: flex; justify-content: space-between;">
+                                    <span style="font-size: 10px;">Phân loại: Ống kính</span>
+                                    <span class="cart-item-body_delete"
+                                        style="font-size: 10px; font-weight: 800;">Xóa</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div style="text-align:center;">
+                        <a href="cart.html">
+                            <button class="cart-list_view m-2 text-dark checkout hidden">Xem giỏ hàng</button>
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="action nav-btns order-lg-2">
+                <div class="profile" onclick="menuToggle();">
+                    <i class="fa fa-user"></i>
+                </div>
+                <div class="action_menu">
+                    <ul>
+                    </ul>
+                </div>
+            </div>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class=" navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse order-lg-1" id="navMenu">
+                <ul class="navbar-nav mx-auto text-center">
+                    <li class="nav-item px-3 py-2">
+                        <a class="nav-link text-uppercase text-dark" href="index.html">trang chủ</a>
+                    </li>
+                    <li class="nav-item px-3 py-2">
+                        <a class="nav-link text-uppercase text-dark" href="productPage.html">sản phẩm</a>
+                    </li>
+                    <li class="nav-item px-3 py-2">
+                        <a class="nav-link text-uppercase text-dark" href="aboutus.html">giới thiệu</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </nav>
+    <!-- end of navbar-->
+
+    <!--Header-->
+    <header id="header" class="vh-100 carousel slide" data-bs-ride="carousel" style="padding-top: 104px;">
+        <div class="container h-100 d-flex align-items-center carousel-inner">
+            <div class="text-center carousel-item active">
+                <h1 class="text-capitalize text-white">NP Camera</h1>
+                <h2 class="py-2 fw-bold text-white">NP Camera - “Nhiếp ảnh thật là rộng lớn.Trong đó có đủ chỗ
+                    cho mọi người.”</h2>
+                <a href="index.html" class="btn mt-3 text-uppercase">Trang Chủ</a>
+            </div>
+        </div>
+    </header>
+    <!--end of header-->
+
+    <!--Blog-->
+    <div class="bg-white py-5">
+        <div class="container py-5">
+            <div class="row align-items-center mb-5">
+                <div class="col-lg-6 order-2 order-lg-1"><i class="fa fa-bar-chart fa-2x mb-3 text-primary"></i>
+                    <h2 class="font-weight-light">Máy ảnh Sony A7 Mark 3</h2>
+                    <p class="font-italic text-muted mb-4">Với khả năng chụp ảnh vượt trội và hiệu suất tốc độ cao được
+                        trang bị trong thân máy nhỏ gọn, chiếc α7 III đem đến cho bạn sức mạnh, độ chính xác và tính
+                        linh hoạt khi chụp những khoảnh khắc chỉ có một lần trong đời theo ý muốn của bạn.</p><a
+                        href="https://www.sony.com.vn/electronics/may-anh-ky-thuat-so-may-anh/ilce-7m3-body-kit?cid=Cat-Alpha_VN_Model:sem:goog:A7M3&pwk=A7M3&gclid=Cj0KCQiAyMKbBhD1ARIsANs7rEFUav2EIOc1SHAuFGtpamtH-d8uIzLgtWzLf3yq3R4rWABrIjGUe0gaAt8lEALw_wcB&gclsrc=aw.ds"
+                        class="btn btn-light px-5 rounded-pill shadow-sm">Tìm hiểu thêm</a>
+                </div>
+                <div class="col-lg-5 px-5 mx-auto order-1 order-lg-2"><img src="images/SonyA73.png" alt=""
+                        class="img-fluid mb-4 mb-lg-0"></div>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-lg-5 px-5 mx-auto"><img src="images/27-70GM.png" alt="" class="img-fluid mb-4 mb-lg-0">
+                </div>
+                <div class="col-lg-6"><i class="fa fa-leaf fa-2x mb-3 text-primary"></i>
+                    <h2 class="font-weight-light">Ống kính Sony FE 24-70GM </h2>
+                    <p class="font-italic text-muted mb-4">FE 24-70 mm F2.8 GM là ống kính zoom chuẩn thuộc “bộ ba thần
+                        thánh” mới nhất, kết hợp hiệu suất AF và hệ thống quang học tiên tiến vào một thiết kế zoom tiện
+                        lợi, gọn nhẹ, đem lại sự linh hoạt tối đa dù chụp ảnh tĩnh hay quay phim. Ống kính cực hợp với
+                        thân máy ảnh α nhỏ gọn, hiệu suất cao để có thể ghi hình trong nhiều tình huống.</p><a
+                        href="https://www.sony.com.vn/electronics/ong-kinh-may-anh/sel2470gm2?cid=Cat-LENs_VN_Model:sem:goog:Sel2470gm&gclid=Cj0KCQiAyMKbBhD1ARIsANs7rEFhsniMdG8qzbwpnk1K_JfafVdnFMLzTOVBbCnqxxbDvevy5vw1j1kaAgkcEALw_wcB&gclsrc=aw.ds"
+                        class="btn btn-light px-5 rounded-pill shadow-sm">Tìm hiểu thêm</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end of Blog-->
+
+    <!--Team-->
+    <div class="bg-light py-5">
+        <div class="container py-5">
+            <div class="row mb-4">
+                <div class="col-lg-8">
+                    <h2 class="display-4 font-weight-light">Thành viên Team</h2>
+                    <p class="font-italic text-muted">NP Camera - “Nhiếp ảnh thật là rộng lớn.Trong đó có đủ
+                        chỗ cho mọi người.”</p>
+                </div>
+            </div>
+
+            <div class="row text-center">
+                <!-- Team item-->
+                <div class="col-xl-6 col-sm-6 mb-5">
+                    <div class="bg-white rounded shadow-sm py-5 px-4"><img src="images/AvatarNhan.jpg" alt=""
+                            width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                        <h5 class="mb-0">Nguyễn Trọng Nhân</h5><span class="small text-uppercase text-muted">Developer -
+                            Front end</span>
+                        <ul class="social mb-0 list-inline mt-3">
+                            <li class="list-inline-item"><a
+                                    href="https://www.facebook.com/profile.php?id=100085898531752"
+                                    class="social-link"><i class="fa-brands fa-facebook"></i></a></li>
+                            <li class="list-inline-item"><a href="https://twitter.com/NguyenNhan3011"
+                                    class="social-link"><i class="fab fa-twitter"></i></a></li>
+                            <li class="list-inline-item"><a href="https://www.instagram.com/trongnhan30112k1/"
+                                    class="social-link"><i class="fab fa-instagram"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- End-->
+
+                <!-- Team item-->
+                <div class="col-xl-6 col-sm-6 mb-5">
+                    <div class="bg-white rounded shadow-sm py-5 px-4"><img src="images/AvatarPhong.jpg" alt=""
+                            width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+                        <h5 class="mb-0">Đỗ Kim Phong</h5><span class="small text-uppercase text-muted">Devaloper - Back
+                            end</span>
+                        <ul class="social mb-0 list-inline mt-3">
+                            <li class="list-inline-item"><a href="https://www.facebook.com/n0ide4/"
+                                    class="social-link"><i class="fa-brands fa-facebook"></i></a></li>
+                            <li class="list-inline-item"><a href="https://twitter.com/Simpson06381753"
+                                    class="social-link"><i class="fab fa-twitter"></i></a></li>
+                            <li class="list-inline-item"><a href="https://www.instagram.com/phongdo1101/"
+                                    class="social-link"><i class="fab fa-instagram"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- End-->
+            </div>
+        </div>
+    </div>
+    <!--end of Team-->
+
+    <!--footer-->
+    <footer class="bg-dark py-5">
+        <div class="container">
+            <div class="row text-white g-4">
+                <div class="col-md-6 col-lg-3">
+                    <a href="index.html" class="text-uppercase text-decoration-none brand text-white">NP Camera</a>
+                    <p class="text-white text-muted mt-3">“Nhiếp ảnh thật là rộng lớn. Trong đó có đủ chỗ cho
+                        mọi người.”</p>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <h5 class="fw-light">Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="my-3">
+                            <a href="index.html" class="text-white text-decoration-none text-muted">Trang Chủ</a>
+                        </li>
+
+                        <li class="my-3">
+                            <a href="productPage.html" class="text-white text-decoration-none text-muted">Sản Phẩm</a>
+                        </li>
+
+                        <li class="my-3">
+                            <a href="aboutus.html" class="text-white text-decoration-none text-muted">Giới Thiệu</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <h5 class="fw-light mb-3">Liên Hệ với chúng tôi</h5>
+                    <div class="d-flex justify-content-start align-items-start my-2 text-muted">
+                        <span class="me-3">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </span>
+                        <span class="fw-light">71/9 Nguyễn văn Thương, P25, Bình Thạnh,TP.HCM</span>
+                    </div>
+                    <div class="d-flex justify-content-start align-items-start my-2 text-muted">
+                        <span class="me-3">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                        <span class="fw-light">npcamera2022@gmail.com</span>
+                    </div>
+                    <div class="d-flex justify-content-start align-items-start my-2 text-muted">
+                        <span class="me-3">
+                            <i class="fas fa-phone-alt"></i>
+                        </span>
+                        <span class="fw-light">0378 774 013</span>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <h5 class="fw-light mb-3">Follow Us</h5>
+                    <div>
+                        <ul class="list-unstyled d-flex">
+                            <li>
+                                <a href="https://www.facebook.com/profile.php?id=100085898531752"
+                                    class="text-white text-decoration-none text-muted fs-4 me-4">
+                                    <i class="fa-brands fa-facebook"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://twitter.com/NguyenNhan3011"
+                                    class="text-white text-decoration-none text-muted fs-4 me-4">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/trongnhan30112k1/"
+                                    class="text-white text-decoration-none text-muted fs-4 me-4">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!--end of footer-->
+
+</body>
+<!--jquery-->
+<script src="JS/jquery-3.6.1.js"></script>
+<!--isotope js-->
+<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.js"></script>
+<!-- Owl Carousel Js file -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+    integrity="sha256-pTxD+DSzIwmwhOqTFN+DB+nHjO4iAsbgfyFq5K5bcE0=" crossorigin="anonymous"></script>
+<!--bootstrap js-->
+<script src="bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
+<!--custom js-->
+<script src="JS/script.js"></script>
+<script src="JS/index.js"></script>
+<script src="JS/suggestions.js"></script>

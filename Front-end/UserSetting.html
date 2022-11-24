@@ -4,55 +4,60 @@
 	<meta charset="UTF-8">
 	<title>Thông Tin Người Dùng</title>
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css"
+		href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<!--bootstrap css-->
-    <link rel="stylesheet" href="bootstrap-5.0.2-dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="bootstrap-5.0.2-dist/css/bootstrap.min.css">
 	<!--font awesome cdn-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+		integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <style>
 	@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap");
-body {
-	background: #f9f9f9;
-	font-family: "Roboto", sans-serif;
-}
 
-.shadow {
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
-}
+	body {
+		background: #f9f9f9;
+		font-family: "Roboto", sans-serif;
+	}
 
-.profile-tab-nav {
-	min-width: 250px;
-}
+	.shadow {
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+	}
 
-.tab-content {
-	flex: 1;
-}
+	.profile-tab-nav {
+		min-width: 250px;
+	}
 
-.form-group {
-	margin-bottom: 1.5rem;
-}
+	.tab-content {
+		flex: 1;
+	}
 
-.nav-pills a.nav-link {
-	padding: 15px 20px;
-	border-bottom: 1px solid #ddd;
-	border-radius: 0;
-	color: #333;
-}
-.nav-pills a.nav-link i {
-	width: 20px;
-}
+	.form-group {
+		margin-bottom: 1.5rem;
+	}
 
-.img-circle img {
-	height: 100px;
-	width: 100px;
-	border-radius: 100%;
-	border: 5px solid #fff;
-}
+	.nav-pills a.nav-link {
+		padding: 15px 20px;
+		border-bottom: 1px solid #ddd;
+		border-radius: 0;
+		color: #333;
+	}
 
+	.nav-pills a.nav-link i {
+		width: 20px;
+	}
+
+	.img-circle img {
+		height: 100px;
+		width: 100px;
+		border-radius: 100%;
+		border: 5px solid #fff;
+	}
 </style>
+
 <body>
 	<section class="py-2 my-4">
 		<div class="container">
@@ -66,24 +71,29 @@ body {
 						<h4 class="text-center">Nhân Nguyễn</h4>
 					</div>
 					<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-						<a class="nav-link active" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="account" aria-selected="true">
-							<i class="fa fa-home text-center mr-1"></i> 
+						<a class="nav-link active" id="account-tab" data-toggle="pill" href="#account" role="tab"
+							aria-controls="account" aria-selected="true">
+							<i class="fa fa-home text-center mr-1"></i>
 							Tài Khoản
 						</a>
-						<a class="nav-link" id="password-tab" data-toggle="pill" href="#password" role="tab" aria-controls="password" aria-selected="false">
-							<i class="fa fa-key text-center mr-1"></i> 
+						<a class="nav-link" id="password-tab" data-toggle="pill" href="#password" role="tab"
+							aria-controls="password" aria-selected="false">
+							<i class="fa fa-key text-center mr-1"></i>
 							Bảo Mật
 						</a>
-						<a class="nav-link" id="security-tab" data-toggle="pill" href="#security" role="tab" aria-controls="security" aria-selected="false">
+						<a class="nav-link" id="security-tab" data-toggle="pill" href="#security" role="tab"
+							aria-controls="security" aria-selected="false">
 							<i class="fa-solid fa-location-dot text-center mr-1"></i>
 							Địa Chỉ
 						</a>
-						<a class="nav-link" id="application-tab" data-toggle="pill" href="#application" role="tab" aria-controls="application" aria-selected="false">
+						<a class="nav-link" id="application-tab" data-toggle="pill" href="#application" role="tab"
+							aria-controls="application" aria-selected="false">
 							<i class="fa-solid fa-clipboard text-center mr-1"></i>
 							Lịch Sử Mua Hàng
 						</a>
-						<a class="nav-link" id="notification-tab" data-toggle="pill" href="#notification" role="tab" aria-controls="notification" aria-selected="false">
-							<i class="fa-solid fa-star text-center mr-1"></i> 
+						<a class="nav-link" id="notification-tab" data-toggle="pill" href="#notification" role="tab"
+							aria-controls="notification" aria-selected="false">
+							<i class="fa-solid fa-star text-center mr-1"></i>
 							Đánh Giá
 						</a>
 					</div>
@@ -94,44 +104,57 @@ body {
 						<div class="row">
 							<div class="col-md-12">
 								<div class="mb-3">
-                                    <label class="small mb-1" style="font-weight:600 ;" for="inputUsername">Username</label>
-                                    <input class="form-control" id="inputUsername" type="text" placeholder="Nhập username..." style="font-weight:300;font-size: 15px;">
-                                </div>
+									<label class="small mb-1" style="font-weight:600 ;"
+										for="inputUsername">Username</label>
+									<input class="form-control" id="inputUsername" type="text"
+										placeholder="Nhập username..." style="font-weight:300;font-size: 15px;">
+								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="mb-3">
-									<label class="small mb-1" style="font-weight:600 ;" for="inputFirstName">First name</label>
-									<input class="form-control" id="inputFirstName" type="text" placeholder="Nhập first name..."style="font-weight:300;font-size: 15px;">
+									<label class="small mb-1" style="font-weight:600 ;" for="inputFirstName">First
+										name</label>
+									<input class="form-control" id="inputFirstName" type="text"
+										placeholder="Nhập first name..." style="font-weight:300;font-size: 15px;">
 								</div>
-								</div>
+							</div>
 							<div class="col-md-6">
 								<div class="mb-3">
-									<label class="small mb-1" style="font-weight:600 ;"for="inputLastName">Last name</label>
-									<input class="form-control" id="inputLastName" type="text" placeholder="Nhập last name..."style="font-weight:300;font-size: 15px;">	
+									<label class="small mb-1" style="font-weight:600 ;" for="inputLastName">Last
+										name</label>
+									<input class="form-control" id="inputLastName" type="text"
+										placeholder="Nhập last name..." style="font-weight:300;font-size: 15px;">
 								</div>
 							</div>
 							<div class="col-md-12">
 								<div class="mb-3">
-									<label class="small mb-1"style="font-weight:600 ;" for="inputEmailAddress">Email</label>
-                                    <input class="form-control" id="inputEmailAddress" type="email" placeholder="Nhập email..."style="font-weight:300;font-size: 15px;">
+									<label class="small mb-1" style="font-weight:600 ;"
+										for="inputEmailAddress">Email</label>
+									<input class="form-control" id="inputEmailAddress" type="email"
+										placeholder="Nhập email..." style="font-weight:300;font-size: 15px;">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="mb-3">
-								<label class="small mb-1"style="font-weight:600 ;" for="inputPhone">Số điện thoại</label>
-								<input class="form-control" id="inputPhone" type="tel" placeholder="Nhập số điện thoại..."style="font-weight:300;font-size: 15px;">
+									<label class="small mb-1" style="font-weight:600 ;" for="inputPhone">Số điện
+										thoại</label>
+									<input class="form-control" id="inputPhone" type="tel"
+										placeholder="Nhập số điện thoại..." style="font-weight:300;font-size: 15px;">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="mb-3">
-									<label class="small mb-1"style="font-weight:600 ;" for="inputBirthday">Ngày sinh</label>
-                                    <input class="form-control" id="inputBirthday" type="text" name="birthday" placeholder="Nhập ngày sinh..."style="font-weight:300;font-size: 15px;">
+									<label class="small mb-1" style="font-weight:600 ;" for="inputBirthday">Ngày
+										sinh</label>
+									<input class="form-control" id="inputBirthday" type="text" name="birthday"
+										placeholder="Nhập ngày sinh..." style="font-weight:300;font-size: 15px;">
 								</div>
 							</div>
 						</div>
 						<div>
-							<button class="btn btn-primary mt-2" onclick="myFunction()" type="button"style="font-size: 15px;">Lưu thay đổi</button>
-							<button class="btn btn-primary mt-2"type="button"style="font-size: 15px;">Hủy</button>
+							<button class="btn btn-primary mt-2" onclick="myFunction()" type="button"
+								style="font-size: 15px;">Lưu thay đổi</button>
+							<button class="btn btn-primary mt-2" type="button" style="font-size: 15px;">Hủy</button>
 						</div>
 					</div>
 					<div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
@@ -139,96 +162,123 @@ body {
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									<label class="small mb-1"style="font-weight:600 ;" for="inputPhone">Mật khẩu cũ</label>
-									<input class="form-control" id="inputOldPassword" type="password" placeholder="Mật khẩu cũ..."style="font-weight:300;font-size: 15px;">
+									<label class="small mb-1" style="font-weight:600 ;" for="inputPhone">Mật khẩu
+										cũ</label>
+									<input class="form-control" id="inputOldPassword" type="password"
+										placeholder="Mật khẩu cũ..." style="font-weight:300;font-size: 15px;">
 								</div>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									<label class="small mb-1"style="font-weight:600 ;" for="inputBirthday">Mật khẩu mới</label>
-									<input class="form-control" id="inputNewPassword" type="password" placeholder="Mật khẩu mới..."style="font-weight:300;font-size: 15px;"">
+									<label class="small mb-1" style="font-weight:600 ;" for="inputBirthday">Mật khẩu
+										mới</label>
+									<input class="form-control" id="inputNewPassword" type="password"
+										placeholder="Mật khẩu mới..." style="font-weight:300;font-size: 15px;"">
 								</div>
 							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label class="small mb-1"style="font-weight:600 ;" for="inputBirthday">Xác nhận mật khẩu</label>
-									<input class="form-control" id="inputConfirmNewPassword" type="password" placeholder="Xác nhận mật khẩu..."style="font-weight:300;font-size: 15px;"">
+							<div class=" col-md-6">
+									<div class="form-group">
+										<label class="small mb-1" style="font-weight:600 ;" for="inputBirthday">Xác nhận
+											mật khẩu</label>
+										<input class="form-control" id="inputConfirmNewPassword" type="password"
+											placeholder="Xác nhận mật khẩu..." style="font-weight:300;font-size: 15px;"">
 								</div>
 							</div>
 						</div>
 						<div>
-							<button class="btn btn-primary" onclick="myFunction()" type="button"style="font-size: 15px;">Lưu thay đổi</button>
-							<button class="btn btn-primary"type="button"style="font-size: 15px;">Hủy</button>
-						</div>
-					</div>
-					<div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
-						<h3 class="mb-4">Địa Chỉ</h3>
-						<div class="row">
-							<div class="col-md-4">
-								<div class="mb-3">
-									<label class="small mb-1" style="font-weight:600 ;" for="inputFirstName">First name</label>
-									<input class="form-control" id="inputFirstName" type="text" placeholder="Nhập first name..."style="font-weight:300;font-size: 15px;">
-								</div>
-								</div>
-							<div class="col-md-4">
-								<div class="mb-3">
-									<label class="small mb-1" style="font-weight:600 ;"for="inputLastName">Last name</label>
-									<input class="form-control" id="inputLastName" type="text" placeholder="Nhập last name..."style="font-weight:300;font-size: 15px;">	
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="form-group">
-									<div class="mb-3">
-										<label class="small mb-1"style="font-weight:600 ;" for="inputPhone">Số điện thoại</label>
-											<input class="form-control" id="inputPhone" type="tel" placeholder="Nhập số điện thoại..."style="font-weight:300;font-size: 15px;">
+							<button class=" btn btn-primary" onclick="myFunction()" type="button" style="font-size: 15px;">Lưu thay
+										đổi</button>
+										<button class="btn btn-primary" type="button"
+											style="font-size: 15px;">Hủy</button>
 									</div>
 								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="form-group">
-										<label class="small mb-1" style="font-weight:600 ;" for="inputUsername">Địa Chỉ</label>
-										<input class="form-control" id="inputUsername" type="text" placeholder="Nhập địa chỉ..." style="font-weight:300;font-size: 15px;">
+								<div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
+									<h3 class="mb-4">Địa Chỉ</h3>
+									<div class="row">
+										<div class="col-md-4">
+											<div class="mb-3">
+												<label class="small mb-1" style="font-weight:600 ;"
+													for="inputFirstName">First name</label>
+												<input class="form-control" id="inputFirstName" type="text"
+													placeholder="Nhập first name..."
+													style="font-weight:300;font-size: 15px;">
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="mb-3">
+												<label class="small mb-1" style="font-weight:600 ;"
+													for="inputLastName">Last name</label>
+												<input class="form-control" id="inputLastName" type="text"
+													placeholder="Nhập last name..."
+													style="font-weight:300;font-size: 15px;">
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<div class="mb-3">
+													<label class="small mb-1" style="font-weight:600 ;"
+														for="inputPhone">Số điện thoại</label>
+													<input class="form-control" id="inputPhone" type="tel"
+														placeholder="Nhập số điện thoại..."
+														style="font-weight:300;font-size: 15px;">
+												</div>
+											</div>
+										</div>
+										<div class="col-md-12">
+											<div class="form-group">
+												<label class="small mb-1" style="font-weight:600 ;"
+													for="inputUsername">Địa Chỉ</label>
+												<input class="form-control" id="inputUsername" type="text"
+													placeholder="Nhập địa chỉ..."
+													style="font-weight:300;font-size: 15px;">
+											</div>
+										</div>
+										<div class="col-md-12">
+											<div class="form-group">
+												<label class="small mb-1" style="font-weight:600 ;"
+													for="inputUsername">Tỉnh/Thành Phố</label>
+												<input class="form-control" id="inputUsername" type="text"
+													placeholder="Nhập tỉnh/thành phố..."
+													style="font-weight:300;font-size: 15px;">
+											</div>
+										</div>
+									</div>
+									<div>
+										<button class="btn btn-primary" onclick="myFunction()" type="button"
+											style="font-size: 15px;">Lưu thay đổi</button>
+										<button class="btn btn-primary" type="button"
+											style="font-size: 15px;">Hủy</button>
+									</div>
 								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="form-group">
-										<label class="small mb-1" style="font-weight:600 ;" for="inputUsername">Tỉnh/Thành Phố</label>
-										<input class="form-control" id="inputUsername" type="text" placeholder="Nhập tỉnh/thành phố..." style="font-weight:300;font-size: 15px;">
-								</div>
-							</div>
-						</div>
-						<div>
-							<button class="btn btn-primary" onclick="myFunction()" type="button"style="font-size: 15px;">Lưu thay đổi</button>
-							<button class="btn btn-primary"type="button"style="font-size: 15px;">Hủy</button>
-						</div>
-					</div>
-					<div class="tab-pane fade" id="application" role="tabpanel" aria-labelledby="application-tab">
-						<h3 class="mb-4">Lịch Sử Mua Hàng</h3>
-						<div class="row">
-							<div class="col-md-6">
-								<div class="form-group">
-									
-								</div>
-							</div>
-						</div>
-						<!-- <div>
+								<div class="tab-pane fade" id="application" role="tabpanel"
+									aria-labelledby="application-tab">
+									<h3 class="mb-4">Lịch Sử Mua Hàng</h3>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+
+											</div>
+										</div>
+									</div>
+									<!-- <div>
 							<button class="btn btn-primary">Update</button>
 							<button class="btn btn-light">Cancel</button>
 						</div> -->
-					</div>
-					<div class="tab-pane fade" id="notification" role="tabpanel" aria-labelledby="notification-tab">
-						<h3 class="mb-4">Đánh Giá</h3>
-						
-						<!-- <div>
+								</div>
+								<div class="tab-pane fade" id="notification" role="tabpanel"
+									aria-labelledby="notification-tab">
+									<h3 class="mb-4">Đánh Giá</h3>
+
+									<!-- <div>
 							<button class="btn btn-primary">Update</button>
 							<button class="btn btn-light">Cancel</button>
 						</div> -->
+								</div>
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
-		</div>
 	</section>
 	<!--jquery-->
 	<script src="JS/jquery-3.6.1.js"></script>
@@ -236,7 +286,8 @@ body {
 	<!--isotope js-->
 	<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.js"></script>
 	<!-- Owl Carousel Js file -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha256-pTxD+DSzIwmwhOqTFN+DB+nHjO4iAsbgfyFq5K5bcE0=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+		integrity="sha256-pTxD+DSzIwmwhOqTFN+DB+nHjO4iAsbgfyFq5K5bcE0=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 	<!--bootstrap js-->
 	<script src="bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
@@ -245,8 +296,6 @@ body {
 	<script src="JS/script.js"></script>
 	<script src="JS/index.js"></script>
 	<script src="JS/suggestions.js"></script>
-	
-	
-	
 </body>
+
 </html>
