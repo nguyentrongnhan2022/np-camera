@@ -75,7 +75,7 @@ class CartController extends Controller
         }
 
         // return $customer;
-        return $new_arr;
+        return $arr;
     }
     
     public function index(GetCustomerBasicRequest $request)
