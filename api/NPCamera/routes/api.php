@@ -228,10 +228,10 @@ Route::get('/products/topBar/search={value}', [ProductQueryController::class, "s
  * Sale products
  * All of them are top 10
  */
-Route::get('/products/newArrival', [ProductQueryController::class, "arrival"]); // Show all products
-Route::get('/products/saleProduct', [ProductQueryController::class, "sale"]); // Show all products
-Route::get('/products/bestSeller', [ProductQueryController::class, "best"]); // Show all products
-Route::get('/products/trending/day={day}', [ProductQueryController::class, "trending"]); // Show all products
+Route::get('/product/newArrival', [ProductQueryController::class, "arrival"]); // Show all products
+Route::get('/product/saleProduct', [ProductQueryController::class, "sale"]); // Show all products
+Route::get('/product/bestSeller', [ProductQueryController::class, "best"]); // Show all products
+Route::get('/product/trending/day={day}', [ProductQueryController::class, "trending"]); // Show all products
 Route::get('/mostfavoriteProducts', [ProductQueryController::class, "mostfavoriteProducts"]); // Show detail of a specific product
 
 Route::post("/register", [UserAuthController::class, "register"]); // Register

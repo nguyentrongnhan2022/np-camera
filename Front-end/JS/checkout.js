@@ -270,7 +270,6 @@ function loadMomo(){
         nameReceiver: nameUser.value.trim(),
         phoneReceiver: "0372963918",
         paidType: 2})
-         
     })
     
     .then(data => data.json())
