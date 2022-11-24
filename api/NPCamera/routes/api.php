@@ -66,7 +66,7 @@ Route::middleware("auth:sanctum")->group(function () {
 
         // Route for Product
         Route::group(['prefix' => "products"], function () {
-            Route::get('/', [ProductController::class, "index"]); // Show all products
+            Route::get('/', [ProductController::class, "indexAdmin"]); // Show all products
             Route::get('/{id}', [ProductController::class, "show"]); // Show detail of a specific product
             Route::post('/add', [ProductController::class, "store"]); // Add single product to database
             Route::post("/bulk", [ProductController::class, "bulkStore"]); // Add multiple product at once
@@ -217,7 +217,7 @@ Route::middleware("auth:sanctum")->group(function () {
 
 
 // ***** CUSTOMER ***** \\
-Route::get('/products', [ProductQueryController::class, "index"]); // Show all products
+Route::get('/products', [ProductQueryController::class, "indexCustomer"]); // Show all products
 Route::get('/products/{id}', [ProductQueryController::class, "show"]); // Show detail of a specific product
 Route::get('/products/filter/search={value}', [ProductQueryController::class, "searchProduct"])->name("filter.search"); // Show detail of a specific product
 Route::get('/products/topBar/search={value}', [ProductQueryController::class, "searchTopBar"]); // Show detail of a specific product
