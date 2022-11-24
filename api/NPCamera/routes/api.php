@@ -255,7 +255,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/vipCustomer", [UserAuthController::class, "vipCustomerCheck"]); // Use for after placing order to check how many order has customer ordered to create special Voucher for only that customer
 
         // Create-Read-Update(Reduce quantity)-Delete Proudct from cart
-        Route::get("/cart", [CartController::class, "index"]);
+        Route::get("/cart/state={state}", [CartController::class, "index"]);
         Route::post("/cart/add", [CartController::class, "store"]); // Update quantity or add new product to cart - Apply in Products page and cart page
         Route::post("/cart/add/{id}", [CartController::class, "singleQuantity"]); // Update quantity or add new product to cart - Apply in Products page and cart page
         Route::put("/cart/update", [CartController::class, "update"]); // Update quantity base on keyboard and only apply in cart page
