@@ -43,16 +43,6 @@ class CartController extends Controller
     /** Admin & CUSTOMER FUNCTION */
     public function generateProductsArray(GetCustomerBasicRequest $request)
     {
-        $check = DB::table("customer_product_cart")
-            ->where("customer_id", "=", $request->user()->id)->exists();
-
-        if (!$check) {
-            return response()->json([
-                "success" => false,
-                "errors" => "This user hasn't added any product to cart yet"
-            ]);
-        }
-
         $customer = Customer::where("id", "=", $request->user()->id)->first();
         // $customer['products'] = $customer->customer_product_cart;
         $products_in_cart = $customer->customer_product_cart;
