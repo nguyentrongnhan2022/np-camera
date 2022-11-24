@@ -41,7 +41,7 @@ class CartController extends Controller
     }
 
     /** Admin & CUSTOMER FUNCTION */
-    public function index(GetCustomerBasicRequest $request)
+    public function generateProductsArray(GetCustomerBasicRequest $request)
     {
         $check = DB::table("customer_product_cart")
             ->where("customer_id", "=", $request->user()->id)->exists();
@@ -85,10 +85,32 @@ class CartController extends Controller
         }
 
         // return $customer;
+        return $new_arr;
+    }
+    
+    public function index(GetCustomerBasicRequest $request)
+    {
+        $check = DB::table("customer_product_cart")
+            ->where("customer_id", "=", $request->user()->id)->exists();
+
+        // If cart is empty
+        if (!$check) {
+            return response()->json([
+                "success" => false,
+                "errors" => "This user hasn't added any product to cart yet"
+            ]);
+        }
+        
+        $arr = $this->generateProductsArray($request);
+
+        // if state is "all" then return all
+        if ($request->state === "all") {
+            return $arr;
+        }
+
         $new_arr = $this->paginator($arr, $request);
         return $new_arr;
     }
-
 
     /** CUSTOMER FUNCTION */
     public function store(StoreProductToCartRequest $request)
