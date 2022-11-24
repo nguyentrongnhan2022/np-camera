@@ -6,7 +6,7 @@
     fetch('http://127.0.0.1:8000/api/admin/dashboard', { 
         method: 'GET', 
         headers: new Headers({
-            'Authorization': 'Bearer 3|G0VXUd9O5GeqiIuX3zUdM7ONpcNKOWK8AxjzUKHI',
+            'Authorization': 'Bearer 5|W9XMDGYIOPj2gbo0S976rrz2Pv7J098hTIFN4gY1',
             'Content-Type': 'application/x-www-form-urlencoded'
         })
     })

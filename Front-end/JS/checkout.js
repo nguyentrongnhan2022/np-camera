@@ -269,12 +269,12 @@ function loadMomo(){
         address: address.value.trim(),
         nameReceiver: nameUser.value.trim(),
         phoneReceiver: "0372963918",
-        paidType: 2})         
+        paidType: 2})
     })
     
     .then(data => data.json())
     .then(data => {
-        // console.log("bhghbgh")
+        console.log("bhghbgh")
         console.log(data.data)
         //renderloadMomo(data.data)
     }

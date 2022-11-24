@@ -34,6 +34,5 @@ function handelData(data) {
         message.innerHTML = "";
         window.localStorage.setItem('email', hehe);
         document.location = "http://127.0.0.1:5500/login.html";
-        alert("alo");
     }
 }
