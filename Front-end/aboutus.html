@@ -53,7 +53,7 @@
         <div class="container">
             <a class="navbar-brand d-flex justify-content-between align-items-center order-lg-0" href="index.html">
                 <img src="images/logo.png" alt="site icon">
-                <span class="text-uppercase fw-lighter ms-2">NP Camera</span>
+                <span class="text-uppercase fw-lighter ms-2 mt-1">NP Camera</span>
             </a>
             <div class="search_wrapper nav-btns order-lg-2 me-5">
                 <div class="search" onclick="searchToggle();">
@@ -64,10 +64,6 @@
                         <input id="input_search" type="text" placeholder="Tìm kiếm......"
                             style="margin-left:10px;margin-right:10px;">
                         <div class="autocom-box">
-                            <li>Máy ảnh Sony A6400</li>
-                            <li>Máy ảnh Sony A7 Mark 3</li>
-                            <li>Ống kính FE 55mm Cz F1.8</li>
-                            <li>Ống kính FE 24-70GM F2.8</li>
                         </div>
                     </div>
                 </div>
@@ -75,80 +71,10 @@
             <div class="cart_header order-lg-2 nav-btns me-5">
                 <div class="cart" onclick="cartToggle();">
                     <i class="fa fa-shopping-cart"></i>
-                    <span class="position-absolute  translate-middle badge bg-primary"
+                    <span id="cartNumber" class="position-absolute translate-middle badge bg-primary"
                         style="margin-left: 7px;font-size: 10px;">0</span>
                 </div>
                 <div class="cart-list">
-                    <!--Empty cart-->
-
-                    <!-- <div style="width:240px;">
-                        <h4 class="text-dark p-2" style="font-weight:500; font-size: 16px; text-align: center;">Sản phẩm đã thêm</h4>
-                        <img src="images/4076503.png" style=" width: 60%;height: auto; margin: 0 48px;" class="pb-3 pt-3">
-                        <h3 class="text-dark p-2" style="font-weight:100; font-size:12px;text-align: center;">Giỏ hàng trống</h4>
-                    </div> -->
-
-                    <!--end of empty cart-->
-
-                    <h4 class="text-dark" style="font-weight:500; font-size: 16px;">Sản phẩm đã thêm</h4>
-                    <ul class="cart-list-item">
-                        <li class="cart-item">
-                            <img src="images/SonyA73.png" class="cart-item-img">
-                            <div class="cart-item-info" style=" width: 100%; margin-right: 10px;">
-                                <div class="cart-item-head"
-                                    style="display:flex; justify-content: space-between; width: 100%; padding-top: 23px;">
-                                    <h5 style="font-size:14px;font-weight: 500;">Máy ảnh Sony A7 Mark 3</h5>
-                                    <span id="sum-price" style="font-size: 10px; font-weight: 500;">$ 32.000.000
-                                        VNĐ&nbsp;&nbsp; x1</span>
-                                </div>
-                                <div class="cart-item-body" style="display: flex; justify-content: space-between;">
-                                    <span style="font-size: 10px;">Phân loại: Máy ảnh</span>
-                                    <span class="cart-item-body_delete"
-                                        style="font-size: 10px; font-weight: 800;">Xóa</span>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    <ul class="cart-list-item">
-                        <li class="cart-item">
-                            <img src="images/SonyA6000.png" class="cart-item-img">
-                            <div class="cart-item-info" style=" width: 100%; margin-right: 10px;">
-                                <div class="cart-item-head"
-                                    style="display:flex; justify-content: space-between; width: 100%; padding-top: 23px;">
-                                    <h5 style="font-size:14px;font-weight: 500;">Máy ảnh Sony A6000</h5>
-                                    <span id="sum-price" style="font-size: 10px; font-weight: 500;">$ 8.000.000
-                                        VNĐ&nbsp;&nbsp; x1</span>
-                                </div>
-                                <div class="cart-item-body" style="display: flex; justify-content: space-between;">
-                                    <span style="font-size: 10px;">Phân loại: Máy ảnh</span>
-                                    <span class="cart-item-body_delete"
-                                        style="font-size: 10px; font-weight: 800;">Xóa</span>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    <ul class="cart-list-item">
-                        <li class="cart-item">
-                            <img src="images/27-70GM.png" class="cart-item-img">
-                            <div class="cart-item-info" style=" width: 100%; margin-right: 10px;">
-                                <div class="cart-item-head"
-                                    style="display:flex; justify-content: space-between; width: 100%; padding-top: 23px;">
-                                    <h5 style="font-size:14px;font-weight: 500;">FE 24-70GM F2.8</h5>
-                                    <span id="sum-price" style="font-size: 10px; font-weight: 500;">$ 40.000.000
-                                        VNĐ&nbsp;&nbsp; x1</span>
-                                </div>
-                                <div class="cart-item-body" style="display: flex; justify-content: space-between;">
-                                    <span style="font-size: 10px;">Phân loại: Ống kính</span>
-                                    <span class="cart-item-body_delete"
-                                        style="font-size: 10px; font-weight: 800;">Xóa</span>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    <div style="text-align:center;">
-                        <a href="cart.html">
-                            <button class="cart-list_view m-2 text-dark checkout hidden">Xem giỏ hàng</button>
-                        </a>
-                    </div>
 
                 </div>
 
@@ -372,4 +298,5 @@
 <!--custom js-->
 <script src="JS/index.js"></script>
 <script src="JS/suggestions.js"></script>
+
 </html>

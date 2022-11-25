@@ -1,7 +1,6 @@
 //dashboard 
 function loadDashboard() {
-    const dashboard_lists = document.querySelector('.dashboard_list')
-    console.log(dashboard_lists)
+    
     fetch('http://127.0.0.1:8000/api/admin/dashboard', {
         method: 'GET',
         headers: new Headers({
@@ -11,16 +10,15 @@ function loadDashboard() {
     })
         .then(res => res.json())
         .then(data => {
-            var count = 0;
-            var htmls = data.data.map((item) => {
-                return `
+            const dashboard_lists = document.querySelector('.dashboard_list')
+            var htmls = `
         <div class="col-lg-6 col-xl-6 ">
                 <div class="card">
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-6">
                                 <h5 class="text-muted font-weight-normal mt-0 text-truncate" title="Campaign Sent">Sản phẩm</h5>
-                                <h3 class="my-2 py-1">${item.totalProducts}</h3>
+                                <h3 class="my-2 py-1">${data.totalProducts}</h3>
                                 <p class="mb-0 text-muted">
                                     <span class="text-success mr-2"><i class="mdi mdi-arrow-up-bold"></i> 3.27%</span>
                                 </p>
@@ -40,7 +38,7 @@ function loadDashboard() {
                         <div class="row align-items-center">
                             <div class="col-6">
                                 <h5 class="text-muted font-weight-normal mt-0 text-truncate" title="New Leads">Sale</h5>
-                                <h3 class="my-2 py-1">${item.totalSales}</h3>
+                                <h3 class="my-2 py-1">${changeFormat(data.totalSales)} VNĐ</h3>
                                 <p class="mb-0 text-muted">
                                     <span class="text-danger mr-2"><i class="mdi mdi-arrow-down-bold"></i> 5.38%</span>
                                 </p>
@@ -60,7 +58,7 @@ function loadDashboard() {
                         <div class="row align-items-center">
                             <div class="col-6">
                                 <h5 class="text-muted font-weight-normal mt-0 text-truncate" title="Deals">Đơn hàng</h5>
-                                <h3 class="my-2 py-1">${item.recentOrders}</h3>
+                                <h3 class="my-2 py-1">${data.recentOrders}</h3>
                                 <p class="mb-0 text-muted">
                                     <span class="text-success mr-2"><i class="mdi mdi-arrow-up-bold"></i> 11.87%</span>
                                 </p>
@@ -81,7 +79,7 @@ function loadDashboard() {
                         <div class="row align-items-center">
                             <div class="col-6">
                                 <h5 class="text-muted font-weight-normal mt-0 text-truncate" title="Booked Revenue">Đơn hàng đang xử lí</h5>
-                                <h3 class="my-2 py-1">${item.totalOrdersPending}</h3>
+                                <h3 class="my-2 py-1">${data.totalOrdersPending}</h3>
                                 <p class="mb-0 text-muted">
                                     <span class="text-success mr-2"><i class="mdi mdi-arrow-up-bold"></i> 4.7%</span>
                                 </p>
@@ -96,19 +94,14 @@ function loadDashboard() {
                 </div> 
             </div> 
             `
-
-            })
-            dashboard_lists.innerHTML = htmls.join('')
+            dashboard_lists.innerHTML = htmls
             dashboard_lists.style.height = 'fit-content'
-        }
-
-        )
+        })
 }
 
 //product admin
 function loadProduct() {
     const product_lists = document.querySelector('.product_list')
-    console.log(product_lists)
     fetch('http://127.0.0.1:8000/api/v1/products', {
         method: 'GET',
         headers: new Headers({
@@ -123,7 +116,7 @@ function loadProduct() {
             console.log(data)
             for (const index in data) {
                 var item = data[index];
-                console.log(item)
+                console.log(data)
                 htmls += `
         <tr id="${item.id}">
             <td>
@@ -179,7 +172,6 @@ function changeFormat(price) {
 //user admin
 function loadUser() {
     const user_lists = document.querySelector('.user_list')
-    console.log(user_lists)
     fetch('http://127.0.0.1:8000/api/v1/users', {
         method: 'GET',
         headers: new Headers({
@@ -230,7 +222,6 @@ function loadUser() {
 //order admin
 function loadOrder() {
     const order_lists = document.querySelector('.order_list')
-    console.log(order_lists)
     fetch('http://127.0.0.1:8000/api/v1/orders?page=1', {
         method: 'GET',
         headers: new Headers({
@@ -268,8 +259,8 @@ function loadOrder() {
                     TTKNH
                 </td>
                 <td class="text-center">
-                    <button class="btn-primary ${(item.status==2&&item.deletedBy==null)?'nutmautoi':''}"  style="border:none;${item.deletedBy==null?'display:block;':'display:none;'} cursor:pointer;" id=${item.orderId+'ok'} onclick="xacNhanCmm(${item.orderId},'ok')">Xác nhận</button>
-                    <button class="btn-primary ${(item.status==0&&item.deletedBy!=null)?'nutmautoi':''}" style="border:none; ${item.deletedBy!=null?'display:block;':'display:none;'} cursor:pointer;"id=${item.orderId+'notok'} onclick="xacNhanCmm(${item.orderId},'notok')" ">Hủy</button>
+                    <button class="btn-primary ${(item.status == 2 && item.deletedBy == null) ? 'nutmautoi' : ''}" style="border:none;${item.deletedBy == null ? 'display:block;' : 'display:none;'} cursor:pointer;" id=${item.orderId + 'ok'} onclick="xacNhanCmm(${item.orderId},'ok')">Xác nhận</button>
+                    <button class="btn-primary ${(item.status == 0 && item.deletedBy != null) ? 'nutmautoi' : ''}" style="border:none; ${((item.deletedBy == null&&item.status!=2)||(item.deletedBy!=null&&item.status==0))? 'display:block;' : 'display:none;'} cursor:pointer;"id=${item.orderId + 'notok'} onclick="xacNhanCmm(${item.orderId},'notok')" ">Hủy</button>
                 </td>
                 <td>
                     <a href="#" class="action-icon"> <i
@@ -285,63 +276,62 @@ function loadOrder() {
         }
         )
 }
-function xacNhanCmm(id,str){
+function xacNhanCmm(id, str) {
     console.log(id)
     console.log(str)
     var caithbicut;
     var caiDendi;
-    if(str=='ok'){
+    if (str == 'ok') {
         console.log("str ok")
-         caithbicut=document.getElementById(id+'notok');
-         caiDendi=document.getElementById(id+str);
-         console.log(caithbicut)
-    console.log(caiDendi)
-        xacnhacDonHang(2);
+        caithbicut = document.getElementById(id + 'notok');
+        caiDendi = document.getElementById(id + str);
+        console.log(caithbicut)
+        console.log(caiDendi)
+        xacnhacDonHang(2,id);
     } else {
-            console.log("str notok")
-            caithbicut=document.getElementById(id+'ok');
-            caiDendi=document.getElementById(id+str);
-            console.log(caithbicut)
-            console.log(caiDendi)
-    //xacnhacDonHang(2);
-    huyDonHangCmm(id);
+        console.log("str notok")
+        caithbicut = document.getElementById(id + 'ok');
+        caiDendi = document.getElementById(id + str);
+        console.log(caithbicut)
+        console.log(caiDendi)
+        //xacnhacDonHang(2);
+        huyDonHangCmm(id);
     }
     caithbicut.remove();
-    caiDendi.disabled = true 
+    caiDendi.disabled = true
     caiDendi.classList.add('nutmautoi')
-    
+
 }
- function xacnhacDonHang(status){
-     fetch('http://127.0.0.1:8000/api/v1/orders/'+id+'/update/status='+status, {
+function xacnhacDonHang(status,id) {
+    fetch('http://127.0.0.1:8000/api/v1/orders/' + id + '/update/status=' + status, {
         method: 'PUT',
         headers: new Headers({
             'Authorization': 'Bearer ' + tokenRealAdmin,
             'Content-Type': 'application/x-www-form-urlencoded'
         })
     })
-    .then(data=>{
+        .then(data => {
 
-    })
+        })
 }
-function huyDonHangCmm(id){
-    console.log('huyDonHangCmm'+id)
-    fetch('http://127.0.0.1:8000/api/v1/orders/'+id+'/destroy=1', {
+function huyDonHangCmm(id) {
+    console.log('huyDonHangCmm' + id)
+    fetch('http://127.0.0.1:8000/api/v1/orders/' + id + '/destroy=1', {
         method: 'DELETE',
         headers: new Headers({
             'Authorization': 'Bearer ' + tokenRealAdmin,
             'Content-Type': 'application/x-www-form-urlencoded'
         })
     })
-    .then(data=>{
-        console.log("huyDonHangCmm receive")    
-    })
+        .then(data => {
+            console.log("huyDonHangCmm receive")
+        })
 }
 //
 function loadAdCate() {
     const toggleMenuList = document.querySelector('.menu_list');
     //   console.log(toggleMenuList);
     const toggleMenuDisplay = document.querySelector('.menu_list ul');
-    console.log(toggleMenuDisplay)
     //   toggleMenuList.classList.toggle('active')
     var token = 'encryptedTokenAdmin'
 
@@ -446,7 +436,6 @@ function getCookie(cname) {
 }
 var tokenRealAdmin;
 function getTokenRealAdmin() {
-    console.log("tokenRealAdmin" + tokenRealAdmin)
     var tokenEncript = getCookie("encryptedTokenAdmin");
     if (tokenEncript != null && tokenEncript != "" && tokenEncript != 'undefined ') {
         fetch('http://127.0.0.1:8000/api/admin/retrieveToken', {
@@ -460,7 +449,6 @@ function getTokenRealAdmin() {
             .then(res => res.json())
             .then(data => {
                 tokenRealAdmin = data.token;
-                console.log(tokenRealAdmin)
                 loadDashboard()
                 loadProduct()
                 loadUser()

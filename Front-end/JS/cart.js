@@ -38,26 +38,66 @@ const suggBox = searchWrapper.querySelector(".autocom-box");
 
 //if user press any key and release
 inputBox.onkeyup = (e) => {
+  const regex = /[`~!@#$%^&*()-_+{}[\]\\|,.//?;':"]/g
   let userData = e.target.value; //user enetered data
+  userData = userData.replace(regex, '')
+  if (userData.length == 0) {
+    suggBox.innerHTML = "";
+    return;
+  }
+  userData = userData.toLocaleLowerCase();
   let emptyArray = [];
   if (userData) {
-    emptyArray = suggestions.filter((data) => {
-      return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase());
+    // emptyArray = suggestions.filter((data) => {
+    //   return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase());
+    // });
+    //query lsit form key search
+
+    $.ajax({
+      url: "http://127.0.0.1:8000/api/products/filter/search=" + userData,
+      type: "GET",
+      success: function (data) {
+        // renderCartView(tokenReal)
+        // alert('Thêm sản phẩm thành công');
+        console.log("key" + userData);
+        console.log(data);
+        if (data.data) {
+          var arrayData = data.data.filter((data) => { return data.deletedAt != 1 });
+          console.log("arrayData");
+          console.log(arrayData);
+          emptyArray = arrayData.map((data) => {
+            return data = `<li onclick="gotoProduct(${data.id})" id="${data.id}" style="color:black;"> ${data.name} </li>`;
+          });
+          console.log(emptyArray);
+          searchWrapper.classList.add("active"); //show autocomplete box
+          showSuggestions(emptyArray);
+          // let allList = suggBox.querySelectorAll("li");
+          // for (let i = 0; i < allList.length; i++) {
+          //   //adding onlick attribute in all li tag
+          //   allList[i].setAttribute("onclick", "select(this)");
+          // }
+        }
+        else {
+          suggBox.innerHTML = "<li>Không có kết quả phù hợp</li>";
+        }
+
+      },
+      error: function (msg) {
+        alert(msg);
+        console.log(msg);
+      }
     });
-    emptyArray = emptyArray.map((data) => {
-      return data = '<li>' + data + '</li>';
-    });
-    console.log(emptyArray);
-    searchWrapper.classList.add("active"); //show autocomplete box
-    showSuggestions(emptyArray);
-    let allList = suggBox.querySelectorAll("li");
-    for (let i = 0; i < allList.length; i++) {
-      //adding onlick attribute in all li tag
-      allList[i].setAttribute("onclick", "select(this)");
-    }
   } else {
     searchWrapper.classList.remove("active"); //hide autocomplete box
   }
+
+
+
+
+
+}
+function gotoProduct(id) {
+  document.location.href = "http://127.0.0.1:5500/product.html?id=" + id;
 }
 function select(element) {
   let selectUserData = element.textContent;
@@ -68,7 +108,7 @@ function showSuggestions(list) {
   let listData;
   if (!list.length) {
     userValue = inputBox.value;
-    listData = '<li>' + userValue + '</li>';
+    listData = '<li style="color:black;">' + userValue + '</li>';
   } else {
     listData = list.join('');
   }
@@ -89,25 +129,23 @@ function menuToggle() {
   if (checkCook == null || checkCook == "" || checkCook == ' undefined') {
     var htmls = function () {
       return `
-          <li><i class="fa-solid fa-right-from-bracket"></i> <a href="login.html">Đăng nhập</a></li>
-          <li><i class="fa-solid fa-right-from-bracket"></i> <a href="register.html">Đăng ký</a></li>
-          `
+        <li><i class="fa-solid fa-right-from-bracket"></i> <a href="login.html" style="color:black;">Đăng nhập</a></li>
+        <li><i class="fa-solid fa-right-from-bracket"></i> <a href="register.html" style="color:black;">Đăng ký</a></li>
+        `
     }
     toggleMenuDisplay.innerHTML = htmls();
   }
   else {
     var htmls = function () {
       return `
-            <li><i class="fa-solid fa-user"></i> <a href="#">Tài khoản của tôi</a></li>
-            <li><i class="fa-solid fa-pen-to-square"></i> <a href="#">Đơn hàng</a></li>
-            <li onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> <a href="#">Đăng xuất</a></li>`
+          <li><i class="fa-solid fa-user" style="color:black;"></i> <a href="UserSetting.html">Tài khoản của tôi</a></li>
+          <li onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket" style="color:black;"></i> <a href="#">Đăng xuất</a></li>`
 
     }
     toggleMenuDisplay.innerHTML = htmls();
   }
 
   // htmls = $.parseHTML(htmls);
-
 
 }
 function cartToggle() {
@@ -129,7 +167,7 @@ function getTokenReal() {
       body: JSON.stringify({ token: tokenEncript })
     })
       .then(res => res.json())
-      .then(data => { tokenReal = data.token; if (tokenReal) { renderCartView(tokenReal);renderCart(tokenReal) } })
+      .then(data => { tokenReal = data.token; if (tokenReal) { renderCartView(tokenReal); renderCart(tokenReal) } })
   }
 }
 getTokenReal()
@@ -179,7 +217,7 @@ function assignButtonAddRemove() {
       $input.val(function (i, oldval) {
         return ++oldval;
       });
-    handleAdd($(this).data("id"),1)
+      handleAdd($(this).data("id"), 1)
 
     }
   });
@@ -188,12 +226,12 @@ function assignButtonAddRemove() {
     let $input = $(`.qty_input[data-id='${$(this).data("id")}']`);
     if ($input.val() > 1 && $input.val() <= 10) {
       $input.val(function (i, oldval) {
-        handleDelete($(this).data("id"),1)
+        handleDelete($(this).data("id"), 1)
         return --oldval;
-        
+
       });
     }
-    
+
   });
 }
 
@@ -215,7 +253,7 @@ function renderCartView(tokenReal) {
 }
 var cartNumbertext = 0
 function renderCartViewWithArray(array) {
-  console.log("cccc"+ array)
+  console.log("cccc" + array)
   var parent = document.querySelector(".cart-list");
   var cartNumber = document.querySelector('#cartNumber')
   var cartTittle = `
@@ -286,17 +324,17 @@ function renderCart(tokenReal) {
       renderCartWithArray(data)
     })
 }
-var totalNumber_product = 0 
+var totalNumber_product = 0
 var totalPrice_product = 0
 function renderCartWithArray(array) {
   var html = "";
-  totalNumber_product = 0 
+  totalNumber_product = 0
   totalPrice_product = 0
-  array.forEach(item => {  
-    totalNumber_product+=item.quantity
-    totalPrice_product+=item.price*item.quantity
+  array.forEach(item => {
+    totalNumber_product += item.quantity
+    totalPrice_product += item.price * item.quantity
     html += `
-    <div class="row py-3 mt-2" id="${item.id}" data-price=${parseInt(item.price)} data-quantity=${item.quantity} data-total=${parseInt(item.price)*parseInt(item.quantity)}>
+    <div class="row py-3 mt-2" id="${item.id}" data-price=${parseInt(item.price)} data-quantity=${item.quantity} data-total=${parseInt(item.price) * parseInt(item.quantity)}>
                   <div class="col-sm-2">
                       <img src="${item.img}" style=" height:auto;" alt="cart1" class="img-fluid">
                   </div>
@@ -340,8 +378,8 @@ function renderCartWithArray(array) {
   var parent = document.querySelector(".container__cart");
   var totalNumber = document.querySelector("#totalNumber_product")
   var totalPrice = document.querySelector("#totalPrice_product")
-  totalNumber.innerHTML=''+totalNumber_product
-  totalPrice.innerHTML=''+ changeFormat(totalPrice_product)
+  totalNumber.innerHTML = '' + totalNumber_product
+  totalPrice.innerHTML = '' + changeFormat(totalPrice_product)
   console.log(parent)
   parent.innerHTML = html;
   assignButtonAddRemove();
@@ -359,10 +397,10 @@ function deleteProduct(id) {
       if (data.success == 'true' || data.success == true) {
         alert('Xóa sản phẩm thành công !')
         var item = document.getElementById(id)
-        totalNumber_product-=parseInt(item.dataset.quantity);
+        totalNumber_product -= parseInt(item.dataset.quantity);
         updateTotal()
-        totalPrice_product-=parseInt(item.dataset.total)
-          updateTotalPrice()
+        totalPrice_product -= parseInt(item.dataset.total)
+        updateTotalPrice()
         item.remove();
       }
       else {
@@ -370,26 +408,26 @@ function deleteProduct(id) {
       }
     })
 }
-function updateTotal(quantity){
-  totalNumber_product-=quantity
+function updateTotal(quantity) {
+  totalNumber_product -= quantity
   var totalNumber = document.querySelector("#totalNumber_product")
-  totalNumber.innerHTML=''+totalNumber_product
+  totalNumber.innerHTML = '' + totalNumber_product
 }
-function updateTotal(){
+function updateTotal() {
   var totalNumber = document.querySelector("#totalNumber_product")
-  totalNumber.innerHTML=''+totalNumber_product
+  totalNumber.innerHTML = '' + totalNumber_product
 }
-function updateTotalDeclineOne(quantity){
-  totalNumber_product-=quantity
+function updateTotalDeclineOne(quantity) {
+  totalNumber_product -= quantity
   var totalNumber = document.querySelector("#totalNumber_product")
-  totalNumber.innerHTML=''+totalNumber_product
+  totalNumber.innerHTML = '' + totalNumber_product
 }
-function updateTotalPrice(){
+function updateTotalPrice() {
   var totalPrice = document.querySelector("#totalPrice_product")
-  totalPrice.innerHTML=''+changeFormat(totalPrice_product)
+  totalPrice.innerHTML = '' + changeFormat(totalPrice_product)
 }
 
-function handleAdd(id,soload) {
+function handleAdd(id, soload) {
   var checkCook = getCookie("encryptedToken");
   if (checkCook == undefined || checkCook == "" || checkCook == "undefined") {
     alert("Bạn chưa đăng nhập !");
@@ -421,13 +459,13 @@ function handleAdd(id,soload) {
         success: function (data) {
           var item = document.getElementById(id)
           console.log(item);
-          totalNumber_product+=1;
-          item.dataset.quantity=parseInt(item.dataset.quantity)+1;
-          item.dataset.total=parseInt(item.dataset.total)+parseInt(item.dataset.price);
+          totalNumber_product += 1;
+          item.dataset.quantity = parseInt(item.dataset.quantity) + 1;
+          item.dataset.total = parseInt(item.dataset.total) + parseInt(item.dataset.price);
           updateTotal();
-          totalPrice_product=parseInt(totalPrice_product)+parseInt(item.dataset.price)
+          totalPrice_product = parseInt(totalPrice_product) + parseInt(item.dataset.price)
           updateTotalPrice()
-          
+
         },
         error: function (msg) {
           alert(msg);
@@ -437,7 +475,7 @@ function handleAdd(id,soload) {
     });
 
 }
-function handleDelete(id){
+function handleDelete(id) {
   var checkCook = getCookie("encryptedToken");
   if (checkCook == undefined || checkCook == "" || checkCook == "undefined") {
     alert("Bạn chưa đăng nhập !");
@@ -469,13 +507,13 @@ function handleDelete(id){
         success: function (data) {
           var item = document.getElementById(id)
           console.log(item);
-          totalNumber_product-=1;
-          item.dataset.quantity=parseInt(item.dataset.quantity)-1;
-          item.dataset.total=parseInt(item.dataset.total)-parseInt(item.dataset.price);
+          totalNumber_product -= 1;
+          item.dataset.quantity = parseInt(item.dataset.quantity) - 1;
+          item.dataset.total = parseInt(item.dataset.total) - parseInt(item.dataset.price);
           updateTotal();
-          totalPrice_product=parseInt(totalPrice_product)-parseInt(item.dataset.price)
+          totalPrice_product = parseInt(totalPrice_product) - parseInt(item.dataset.price)
           updateTotalPrice()
-          
+
         },
         error: function (msg) {
           alert(msg);
@@ -485,6 +523,6 @@ function handleDelete(id){
     });
 
 }
-function handlePay(){
-document.location.href = "checkout.html";
+function handlePay() {
+  document.location.href = "checkout.html";
 }

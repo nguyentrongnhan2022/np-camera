@@ -24,26 +24,66 @@ const suggBox = searchWrapper.querySelector(".autocom-box");
 
 //if user press any key and release
 inputBox.onkeyup = (e) => {
+    const regex = /[`~!@#$%^&*()-_+{}[\]\\|,.//?;':"]/g
     let userData = e.target.value; //user enetered data
+    userData = userData.replace(regex, '')
+    if (userData.length == 0) {
+        suggBox.innerHTML = "";
+        return;
+    }
+    userData = userData.toLocaleLowerCase();
     let emptyArray = [];
     if (userData) {
-        emptyArray = suggestions.filter((data) => {
-            return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase());
+        // emptyArray = suggestions.filter((data) => {
+        //   return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase());
+        // });
+        //query lsit form key search
+
+        $.ajax({
+            url: "http://127.0.0.1:8000/api/products/filter/search=" + userData,
+            type: "GET",
+            success: function (data) {
+                // renderCartView(tokenReal)
+                // alert('Thêm sản phẩm thành công');
+                console.log("key" + userData);
+                console.log(data);
+                if (data.data) {
+                    var arrayData = data.data.filter((data) => { return data.deletedAt != 1 });
+                    console.log("arrayData");
+                    console.log(arrayData);
+                    emptyArray = arrayData.map((data) => {
+                        return data = `<li onclick="gotoProduct(${data.id})" id="${data.id}" style="color:black;"> ${data.name} </li>`;
+                    });
+                    console.log(emptyArray);
+                    searchWrapper.classList.add("active"); //show autocomplete box
+                    showSuggestions(emptyArray);
+                    // let allList = suggBox.querySelectorAll("li");
+                    // for (let i = 0; i < allList.length; i++) {
+                    //   //adding onlick attribute in all li tag
+                    //   allList[i].setAttribute("onclick", "select(this)");
+                    // }
+                }
+                else {
+                    suggBox.innerHTML = "<li>Không có kết quả phù hợp</li>";
+                }
+
+            },
+            error: function (msg) {
+                alert(msg);
+                console.log(msg);
+            }
         });
-        emptyArray = emptyArray.map((data) => {
-            return data = '<li>' + data + '</li>';
-        });
-        console.log(emptyArray);
-        searchWrapper.classList.add("active"); //show autocomplete box
-        showSuggestions(emptyArray);
-        let allList = suggBox.querySelectorAll("li");
-        for (let i = 0; i < allList.length; i++) {
-            //adding onlick attribute in all li tag
-            allList[i].setAttribute("onclick", "select(this)");
-        }
     } else {
         searchWrapper.classList.remove("active"); //hide autocomplete box
     }
+
+
+
+
+
+}
+function gotoProduct(id) {
+    document.location.href = "http://127.0.0.1:5500/product.html?id=" + id;
 }
 function select(element) {
     let selectUserData = element.textContent;
@@ -54,7 +94,7 @@ function showSuggestions(list) {
     let listData;
     if (!list.length) {
         userValue = inputBox.value;
-        listData = '<li>' + userValue + '</li>';
+        listData = '<li style="color:black;">' + userValue + '</li>';
     } else {
         listData = list.join('');
     }
@@ -75,25 +115,23 @@ function menuToggle() {
     if (checkCook == null || checkCook == "" || checkCook == ' undefined') {
         var htmls = function () {
             return `
-        <li><i class="fa-solid fa-right-from-bracket"></i> <a href="login.html">Đăng nhập</a></li>
-        <li><i class="fa-solid fa-right-from-bracket"></i> <a href="register.html">Đăng ký</a></li>
-        `
+          <li><i class="fa-solid fa-right-from-bracket"></i> <a href="login.html" style="color:black;">Đăng nhập</a></li>
+          <li><i class="fa-solid fa-right-from-bracket"></i> <a href="register.html" style="color:black;">Đăng ký</a></li>
+          `
         }
         toggleMenuDisplay.innerHTML = htmls();
     }
     else {
         var htmls = function () {
             return `
-          <li><i class="fa-solid fa-user"></i> <a href="#">Tài khoản của tôi</a></li>
-          <li><i class="fa-solid fa-pen-to-square"></i> <a href="#">Đơn hàng</a></li>
-          <li onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> <a href="#">Đăng xuất</a></li>`
+            <li><i class="fa-solid fa-user" style="color:black;"></i> <a href="UserSetting.html">Tài khoản của tôi</a></li>
+            <li onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket" style="color:black;"></i> <a href="#">Đăng xuất</a></li>`
 
         }
         toggleMenuDisplay.innerHTML = htmls();
     }
 
     // htmls = $.parseHTML(htmls);
-
 
 }
 function cartToggle() {
@@ -250,7 +288,7 @@ function pad(number) {
     }
     return number;
 }
-var cc = todayDate.toLocaleString('en-CA', {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'});
+var cc = todayDate.toLocaleString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
 async function loadOrder() {
     meData = JSON.stringify({
         voucherCode: "",
@@ -265,19 +303,19 @@ async function loadOrder() {
     // console.log("today" + today)
     // console.log(today)
 
-    var today = todayDate.toLocaleString('en-CA', {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'});
+    var today = todayDate.toLocaleString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
     console.log(today)
     console.log(today)
-    if(cc.indexOf('p')!=-1){
-        today=today.substr(0,cc.indexOf('p'))
+    if (cc.indexOf('p') != -1) {
+        today = today.substr(0, cc.indexOf('p'))
     } else {
-        today=today.substr(0,cc.indexOf('a'))
+        today = today.substr(0, cc.indexOf('a'))
     }
-    
-    var todayArr=today.split(',')
-    var newToday=todayArr[0].trim()+' '+todayArr[1].trim()
+
+    var todayArr = today.split(',')
+    var newToday = todayArr[0].trim() + ' ' + todayArr[1].trim()
     console.log(newToday)
-   
+
     $.ajax({
         url: "http://127.0.0.1:8000/api/user/order/placeorderPaypal",
         beforeSend: function (xhr) {

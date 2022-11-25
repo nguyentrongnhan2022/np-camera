@@ -38,26 +38,66 @@ for (let pair of queryString.entries()) {
 
   //if user press any key and release
   inputBox.onkeyup = (e) => {
+    const regex = /[`~!@#$%^&*()-_+{}[\]\\|,.//?;':"]/g
     let userData = e.target.value; //user enetered data
+    userData = userData.replace(regex, '')
+    if (userData.length == 0) {
+      suggBox.innerHTML = "";
+      return;
+    }
+    userData = userData.toLocaleLowerCase();
     let emptyArray = [];
     if (userData) {
-      emptyArray = suggestions.filter((data) => {
-        return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase());
+      // emptyArray = suggestions.filter((data) => {
+      //   return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase());
+      // });
+      //query lsit form key search
+
+      $.ajax({
+        url: "http://127.0.0.1:8000/api/products/filter/search=" + userData,
+        type: "GET",
+        success: function (data) {
+          // renderCartView(tokenReal)
+          // alert('Thêm sản phẩm thành công');
+          console.log("key" + userData);
+          console.log(data);
+          if (data.data) {
+            var arrayData = data.data.filter((data) => { return data.deletedAt != 1 });
+            console.log("arrayData");
+            console.log(arrayData);
+            emptyArray = arrayData.map((data) => {
+              return data = `<li onclick="gotoProduct(${data.id})" id="${data.id}" style="color:black;"> ${data.name} </li>`;
+            });
+            console.log(emptyArray);
+            searchWrapper.classList.add("active"); //show autocomplete box
+            showSuggestions(emptyArray);
+            // let allList = suggBox.querySelectorAll("li");
+            // for (let i = 0; i < allList.length; i++) {
+            //   //adding onlick attribute in all li tag
+            //   allList[i].setAttribute("onclick", "select(this)");
+            // }
+          }
+          else {
+            suggBox.innerHTML = "<li>Không có kết quả phù hợp</li>";
+          }
+
+        },
+        error: function (msg) {
+          alert(msg);
+          console.log(msg);
+        }
       });
-      emptyArray = emptyArray.map((data) => {
-        return data = '<li>' + data + '</li>';
-      });
-      console.log(emptyArray);
-      searchWrapper.classList.add("active"); //show autocomplete box
-      showSuggestions(emptyArray);
-      let allList = suggBox.querySelectorAll("li");
-      for (let i = 0; i < allList.length; i++) {
-        //adding onlick attribute in all li tag
-        allList[i].setAttribute("onclick", "select(this)");
-      }
     } else {
       searchWrapper.classList.remove("active"); //hide autocomplete box
     }
+
+
+
+
+
+  }
+  function gotoProduct(id) {
+    document.location.href = "http://127.0.0.1:5500/product.html?id=" + id;
   }
   function select(element) {
     let selectUserData = element.textContent;
@@ -68,7 +108,7 @@ for (let pair of queryString.entries()) {
     let listData;
     if (!list.length) {
       userValue = inputBox.value;
-      listData = '<li>' + userValue + '</li>';
+      listData = '<li style="color:black;">' + userValue + '</li>';
     } else {
       listData = list.join('');
     }
@@ -360,25 +400,23 @@ for (let pair of queryString.entries()) {
     if (checkCook == null || checkCook == "" || checkCook == ' undefined') {
       var htmls = function () {
         return `
-            <li><i class="fa-solid fa-right-from-bracket"></i> <a href="login.html">Đăng nhập</a></li>
-            <li><i class="fa-solid fa-right-from-bracket"></i> <a href="register.html">Đăng ký</a></li>
-            `
+          <li><i class="fa-solid fa-right-from-bracket"></i> <a href="login.html" style="color:black;">Đăng nhập</a></li>
+          <li><i class="fa-solid fa-right-from-bracket"></i> <a href="register.html" style="color:black;">Đăng ký</a></li>
+          `
       }
       toggleMenuDisplay.innerHTML = htmls();
     }
     else {
       var htmls = function () {
         return `
-              <li><i class="fa-solid fa-user"></i> <a href="#">Tài khoản của tôi</a></li>
-              <li><i class="fa-solid fa-pen-to-square"></i> <a href="#">Đơn hàng</a></li>
-              <li onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> <a href="#">Đăng xuất</a></li>`
+            <li><i class="fa-solid fa-user" style="color:black;"></i> <a href="UserSetting.html">Tài khoản của tôi</a></li>
+            <li onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket" style="color:black;"></i> <a href="#">Đăng xuất</a></li>`
 
       }
       toggleMenuDisplay.innerHTML = htmls();
     }
 
     // htmls = $.parseHTML(htmls);
-
 
   }
   function handleLogout() {
@@ -431,6 +469,50 @@ for (let pair of queryString.entries()) {
   }
   assignButtonAddRemove();
 
+  //specials
+  const specials_list = document.querySelector('.special-list')
+  function loadProductSpecial() {
+    fetch('http://127.0.0.1:8000/api/product/bestSeller', {
+      method: 'GET',
+      headers: new Headers({
+        'Authorization': 'Bearer ' + tokenReal,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        var htmls = "";
+        console.log(data)
+        for (const index in data) {
+          var item = data[index];
+          console.log(item)
+          htmls += `
+          <div class="p-5 col-lg-3 special-list_list">
+              <a href="product.html?id=${item.productId}" style="text-decoration:none;">
+                <div class="special-img">
+                    <img src="${item.img}" class="special-img_img">
+                </div>
+                </a>
+                <div class="text-center">
+                    <div class="rating mt-2 mb-2">
+                        <span class="text-primary"><i class="fas fa-star"></i></span>
+                        <span class="text-primary"><i class="fas fa-star"></i></span>
+                        <span class="text-primary"><i class="fas fa-star"></i></span>
+                        <span class="text-primary"><i class="fas fa-star"></i></span>
+                        <span class="text-primary"><i class="fas fa-star"></i></span>
+                    </div>
+                    <p class="text-capitalize mt-1 mb-1" style="font-size:14px; color:black;">${item.name}</p>
+                    <span class="fw-bold d-block" style="font-size: 14px;color:black;">${changeFormat(item.price)} VNĐ</span>
+                    <button class="btn btn-primary mt-3 addToCart" data-product-id="1" onclick="handleAdd(${item.productId});"  style="font-size:15px;">Thêm vào giỏ hàng</button>
+                </div>
+          </div>`
+        }
+        specials_list.innerHTML = htmls
+        specials_list.style.height = 'fit-content'
+      })
+
+  }
+  loadProductSpecial();
   //special
   $('.owl-carousel').owlCarousel({
     loop: true,

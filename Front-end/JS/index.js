@@ -27,26 +27,66 @@ const suggBox = searchWrapper.querySelector(".autocom-box");
 
 //if user press any key and release
 inputBox.onkeyup = (e) => {
+  const regex = /[`~!@#$%^&*()-_+{}[\]\\|,.//?;':"]/g
   let userData = e.target.value; //user enetered data
+  userData = userData.replace(regex, '')
+  if (userData.length == 0) {
+    suggBox.innerHTML = "";
+    return;
+  }
+  userData = userData.toLocaleLowerCase();
   let emptyArray = [];
   if (userData) {
-    emptyArray = suggestions.filter((data) => {
-      return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase());
+    // emptyArray = suggestions.filter((data) => {
+    //   return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase());
+    // });
+    //query lsit form key search
+
+    $.ajax({
+      url: "http://127.0.0.1:8000/api/products/filter/search=" + userData,
+      type: "GET",
+      success: function (data) {
+        // renderCartView(tokenReal)
+        // alert('Thêm sản phẩm thành công');
+        console.log("key" + userData);
+        console.log(data);
+        if (data.data) {
+          var arrayData = data.data.filter((data) => { return data.deletedAt != 1 });
+          console.log("arrayData");
+          console.log(arrayData);
+          emptyArray = arrayData.map((data) => {
+            return data = `<li onclick="gotoProduct(${data.id})" id="${data.id}" style="color:black;"> ${data.name} </li>`;
+          });
+          console.log(emptyArray);
+          searchWrapper.classList.add("active"); //show autocomplete box
+          showSuggestions(emptyArray);
+          // let allList = suggBox.querySelectorAll("li");
+          // for (let i = 0; i < allList.length; i++) {
+          //   //adding onlick attribute in all li tag
+          //   allList[i].setAttribute("onclick", "select(this)");
+          // }
+        }
+        else {
+          suggBox.innerHTML = "<li>Không có kết quả phù hợp</li>";
+        }
+
+      },
+      error: function (msg) {
+        alert(msg);
+        console.log(msg);
+      }
     });
-    emptyArray = emptyArray.map((data) => {
-      return data = '<li style="color:black;">' + data + '</li>';
-    });
-    console.log(emptyArray);
-    searchWrapper.classList.add("active"); //show autocomplete box
-    showSuggestions(emptyArray);
-    let allList = suggBox.querySelectorAll("li");
-    for (let i = 0; i < allList.length; i++) {
-      //adding onlick attribute in all li tag
-      allList[i].setAttribute("onclick", "select(this)");
-    }
   } else {
     searchWrapper.classList.remove("active"); //hide autocomplete box
   }
+
+
+
+
+
+}
+function gotoProduct(id) {
+  document.location.href = "http://127.0.0.1:5500/product.html?id=" + id;
 }
 function select(element) {
   let selectUserData = element.textContent;
@@ -96,13 +136,11 @@ function menuToggle() {
 
   // htmls = $.parseHTML(htmls);
 
-
 }
 function cartToggle() {
   const toggleMenu = document.querySelector('.cart-list');
   toggleMenu.classList.toggle('active')
 }
-
 
 // user
 function getCookie(cname) {
@@ -189,12 +227,12 @@ function loadProduct(currentURL, notJump) {
       SanPhamCurrent_page = data.current_page;
       currentURLOBJ = data.links;
       // var itemFilter=data.data.filter(item=>item.deletedAt!=1)
-      var itemFilter=data.data;
+      var itemFilter = data.data;
 
-      var htmls ="";
-      for(const index in itemFilter){
-        var item=itemFilter[index];
-        htmls+= ` 
+      var htmls = "";
+      for (const index in itemFilter) {
+        var item = itemFilter[index];
+        htmls += ` 
         <div class="collection-list__list col-md-6 col-lg-4 col-xl-3 px-5 py-3">
         <a href="product.html?id=${item.id}" style="text-decoration:none;" class=" text-dark">
               <div class="collection-img">
@@ -215,34 +253,34 @@ function loadProduct(currentURL, notJump) {
             </div>
         </div>`
       }
-      
-        //var price = parseInt(item.price);
-        //allItems.push({ "price": price, "html": kq });
-        // if (lanNayThemKhz) {
-        //   console.log("duoi " + parseInt(currentURL.substring(currentURL.length - 1, currentURL.length)));
-        //   if (item.categories[0].id == 1) camItem.data.push({ "price": price, "html": kq });
-        //   camItem.url = currentURL;
-        // }
-        // else
-        //   if (camItem.url.substring(camItem.url.length - 1, camItem.url.length) == "s" || (parseInt(camItem.url.substring(camItem.url.length - 1, camItem.url.length)) < parseInt(currentURL.substring(currentURL.length - 1, currentURL.length)))) {
-        //     if (currentURL.substring(currentURL.length - 1, currentURL.length) != "s") {
-        //       console.log("currentURL: " + currentURL)
-        //       console.log("item.categories[0]: " + item.categories[0])
-        //       if (item.categories.length > 0 && item.categories[0].id == 1) {
-        //         camItem.data.push({ "price": price, "html": kq });
-        //       }
-        //     }
 
-        //   }
-        // return kq;
-        collection_lists.innerHTML = htmls
+      //var price = parseInt(item.price);
+      //allItems.push({ "price": price, "html": kq });
+      // if (lanNayThemKhz) {
+      //   console.log("duoi " + parseInt(currentURL.substring(currentURL.length - 1, currentURL.length)));
+      //   if (item.categories[0].id == 1) camItem.data.push({ "price": price, "html": kq });
+      //   camItem.url = currentURL;
+      // }
+      // else
+      //   if (camItem.url.substring(camItem.url.length - 1, camItem.url.length) == "s" || (parseInt(camItem.url.substring(camItem.url.length - 1, camItem.url.length)) < parseInt(currentURL.substring(currentURL.length - 1, currentURL.length)))) {
+      //     if (currentURL.substring(currentURL.length - 1, currentURL.length) != "s") {
+      //       console.log("currentURL: " + currentURL)
+      //       console.log("item.categories[0]: " + item.categories[0])
+      //       if (item.categories.length > 0 && item.categories[0].id == 1) {
+      //         camItem.data.push({ "price": price, "html": kq });
+      //       }
+      //     }
+
+      //   }
+      // return kq;
+      collection_lists.innerHTML = htmls
       collection_lists.style.height = 'fit-content'
       if (!notJump) jumpTo();
 
-      Currentdatalink.next_page_url=data.next_page_url;
-      Currentdatalink.path=data.path;
-      Currentdatalink.prev_page_url=data.prev_page_url;
-  
+      Currentdatalink.next_page_url = data.next_page_url;
+      Currentdatalink.path = data.path;
+      Currentdatalink.prev_page_url = data.prev_page_url;
+
       var sanPhamUl = document.querySelector(".sanPhamUl");
       var ulHtml = '';
       console.log("SanPhamLast_page");
@@ -256,9 +294,9 @@ function loadProduct(currentURL, notJump) {
       console.log(currentURLOBJ)
       console.log("sanPhamUl");
       console.log(sanPhamUl);
-      })
-      
-    }
+    })
+
+}
 
 //     )
 // }
@@ -447,12 +485,12 @@ function loadProductSpecial() {
   })
     .then(res => res.json())
     .then(data => {
-      var htmls="";
+      var htmls = "";
       console.log(data)
-      for(const index in data){
-        var item=data[index];
+      for (const index in data) {
+        var item = data[index];
         console.log(item)
-        htmls+=`
+        htmls += `
         <div class="p-5 col-lg-3 special-list_list">
             <a href="product.html?id=${item.productId}" style="text-decoration:none;">
               <div class="special-img">
@@ -475,9 +513,9 @@ function loadProductSpecial() {
       }
       specials_list.innerHTML = htmls
       specials_list.style.height = 'fit-content'
-      })
-      
-    }
+    })
+
+}
 loadProductSpecial();
 
 //special

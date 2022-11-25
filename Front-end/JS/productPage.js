@@ -1,10 +1,10 @@
 // init IsotopecurrentURL
 var currentURL = 'http://127.0.0.1:8000/api/products'
 var currentURLAll = 'http://127.0.0.1:8000/api/products'
-var currentURLCam = "http://127.0.0.1:8000/api/products/filter/search=M%C3%A1y%%E1%BA%A3nh"
-var currentURLongKinh = 'http://127.0.0.1:8000/api/products/filter/search=ong%kinh'
+var currentURLCam = "http://127.0.0.1:8000/api/products/categories/1"
+var currentURLongKinh = 'http://127.0.0.1:8000/api/products/categories/2'
 var prelink = 'http://127.0.0.1:8000/api/products?orderBy=asc&page=';
-var Currentdatalink = []
+var Currentdatalink={}
 var $grid = $('.collection-list').isotope({
   // options
 });
@@ -35,26 +35,66 @@ const suggBox = searchWrapper.querySelector(".autocom-box");
 
 //if user press any key and release
 inputBox.onkeyup = (e) => {
+  const regex = /[`~!@#$%^&*()-_+{}[\]\\|,.//?;':"]/g
   let userData = e.target.value; //user enetered data
+  userData = userData.replace(regex, '')
+  if (userData.length == 0) {
+    suggBox.innerHTML = "";
+    return;
+  }
+  userData = userData.toLocaleLowerCase();
   let emptyArray = [];
   if (userData) {
-    emptyArray = suggestions.filter((data) => {
-      return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase());
+    // emptyArray = suggestions.filter((data) => {
+    //   return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase());
+    // });
+    //query lsit form key search
+
+    $.ajax({
+      url: "http://127.0.0.1:8000/api/products/filter/search=" + userData,
+      type: "GET",
+      success: function (data) {
+        // renderCartView(tokenReal)
+        // alert('Thêm sản phẩm thành công');
+        console.log("key" + userData);
+        console.log(data);
+        if (data.data) {
+          var arrayData = data.data.filter((data) => { return data.deletedAt != 1 });
+          console.log("arrayData");
+          console.log(arrayData);
+          emptyArray = arrayData.map((data) => {
+            return data = `<li onclick="gotoProduct(${data.id})" id="${data.id}" style="color:black;"> ${data.name} </li>`;
+          });
+          console.log(emptyArray);
+          searchWrapper.classList.add("active"); //show autocomplete box
+          showSuggestions(emptyArray);
+          // let allList = suggBox.querySelectorAll("li");
+          // for (let i = 0; i < allList.length; i++) {
+          //   //adding onlick attribute in all li tag
+          //   allList[i].setAttribute("onclick", "select(this)");
+          // }
+        }
+        else {
+          suggBox.innerHTML = "<li>Không có kết quả phù hợp</li>";
+        }
+
+      },
+      error: function (msg) {
+        alert(msg);
+        console.log(msg);
+      }
     });
-    emptyArray = emptyArray.map((data) => {
-      return data = '<li>' + data + '</li>';
-    });
-    console.log(emptyArray);
-    searchWrapper.classList.add("active"); //show autocomplete box
-    showSuggestions(emptyArray);
-    let allList = suggBox.querySelectorAll("li");
-    for (let i = 0; i < allList.length; i++) {
-      //adding onlick attribute in all li tag
-      allList[i].setAttribute("onclick", "select(this)");
-    }
   } else {
     searchWrapper.classList.remove("active"); //hide autocomplete box
   }
+
+
+
+
+
+}
+function gotoProduct(id) {
+  document.location.href = "http://127.0.0.1:5500/product.html?id=" + id;
 }
 function select(element) {
   let selectUserData = element.textContent;
@@ -65,7 +105,7 @@ function showSuggestions(list) {
   let listData;
   if (!list.length) {
     userValue = inputBox.value;
-    listData = '<li>' + userValue + '</li>';
+    listData = '<li style="color:black;">' + userValue + '</li>';
   } else {
     listData = list.join('');
   }
@@ -128,25 +168,23 @@ function menuToggle() {
   if (checkCook == null || checkCook == "" || checkCook == ' undefined') {
     var htmls = function () {
       return `
-          <li><i class="fa-solid fa-right-from-bracket"></i> <a href="login.html">Đăng nhập</a></li>
-          <li><i class="fa-solid fa-right-from-bracket"></i> <a href="register.html">Đăng ký</a></li>
-          `
+        <li><i class="fa-solid fa-right-from-bracket"></i> <a href="login.html" style="color:black;">Đăng nhập</a></li>
+        <li><i class="fa-solid fa-right-from-bracket"></i> <a href="register.html" style="color:black;">Đăng ký</a></li>
+        `
     }
     toggleMenuDisplay.innerHTML = htmls();
   }
   else {
     var htmls = function () {
       return `
-            <li><i class="fa-solid fa-user"></i> <a href="#">Tài khoản của tôi</a></li>
-            <li><i class="fa-solid fa-pen-to-square"></i> <a href="#">Đơn hàng</a></li>
-            <li onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> <a href="#">Đăng xuất</a></li>`
+          <li><i class="fa-solid fa-user" style="color:black;"></i> <a href="UserSetting.html">Tài khoản của tôi</a></li>
+          <li onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket" style="color:black;"></i> <a href="#">Đăng xuất</a></li>`
 
     }
     toggleMenuDisplay.innerHTML = htmls();
   }
 
   // htmls = $.parseHTML(htmls);
-
 
 }
 function handleLogout() {
@@ -185,7 +223,8 @@ function handlePartPrev() {
   //console.log(Currentdatalink[0].prev)
 }
 function handlePartNext() {
-
+  console.log("Currentdatalink");
+  console.log(Currentdatalink);
   if (Currentdatalink.next_page_url == null) {
     page_link_2.classList.add('active');
     page_link_1.classList.remove('active');
@@ -283,10 +322,10 @@ function loadProduct(currentURL, idcte) {
       collection_lists.style.height = 'fit-content'
       jumpTo();
 
-      Currentdatalink.push(data.links);
-      if (Currentdatalink.length == 2) {
-        Currentdatalink.shift();
-      }
+      //Currentdatalink.push(data.links);
+      // if (Currentdatalink.length == 2) {
+      //   Currentdatalink.shift();
+      // }
       console.log("heeheheheheh");
       var sanPhamUl = document.querySelector(".sanPhamUl");
       var ulHtml = '';
@@ -302,17 +341,19 @@ function loadProduct(currentURL, idcte) {
       console.log("sanPhamUl");
       console.log(sanPhamUl);
       const page_links = document.querySelectorAll('.page-link')
-var page_link_1 = page_links[0];
-var page_link_2 = page_links[1];
-page_link_1.classList.add('active');
-page_link_1.onclick = () => { handlePartPrev() };
-page_link_2.onclick = () => { handlePartNext() };
+      var page_link_1 = page_links[0];
+      var page_link_2 = page_links[1];
+      page_link_1.classList.add('active');
+      page_link_1.onclick = () => { handlePartPrev() };
+      page_link_2.onclick = () => { handlePartNext() };
     }
 
     )
 }
 loadProductPage(currentURL)
-function loadProductPage(currentURL, notJump) {
+function loadProductPage(currentURL, notJump,isPagaAll) {
+  console.log("load")
+  console.log(currentURL)
   var lanNayThemKhz = (camItem.url != undefined && camItem.url != "") ? false : true;
   console.log(currentURL);
   console.log("lanNayThemKhz", lanNayThemKhz);
@@ -321,17 +362,18 @@ function loadProductPage(currentURL, notJump) {
   fetch(currentURL)
     .then(res => res.json())
     .then(data => {
+      console.log("loadProductPage "+currentURL);
       console.log(data)
       SanPhamLast_page = data.last_page;
       SanPhamCurrent_page = data.current_page;
       currentURLOBJ = data.links;
       // var itemFilter=data.data.filter(item=>item.deletedAt!=1)
-      var itemFilter=data.data;
+      var itemFilter = data.data;
 
-      var htmls ="";
-      for(const index in itemFilter){
-        var item=itemFilter[index];
-        htmls+= ` 
+      var htmls = "";
+      for (const index in itemFilter) {
+        var item = itemFilter[index];
+        htmls += ` 
         <div class="collection-list__list col-md-6 col-lg-4 col-xl-3 px-5 py-3">
         <a href="product.html?id=${item.id}" style="text-decoration:none;" class=" text-dark">
               <div class="collection-img">
@@ -352,35 +394,46 @@ function loadProductPage(currentURL, notJump) {
             </div>
         </div>`
       }
-      
-        //var price = parseInt(item.price);
-        //allItems.push({ "price": price, "html": kq });
-        // if (lanNayThemKhz) {
-        //   console.log("duoi " + parseInt(currentURL.substring(currentURL.length - 1, currentURL.length)));
-        //   if (item.categories[0].id == 1) camItem.data.push({ "price": price, "html": kq });
-        //   camItem.url = currentURL;
-        // }
-        // else
-        //   if (camItem.url.substring(camItem.url.length - 1, camItem.url.length) == "s" || (parseInt(camItem.url.substring(camItem.url.length - 1, camItem.url.length)) < parseInt(currentURL.substring(currentURL.length - 1, currentURL.length)))) {
-        //     if (currentURL.substring(currentURL.length - 1, currentURL.length) != "s") {
-        //       console.log("currentURL: " + currentURL)
-        //       console.log("item.categories[0]: " + item.categories[0])
-        //       if (item.categories.length > 0 && item.categories[0].id == 1) {
-        //         camItem.data.push({ "price": price, "html": kq });
-        //       }
-        //     }
 
-        //   }
-        // return kq;
+      //var price = parseInt(item.price);
+      //allItems.push({ "price": price, "html": kq });
+      // if (lanNayThemKhz) {
+      //   console.log("duoi " + parseInt(currentURL.substring(currentURL.length - 1, currentURL.length)));
+      //   if (item.categories[0].id == 1) camItem.data.push({ "price": price, "html": kq });
+      //   camItem.url = currentURL;
+      // }
+      // else
+      //   if (camItem.url.substring(camItem.url.length - 1, camItem.url.length) == "s" || (parseInt(camItem.url.substring(camItem.url.length - 1, camItem.url.length)) < parseInt(currentURL.substring(currentURL.length - 1, currentURL.length)))) {
+      //     if (currentURL.substring(currentURL.length - 1, currentURL.length) != "s") {
+      //       console.log("currentURL: " + currentURL)
+      //       console.log("item.categories[0]: " + item.categories[0])
+      //       if (item.categories.length > 0 && item.categories[0].id == 1) {
+      //         camItem.data.push({ "price": price, "html": kq });
+      //       }
+      //     }
 
-        collection_lists.innerHTML = htmls
+      //   }
+      // return kq;
+
+      collection_lists.innerHTML = htmls
       collection_lists.style.height = 'fit-content'
       if (!notJump) jumpTo();
-      setBenginEndValue2(data)
-      Currentdatalink.next_page_url=data.next_page_url;
-      Currentdatalink.path=data.path;
-      Currentdatalink.prev_page_url=data.prev_page_url;
-  
+      
+      //console.
+      if(data.hasOwnProperty('meta')){
+         console.log("hasOwnProperty");
+         console.log(data);
+        Currentdatalink.next_page_url = data.links.next;
+        Currentdatalink.path = data.meta.path;
+        Currentdatalink.prev_page_url = data.links.prev;
+      } else {
+        setBenginEndValue2(data)
+      Currentdatalink.next_page_url = data.next_page_url;
+        Currentdatalink.path = data.path;
+        Currentdatalink.prev_page_url = data.prev_page_url;
+      }
+      
+
       var sanPhamUl = document.querySelector(".sanPhamUl");
       var ulHtml = '';
       console.log("SanPhamLast_page");
@@ -394,9 +447,14 @@ function loadProductPage(currentURL, notJump) {
       console.log(currentURLOBJ)
       console.log("sanPhamUl");
       console.log(sanPhamUl);
-      })
-      
-    }
+      var page_link_1 = page_links[0];
+      var page_link_2 = page_links[1];
+      page_link_1.classList.add('active');
+      page_link_1.onclick = () => { handlePartPrev() };
+      page_link_2.onclick = () => { handlePartNext() };
+    })
+
+}
 // function handlePartPrev(Currentdatalink) {
 //   if (Currentdatalink[0].prev == null) {
 //     page_link_1.classList.add('active');
@@ -434,12 +492,12 @@ async function fetchUrl() {
       .then(res => res.json())
       .then(data => {
         //var itemFilter = data.data.filter(item => item.deletedAt != 1)
-        var htmls="";
-        var itemFilter=data.data;
-        for(var index in itemFilter){
-          var item=itemFilter[index];
-          
-          var kq=` 
+        var htmls = "";
+        var itemFilter = data.data;
+        for (var index in itemFilter) {
+          var item = itemFilter[index];
+
+          var kq = ` 
           <div class="collection-list__list col-md-6 col-lg-4 col-xl-3 px-5 py-3">
                 <a href="product.html?id=${item.id}" style="text-decoration:none;" class=" text-dark">
                 <div class="collection-img">
@@ -459,7 +517,7 @@ async function fetchUrl() {
                 <button class="btn btn-primary mt-3 addToCart" data-product-id="1"  style="font-size:15px;" onclick="handleAdd(${item.id});">Thêm vào giỏ hàng</button>
               </div>
           </div>`
-          htmls+=kq
+          htmls += kq
           console.log("response: " + curLink);
           var price = parseInt(item.price);
           itemsUp.push({ "price": price, "html": kq });
@@ -541,12 +599,12 @@ async function fetchUrlDown() {
       .then(res => res.json())
       .then(data => {
         //var itemFilter = data.data.filter(item => item.deletedAt != 1)
-        var htmls="";
-        var itemFilter=data.data;
-        for(var index in itemFilter){
-          var item=itemFilter[index];
-          
-          var kq=` 
+        var htmls = "";
+        var itemFilter = data.data;
+        for (var index in itemFilter) {
+          var item = itemFilter[index];
+
+          var kq = ` 
           <div class="collection-list__list col-md-6 col-lg-4 col-xl-3 px-5 py-3">
                 <a href="product.html?id=${item.id}" style="text-decoration:none;" class=" text-dark">
                 <div class="collection-img">
@@ -566,7 +624,7 @@ async function fetchUrlDown() {
                 <button class="btn btn-primary mt-3 addToCart" data-product-id="1"  style="font-size:15px;" onclick="handleAdd(${item.id});">Thêm vào giỏ hàng</button>
               </div>
           </div>`
-          htmls+=kq
+          htmls += kq
           console.log("response: " + curLink);
           var price = parseInt(item.price);
           itemsDown.push({ "price": price, "html": kq });
@@ -641,7 +699,7 @@ butAll.onclick = () => {
   loadProductPage(currentURLAll)
 }
 butCam.onclick = () => {
-  loadProductCam(currentURLCam);
+  loadProductPage(currentURLCam);
 }
 function loadProductCam(currentURL) {
   const collection_lists = document.querySelector('.collection-list')
@@ -682,10 +740,10 @@ function loadProductCam(currentURL) {
       collection_lists.style.height = 'fit-content'
       jumpTo();
 
-      Currentdatalink.push(data.links);
-      if (Currentdatalink.length == 2) {
-        Currentdatalink.shift();
-      }
+      Currentdatalink=data.links;
+      // if (Currentdatalink.length == 2) {
+      //   Currentdatalink.shift();
+      // }
       console.log("heeheheheheh");
       var sanPhamUl = document.querySelector(".sanPhamUl");
       var ulHtml = '';
@@ -855,6 +913,52 @@ function deleteProduct(id) {
       }
     })
 }
+
+//specials
+const specials_list = document.querySelector('.special-list')
+console.log(specials_list)
+function loadProductSpecial() {
+  fetch('http://127.0.0.1:8000/api/product/bestSeller', {
+    method: 'GET',
+    headers: new Headers({
+      'Authorization': 'Bearer ' + tokenReal,
+      'Content-Type': 'application/x-www-form-urlencoded'
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+      var htmls = "";
+      console.log(data)
+      for (const index in data) {
+        var item = data[index];
+        console.log(item)
+        htmls += `
+        <div class="p-5 col-lg-3 special-list_list">
+            <a href="product.html?id=${item.productId}" style="text-decoration:none;">
+              <div class="special-img">
+                  <img src="${item.img}" class="special-img_img">
+              </div>
+              </a>
+              <div class="text-center">
+                  <div class="rating mt-2 mb-2">
+                      <span class="text-primary"><i class="fas fa-star"></i></span>
+                      <span class="text-primary"><i class="fas fa-star"></i></span>
+                      <span class="text-primary"><i class="fas fa-star"></i></span>
+                      <span class="text-primary"><i class="fas fa-star"></i></span>
+                      <span class="text-primary"><i class="fas fa-star"></i></span>
+                  </div>
+                  <p class="text-capitalize mt-1 mb-1" style="font-size:14px; color:black;">${item.name}</p>
+                  <span class="fw-bold d-block" style="font-size: 14px;color:black;">${changeFormat(item.price)} VNĐ</span>
+                  <button class="btn btn-primary mt-3 addToCart" data-product-id="1" onclick="handleAdd(${item.productId});"  style="font-size:15px;">Thêm vào giỏ hàng</button>
+              </div>
+        </div>`
+      }
+      specials_list.innerHTML = htmls
+      specials_list.style.height = 'fit-content'
+    })
+
+}
+loadProductSpecial();
 
 //special
 $('.owl-carousel').owlCarousel({
