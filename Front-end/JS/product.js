@@ -157,9 +157,13 @@ for (let pair of queryString.entries()) {
             "quantity": getQuantity()
           },
           success: function (data) {
-            renderCartView(tokenReal)
-            alert('Thêm sản phẩm thành công');
-            console.log(data);
+            if(data.success=="false"||data.success==false){
+              alert(data.errors)
+            }
+            else{
+              renderCartView(tokenReal)
+              alert('Thêm sản phẩm thành công');
+            }
           },
           error: function (msg) {
             alert(msg);
@@ -271,6 +275,7 @@ for (let pair of queryString.entries()) {
     fetch('http://127.0.0.1:8000/api/products/' + id)
       .then(res => res.json())
       .then(data => {
+        console.log(data)
         var kq = ` 
         <div class="col-sm-6" style="text-align:center;">
               <img src="${data.data.img}" alt="product" class="mt-5"style="width:45%;">

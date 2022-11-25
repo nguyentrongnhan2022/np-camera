@@ -3,7 +3,7 @@ var descriptionProductAdd = document.getElementById('descriptionProductAdd');
 var pricePorductAdd = document.getElementById('priceProductAdd');
 var idMayanh = document.getElementById('idMayanh')
 var idOngkinh = document.getElementById('idOngkinh')
-
+var quantityProductAdd = document.getElementById('quantityProductAdd')
 var sltCategory=document.getElementById('category')
 let base64String = "";
 function imageUploaded() {
@@ -28,7 +28,7 @@ function handleAddProduct(id) {
         price: pricePorductAdd.value.trim(),
         percentSale: 0,
         img: "data:image/png;base64," + base64String,
-        quantity: 1,
+        quantity: quantityProductAdd.value.trim(),
         category: [
             {
                 "id": sltCategory.value
@@ -50,7 +50,7 @@ function handleAddProduct(id) {
             "price": pricePorductAdd.value.trim(),
             "percentSale": 0,
             "img": "data:image/png;base64," + base64String,
-            "quantity": 1,
+            "quantity": quantityProductAdd.value.trim(),
             "category": [
                 {
                     "id": sltCategory.value

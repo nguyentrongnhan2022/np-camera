@@ -193,7 +193,7 @@ function loadOrderHistory() {
         <h5  id="idAdr"style="font-size:13px;font-weight:500; color:black;">Địa chỉ : &nbsp;${item.address}</h5>
         <h5 id="idSDT"style="font-size:13px;font-weight:500; color:black;">Số điện thoại : &nbsp;${item.phoneReceiver}</h5>
         <h5 id="idPrice"style="font-size:13px;font-weight:500; color:black;">Tổng tiền :&nbsp;${changeFormat(item.totalPrice)} VNĐ</h5>
-        <h5 id="idStatus"style="font-size:13px;font-weight:500; color:black;">Trạng thái đơn hàng :&nbsp;${item.status==2?"ĐƠN HÀNG ĐÃ ĐƯỢC XÁC THỰC.":"ĐƠN HÀNG ĐĂNG ĐƯỢC XỬ LÝ."} </h5>
+        <h5 id="idStatus"style="font-size:13px;font-weight:500; color:black;">Trạng thái đơn hàng :&nbsp;${item.status==2?"ĐƠN HÀNG ĐÃ ĐƯỢC XÁC THỰC.":"ĐƠN HÀNG ĐANG ĐƯỢC XỬ LÝ."} </h5>
         </li>`
       }
       
