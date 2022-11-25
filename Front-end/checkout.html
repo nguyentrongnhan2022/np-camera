@@ -155,15 +155,20 @@ span.price {
                     <input type="text" id="emailUser" name="email" placeholder="nguyenvana@gmail.com" style="outline:none;width: 100%;margin-bottom: 20px;padding: 12px;border: 1px solid #ccc;border-radius: 3px;">
                     <label for="adr"><i class="fa-solid fa-location-dot"></i>&nbsp;&nbsp;Địa chỉ</label>
                     <input type="text" id="adrUser" name="address" placeholder="74, An Thái, An Cư, Cái Bè, Tiền Giang" style="outline:none; width: 100%;margin-bottom: 20px;padding: 12px;border: 1px solid #ccc;border-radius: 3px;" required>
+                    <label for="phoneNber"><i class="fa-solid fa-location-dot"></i>&nbsp;&nbsp;Số điện thoại</label>
+                    <input type="text" id="phoneNumber" name="phoneNumber" placeholder="0378774013" style="outline:none; width: 100%;margin-bottom: 20px;padding: 12px;border: 1px solid #ccc;border-radius: 3px;" required>
                     <div>
                         <label for="method" class="name-method">Phương thức thanh toán</label>
                     </div>
                     <div class="row">
                     <div class="col-50">
-                        <input id="pay_nhanhang" type="radio" class="checkbox-name" name="state" placeholder="NY" checked> Thanh toán khi nhận hàng
+                        <input id="pay_nhanhang" type="radio" class="checkbox-name" name="state" placeholder="NY" value="0" checked> Thanh toán khi nhận hàng
                     </div>
                     <div class="col-50 mt-2 mb-2">
-                        <input id="pay_momo" type="radio" class="checkbox-name" name="state" placeholder="NY"> Thanh toán Momo
+                        <input id="pay_momo_atm" type="radio" class="checkbox-name" name="state" placeholder="NY" value="1"> Thanh toán Momo ATM
+                    </div>
+                    <div class="col-50 mt-0 mb-2">
+                        <input id="pay_momo_qr" type="radio" class="checkbox-name" name="state" placeholder="NY" value="2"> Thanh toán Momo QR
                     </div>
                     </div>
                 </div>

@@ -76,12 +76,8 @@ inputBox.onkeyup = (e) => {
     } else {
         searchWrapper.classList.remove("active"); //hide autocomplete box
     }
-
-
-
-
-
 }
+
 function gotoProduct(id) {
     document.location.href = "http://127.0.0.1:5500/product.html?id=" + id;
 }
@@ -280,6 +276,7 @@ var s = today.getSeconds();
 
 var nameUser = document.getElementById('nameUser');
 var address = document.getElementById('adrUser');
+var phoneNumber = document.getElementById('phoneNumber');
 console.log(address)
 
 function pad(number) {
@@ -288,36 +285,28 @@ function pad(number) {
     }
     return number;
 }
-var cc = todayDate.toLocaleString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
-async function loadOrder() {
+var today = todayDate.toLocaleString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: "h24" });
+async function loadOrder(paidType) {
     meData = JSON.stringify({
         voucherCode: "",
         dateOrder: today,
         address: address.value.trim(),
         nameReceiver: nameUser.value.trim(),
-        phoneReceiver: "0372963918",
-        paidType: 2
+        phoneReceiver: phoneNumber.value.trim(),
+        paidType: parseInt(paidType)
     });
-    console.log(meData);
+    console.log(paidType);
     // today = pad(todayDate.getFullYear()) + '-' + pad(todayDate.getMonth() + 1) + '-' + pad(todayDate.getDate()) + '- ' + pad(todayDate.getHours()) + ':' + pad(todayDate.getMinutes()) + ':' + pad(todayDate.getSeconds())
     // console.log("today" + today)
     // console.log(today)
 
-    var today = todayDate.toLocaleString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
     console.log(today)
-    console.log(today)
-    if (cc.indexOf('p') != -1) {
-        today = today.substr(0, cc.indexOf('p'))
-    } else {
-        today = today.substr(0, cc.indexOf('a'))
-    }
-
     var todayArr = today.split(',')
     var newToday = todayArr[0].trim() + ' ' + todayArr[1].trim()
     console.log(newToday)
 
     $.ajax({
-        url: "http://127.0.0.1:8000/api/user/order/placeorderPaypal",
+        url: "http://127.0.0.1:8000/api/user/order/placeorder",
         beforeSend: function (xhr) {
             /* Authorization header */
             xhr.setRequestHeader("Authorization", 'Bearer ' + tokenReal);
@@ -329,12 +318,15 @@ async function loadOrder() {
             "dateOrder": newToday,
             "address": address.value.trim(),
             "nameReceiver": nameUser.value.trim(),
-            "phoneReceiver": "0372963918",
-            "paidType": 2
+            "phoneReceiver": phoneNumber.value.trim(),
+            "paidType": parseInt(paidType)
         },
 
         success: function (data) {
             if (data.success == "true" || data.success == true) {
+                if (parseInt(paidType) !== 0) {
+                    window.location.href = data.link.payUrl;
+                }
                 alert('Thanh toán thành công');
                 document.location.href = "paySucces.html";
             }
@@ -396,9 +388,17 @@ async function loadOrder() {
 
 var my_func = function (event) {
     event.preventDefault();
-    if (pay_nhanhang.checked) { loadOrder() }
+    if (pay_nhanhang.checked) {
+        loadOrder(pay_nhanhang.value);
+        // document.location.href = "paySucces.html";
+    } else if (pay_nhanhang_momo_atm.checked) {
+        loadOrder(pay_nhanhang_momo_atm.value);
+    } else {
+        loadOrder(pay_nhanhang_momo_qr.value);
+    }
 };
 var form = document.getElementById("meForm");
 form.addEventListener("submit", my_func, true);
 var pay_nhanhang = document.getElementById('pay_nhanhang')
-var pay_momo = document.getElementById('pay_momo')
+var pay_nhanhang_momo_atm = document.getElementById('pay_momo_atm')
+var pay_nhanhang_momo_qr = document.getElementById('pay_momo_qr')

@@ -187,13 +187,13 @@ function loadOrderHistory() {
         console.log("item"+item)
         htmls+=`
         <li class="mb-5" style="list-style:none;">
-        <h5 id="idOrder"style="font-size:13px;font-weight:500; color:black;">ID :&nbsp; ${item.id}</h5>
+        <h5 id="idOrder"style="font-size:13px;font-weight:500; color:black;">ID :&nbsp; ${item.idDelivery}</h5>
         <h5 id="idDate" style="font-size:13px;font-weight:500; color:black;">Ngày đặt hàng :&nbsp;${item.dateOrder} </h5>
         <h5 id="idName"style="font-size:13px;font-weight:500; color:black;">Tên :&nbsp;${item.nameReceiver}</h5>
         <h5  id="idAdr"style="font-size:13px;font-weight:500; color:black;">Địa chỉ : &nbsp;${item.address}</h5>
         <h5 id="idSDT"style="font-size:13px;font-weight:500; color:black;">Số điện thoại : &nbsp;${item.phoneReceiver}</h5>
         <h5 id="idPrice"style="font-size:13px;font-weight:500; color:black;">Tổng tiền :&nbsp;${changeFormat(item.totalPrice)} VNĐ</h5>
-        <h5 id="idStatus"style="font-size:13px;font-weight:500; color:black;">Trạng thái đơn hàng :&nbsp;${item.status==2?"ĐƠN HÀNG ĐÃ ĐƯỢC XÁC THỰC.":"ĐƠN HÀNG ĐÃ BI HỦY."} </h5>
+        <h5 id="idStatus"style="font-size:13px;font-weight:500; color:black;">Trạng thái đơn hàng :&nbsp;${item.status==2?"ĐƠN HÀNG ĐÃ ĐƯỢC XÁC THỰC.":"ĐƠN HÀNG ĐĂNG ĐƯỢC XỬ LÝ."} </h5>
         </li>`
       }
       
