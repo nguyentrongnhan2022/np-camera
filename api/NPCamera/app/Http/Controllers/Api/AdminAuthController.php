@@ -39,7 +39,7 @@ class AdminAuthController extends Controller
             $sum_price = $sum_price + $total_sales[$i]->total_price;
         }
         
-        $products = Product::get()->count(); // Total products has been created so far
+        $products = Product::where("deleted_at", "=", null)->get()->count(); // Total products has been created so far
         $pending_orders = Order::where("status", "=", 0)->get()->count(); // Orders have status = 0 will be considered as Pending
         $recent_orders = Order::orderBy('created_at', 'DESC')->get()->count();
         

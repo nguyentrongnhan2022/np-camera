@@ -220,6 +220,7 @@ Route::middleware("auth:sanctum")->group(function () {
 // ***** CUSTOMER ***** \\
 Route::get('/products', [ProductQueryController::class, "indexCustomer"]); // Show all products
 Route::get('/products/{id}', [ProductQueryController::class, "show"]); // Show detail of a specific product
+Route::get('/products/categories/{filter}', [ProductQueryController::class, "filterProducts"]);// Show detail of a specific product
 Route::get('/products/filter/search={value}', [ProductQueryController::class, "searchProduct"])->name("filter.search"); // Show detail of a specific product
 Route::get('/products/topBar/search={value}', [ProductQueryController::class, "searchTopBar"]); // Show detail of a specific product
 /** Query for products appearance in front page
@@ -272,10 +273,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // After payment completed
         Route::get(
-            "/order/{id}/payment?partnerCode={partnerCode}&orderId={orderId}&requestId={requestId}&amount={amount}&orderInfo={orderInfo}&orderType={orderType}&transId={transId}&resultCode={resultCode}&message={message}&payType={payType}&responseTime={responseTime}&extraData={extraData}&signature={signature}",
+            "/order/payment?partnerCode={partnerCode}&orderId={orderId}&requestId={requestId}&amount={amount}&orderInfo={orderInfo}&orderType={orderType}&transId={transId}&resultCode={resultCode}&message={message}&payType={payType}&responseTime={responseTime}&extraData={extraData}&signature={signature}",
             [CheckoutController::class, "redirect"]
         )->name("return.page");
-        Route::post("/order/{id}/complete/payment", [CheckoutController::class, "redirect"]); // Use this when front-end can't get header redirect URL
+        Route::post("/order/complete/payment", [CheckoutController::class, "redirect"]); // Use this when front-end can't get header redirect URL
 
         Route::delete("/order/placeorder&cancel={id}", [OrderController::class, "destroy"]); // {id} is order_id; Cancel order
         Route::put("/order/{id}/status", [OrderController::class, "updateStatus"]); // Customer only allow to confirm "Completed" state for order
