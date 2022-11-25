@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Thêm sản phẩm</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700" />
+    <!-- https://fonts.google.com/specimen/Roboto -->
+    <link rel="stylesheet" href="css/fontawesome.min.css" />
+    <!-- https://fontawesome.com/ -->
+    <link rel="stylesheet" href="jquery-ui-datepicker/jquery-ui.min.css" type="text/css" />
+    <!-- http://api.jqueryui.com/datepicker/ -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <!-- https://getbootstrap.com/ -->
+    <link rel="stylesheet" href="css/templatemo-style.css">
+    <!--
+	Product Admin CSS Template
+	https://templatemo.com/tm-524-product-admin
+	-->
+</head>
+
+<body>
+    <div class="container tm-mt-big tm-mb-big">
+        <div class="row">
+            <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
+                <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="tm-block-title d-inline-block text-uppercase">Thêm khách hàng </h2>
+                        </div>
+                    </div>
+                    <form action="" class="tm-edit-product-form" id="meForm">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="small mb-1 text-white" style="font-weight:600 ;"for="inputFirstName">First name</label>
+                                <input class="form-control" id="firstnameUserAdd" type="text"placeholder="Nhập first name..." style="font-weight:600;font-size: 15px;" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="small mb-1 text-white " style="font-weight:600 ;" for="inputLastName">Lastname</label>
+                                <input class="form-control" id="lastnameUserAdd" type="text"placeholder="Nhập last name..." style="font-weight:600;font-size: 15px;"required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="small mb-1 text-white" style="font-weight:600 ;"for="inputEmailAddress">Email</label>
+                                <input class="form-control" id="emailUserAdd" type="email"placeholder="Nhập email..." style="font-weight:600;font-size: 15px;"required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="small mb-1 text-white" style="font-weight:600 ;" for="inputPhone">Mật khẩu</label>
+                                <input class="form-control" id="passUserAdd" type="password"placeholder="Nhập số điện thoại..." style="font-weight:600;font-size: 15px;"required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <button onclick="handleAddUser();" type="submit"class="btn btn-primary btn-block text-uppercase">thêm khách hàng</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- https://jqueryui.com/download/ -->
+
+    <!-- https://getbootstrap.com/ -->
+    <script src="JS/adduser.js"></script>
+    <script src="JS/jquery-3.3.1.min.js"></script>
+</body>
+
+</html>

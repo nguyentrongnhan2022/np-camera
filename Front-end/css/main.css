@@ -14,7 +14,13 @@ body{
 .bg-primary{
     background-color: var(--pink)!important;
 }
-
+.scroller {
+    width: auto;
+    height: 200px;
+    overflow-y: scroll;
+    scrollbar-color: rebeccapurple green;
+    scrollbar-width: thin;
+  }
 .btn:not(.nav-btns button){
     background-color: #fff;
     color: rgb(85, 85, 85);
@@ -125,7 +131,9 @@ body{
     background: #efefef;
     transition: 0.25s;
 }
-
+.active{
+    color: red;
+}
 /*cart*/
 .cart{
     overflow: hidden;

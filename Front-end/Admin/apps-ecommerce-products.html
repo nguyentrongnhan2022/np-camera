@@ -1,203 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>Admin-NPCamera</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
-        <meta content="Coderthemes" name="author" />
-        <!-- App favicon -->
-        <link rel="shortcut icon" href="assets/images/favicon.ico">
 
-        <!-- third party css -->
-        <link href="assets/css/vendor/dataTables.bootstrap4.css" rel="stylesheet" type="text/css" />
-        <link href="assets/css/vendor/responsive.bootstrap4.css" rel="stylesheet" type="text/css" />
-        <!-- third party css end -->
+<head>
+    <meta charset="utf-8" />
+    <title>Admin-NPCamera</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+    <meta content="Coderthemes" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
 
-        <!-- App css -->
-        <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-        <link href="assets/css/app-modern.min.css" rel="stylesheet" type="text/css" id="light-style" />
-        <link href="assets/css/app-modern-dark.min.css" rel="stylesheet" type="text/css" id="dark-style" />
+    <!-- third party css -->
 
-    </head>
+    <link href="assets/css/vendor/dataTables.bootstrap4.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/vendor/responsive.bootstrap4.css" rel="stylesheet" type="text/css" />
+    <!-- third party css end -->
 
-    <body class="loading" data-layout="detached" data-layout-config='{"leftSidebarCondensed":false,"darkMode":false, "showRightSidebarOnStart": true}'>
+    <!-- App css -->
+    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/app-modern.min.css" rel="stylesheet" type="text/css" id="light-style" />
+    <link href="assets/css/app-modern-dark.min.css" rel="stylesheet" type="text/css" id="dark-style" />
 
-        <!-- Start Content-->
-        <div class="container-fluid">
+</head>
 
-            <!-- Begin page -->
-            <div class="wrapper">
+<body class="loading" data-layout="detached"
+    data-layout-config='{"leftSidebarCondensed":false,"darkMode":false, "showRightSidebarOnStart": true}'>
 
-                <!-- ========== Left Sidebar Start ========== -->
-                <div class="left-side-menu left-side-menu-detached">
+    <!-- Start Content-->
+    <div class="container-fluid">
 
-                    <div class="leftbar-user">
-                        <a href="javascript: void(0);">
-                            <img src="assets/images/users/AvatarNhan.jpg" alt="user-image" height="42" class="rounded-circle shadow-sm">
-                            <span class="leftbar-user-name">Nhân Nguyễn</span>
-                        </a>
-                    </div>
+        <!-- Begin page -->
+        <div class="wrapper">
 
-                    <!--- Sidemenu -->
-                    <ul class="menu_list side-nav">
-                        
-                    </ul>
-                    <!-- End Sidebar -->
+            <!-- ========== Left Sidebar Start ========== -->
+            <div class="left-side-menu left-side-menu-detached">
 
-                    <div class="clearfix"></div>
-                    <!-- Sidebar -left -->
-
+                <div class="leftbar-user">
+                    <a href="javascript: void(0);">
+                        <img src="assets/images/users/AvatarNhan.jpg" alt="user-image" height="42"
+                            class="rounded-circle shadow-sm">
+                        <span class="leftbar-user-name">Nhân Nguyễn</span>
+                    </a>
                 </div>
-                <!-- Left Sidebar End -->
 
-                <div class="content-page">
-                    <div class="content">
-                        
-                        <!-- start page title -->
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="page-title-box">
-                                    <div class="page-title-right">
-                                        <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Admin</a></li>
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Cửa Hàng</a></li>
-                                            <li class="breadcrumb-item active">Sản Phẩm</li>
-                                        </ol>
-                                    </div>
-                                    <h4 class="page-title">Sản Phẩm</h4>
+                <!--- Sidemenu -->
+                <ul class="menu_list side-nav">
+
+                </ul>
+                <!-- End Sidebar -->
+
+                <div class="clearfix"></div>
+                <!-- Sidebar -left -->
+
+            </div>
+            <!-- Left Sidebar End -->
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- start page title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box">
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0">
+                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Admin</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Cửa Hàng</a></li>
+                                        <li class="breadcrumb-item active">Sản Phẩm</li>
+                                    </ol>
                                 </div>
+                                <h4 class="page-title">Sản Phẩm</h4>
                             </div>
-                        </div>     
-                        <!-- end page title --> 
-
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row mb-2">
-                                            <div class="col-sm-4">
-                                                <a href="javascript:void(0);" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle mr-2"></i> Thêm sản phẩm</a>
-                                            </div>
-                                        </div>
-                
-                                        <div class="table-responsive">
-                                            <table class="table table-centered w-100 dt-responsive nowrap" id="products">
-                                                <thead class="thead-light">
-                                                    <tr>
-                                                        <th class="all" style="width: 20px;">
-                                                            <div class="custom-control custom-checkbox">
-                                                                <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                                                <label class="custom-control-label" for="customCheck1">&nbsp;</label>
-                                                            </div>
-                                                        </th>
-                                                        <th class="all">Sản phẩm</th>
-                                                        <th>Phân loại</th>
-                                                        <th>Ngày thêm</th>
-                                                        <th>Giá</th>
-                                                        <th>Số lượng</th>
-                                                        <th>Trạng thái</th>
-                                                        <th style="width: 120px;"></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="product_list">
-                                            
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                            </div> <!-- end col -->
                         </div>
-                        <!-- end row -->
-                        
-                    </div> <!-- End Content -->
-
-                </div> <!-- content-page -->
-
-            </div> <!-- end wrapper-->
-        </div>
-        <!-- END Container -->
-
-
-        <!-- Right Sidebar -->
-        <div class="right-bar">
-
-            <div class="rightbar-title">
-                <a href="javascript:void(0);" class="right-bar-toggle float-right">
-                    <i class="dripicons-cross noti-icon"></i>
-                </a>
-                <h5 class="m-0">Settings</h5>
-            </div>
-
-            <div class="rightbar-content h-100" data-simplebar>
-
-                <div class="p-3">
-                    <div class="alert alert-warning" role="alert">
-                        <strong>Customize </strong> the overall color scheme, sidebar menu, etc.
                     </div>
+                    <!-- end page title -->
 
-                    <!-- Settings -->
-                    <h5 class="mt-3">Color Scheme</h5>
-                    <hr class="mt-1" />
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row mb-2">
+                                        <div class="col-sm-4 ">
+                                            <a href="add-product.html" class="btn btn-danger mb-2"><i
+                                                class="mdi mdi-plus-circle mr-2"></i> Thêm sản phẩm</a>
+                                        </div>
 
-                    <div class="custom-control custom-switch mb-1">
-                        <input type="radio" class="custom-control-input" name="color-scheme-mode" value="light"
-                            id="light-mode-check" checked />
-                        <label class="custom-control-label" for="light-mode-check">Light Mode</label>
+                                    </div>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-centered w-100 dt-responsive nowrap" id="products">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th class="all" style="width: 20px;">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                id="customCheck1">
+                                                            <label class="custom-control-label"
+                                                                for="customCheck1">&nbsp;</label>
+                                                        </div>
+                                                    </th>
+                                                    <th class="all">Sản phẩm</th>
+                                                    <th>Phân loại</th>
+                                                    <th>Ngày thêm</th>
+                                                    <th>Giá</th>
+                                                    <th>Số lượng</th>
+                                                    <th>Trạng thái</th>
+                                                    <th style="width: 120px;"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="product_list">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card-->
+                        </div> <!-- end col -->
                     </div>
+                    <!-- end row -->
 
-                    <div class="custom-control custom-switch mb-1">
-                        <input type="radio" class="custom-control-input" name="color-scheme-mode" value="dark"
-                            id="dark-mode-check" />
-                        <label class="custom-control-label" for="dark-mode-check">Dark Mode</label>
-                    </div>
+                </div> <!-- End Content -->
 
-                    <!-- Left Sidebar-->
-                    <h5 class="mt-4">Left Sidebar</h5>
-                    <hr class="mt-1" />
+            </div> <!-- content-page -->
 
-                    <div class="custom-control custom-switch mb-1">
-                        <input type="radio" class="custom-control-input" name="compact" value="fixed" id="fixed-check"
-                            checked />
-                        <label class="custom-control-label" for="fixed-check">Scrollable</label>
-                    </div>
+        </div> <!-- end wrapper-->
+    </div>
+    <!-- END Container -->
 
-                    <div class="custom-control custom-switch mb-1">
-                        <input type="radio" class="custom-control-input" name="compact" value="condensed"
-                            id="condensed-check" />
-                        <label class="custom-control-label" for="condensed-check">Condensed</label>
-                    </div>
 
-                    <button class="btn btn-primary btn-block mt-4" id="resetBtn">Reset to Default</button>
+    <!-- Right Sidebar -->
+    <div class="right-bar">
 
-                    <a href="https://themes.getbootstrap.com/product/hyper-responsive-admin-dashboard-template/"
-                        class="btn btn-danger btn-block mt-3" target="_blank"><i class="mdi mdi-basket mr-1"></i> Purchase
-                        Now</a>
-                </div> <!-- end padding-->
-
-            </div>
+        <div class="rightbar-title">
+            <a href="javascript:void(0);" class="right-bar-toggle float-right">
+                <i class="dripicons-cross noti-icon"></i>
+            </a>
+            <h5 class="m-0">Settings</h5>
         </div>
 
-        <div class="rightbar-overlay"></div>
-        <!-- /Right-bar -->
+        <div class="rightbar-content h-100" data-simplebar>
+
+            <div class="p-3">
+                <div class="alert alert-warning" role="alert">
+                    <strong>Customize </strong> the overall color scheme, sidebar menu, etc.
+                </div>
+
+                <!-- Settings -->
+                <h5 class="mt-3">Color Scheme</h5>
+                <hr class="mt-1" />
+
+                <div class="custom-control custom-switch mb-1">
+                    <input type="radio" class="custom-control-input" name="color-scheme-mode" value="light"
+                        id="light-mode-check" checked />
+                    <label class="custom-control-label" for="light-mode-check">Light Mode</label>
+                </div>
+
+                <div class="custom-control custom-switch mb-1">
+                    <input type="radio" class="custom-control-input" name="color-scheme-mode" value="dark"
+                        id="dark-mode-check" />
+                    <label class="custom-control-label" for="dark-mode-check">Dark Mode</label>
+                </div>
+
+                <!-- Left Sidebar-->
+                <h5 class="mt-4">Left Sidebar</h5>
+                <hr class="mt-1" />
+
+                <div class="custom-control custom-switch mb-1">
+                    <input type="radio" class="custom-control-input" name="compact" value="fixed" id="fixed-check"
+                        checked />
+                    <label class="custom-control-label" for="fixed-check">Scrollable</label>
+                </div>
+
+                <div class="custom-control custom-switch mb-1">
+                    <input type="radio" class="custom-control-input" name="compact" value="condensed"
+                        id="condensed-check" />
+                    <label class="custom-control-label" for="condensed-check">Condensed</label>
+                </div>
+
+                <button class="btn btn-primary btn-block mt-4" id="resetBtn">Reset to Default</button>
+
+                <a href="https://themes.getbootstrap.com/product/hyper-responsive-admin-dashboard-template/"
+                    class="btn btn-danger btn-block mt-3" target="_blank"><i class="mdi mdi-basket mr-1"></i> Purchase
+                    Now</a>
+            </div> <!-- end padding-->
+
+        </div>
+    </div>
+
+    <div class="rightbar-overlay"></div>
+    <!-- /Right-bar -->
 
 
-        <!-- bundle -->
-        <script src="assets/js/vendor.min.js"></script>
-        <script src="assets/js/app.min.js"></script>
-        
-        <!-- third party js -->
-        <script src="assets/js/vendor/jquery.dataTables.min.js"></script>
-        <script src="assets/js/vendor/dataTables.bootstrap4.js"></script>
-        <script src="assets/js/vendor/dataTables.responsive.min.js"></script>
-        <script src="assets/js/vendor/responsive.bootstrap4.min.js"></script>
-        <script src="assets/js/vendor/dataTables.checkboxes.min.js"></script>
-        <!-- third party js ends -->
+    <!-- bundle -->
+    <script src="assets/js/vendor.min.js"></script>
+    <script src="assets/js/app.min.js"></script>
 
-        <!-- demo app -->
-        <script src="assets/js/pages/demo.products.js"></script>
-        <!-- end demo js-->
-        <script src="JS/index.js"></script>
-    </body>
+    <!-- third party js -->
+    <script src="assets/js/vendor/jquery.dataTables.min.js"></script>
+    <script src="assets/js/vendor/dataTables.bootstrap4.js"></script>
+    <script src="assets/js/vendor/dataTables.responsive.min.js"></script>
+    <script src="assets/js/vendor/responsive.bootstrap4.min.js"></script>
+    <script src="assets/js/vendor/dataTables.checkboxes.min.js"></script>
+    <!-- third party js ends -->
+
+    <!-- demo app -->
+    <script src="assets/js/pages/demo.products.js"></script>
+    <!-- end demo js-->
+    <script src="JS/index.js"></script>
+    <script src="JS/deleteProduct.js"></script>
+</body>
+
 </html>

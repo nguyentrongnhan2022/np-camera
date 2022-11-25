@@ -153,8 +153,8 @@
         function checkLogin(data){
             if(data.success){
                 console.log(data);
-                var token=data.token;
-                setCookie("encryptedToken",token,7);
+                var token=data.encryptedToken;
+                setCookie("encryptedTokenAdmin",token,7);
                 setCookie("admin",JSON.stringify(data.data),7);
                 document.location.href="http://127.0.0.1:5500/Admin/index.html";
             } else {

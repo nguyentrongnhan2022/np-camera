@@ -1,3 +1,6 @@
+var currentURL = 'http://127.0.0.1:8000/api/products'
+var Currentdatalink = []
+
 // init Isotope
 var collection_prices;
 var $grid = $('.collection-list').isotope({
@@ -31,7 +34,7 @@ inputBox.onkeyup = (e) => {
       return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase());
     });
     emptyArray = emptyArray.map((data) => {
-      return data = '<li>' + data + '</li>';
+      return data = '<li style="color:black;">' + data + '</li>';
     });
     console.log(emptyArray);
     searchWrapper.classList.add("active"); //show autocomplete box
@@ -54,7 +57,7 @@ function showSuggestions(list) {
   let listData;
   if (!list.length) {
     userValue = inputBox.value;
-    listData = '<li>' + userValue + '</li>';
+    listData = '<li style="color:black;">' + userValue + '</li>';
   } else {
     listData = list.join('');
   }
@@ -75,8 +78,8 @@ function menuToggle() {
   if (checkCook == null || checkCook == "" || checkCook == ' undefined') {
     var htmls = function () {
       return `
-        <li><i class="fa-solid fa-right-from-bracket"></i> <a href="login.html">Đăng nhập</a></li>
-        <li><i class="fa-solid fa-right-from-bracket"></i> <a href="register.html">Đăng ký</a></li>
+        <li><i class="fa-solid fa-right-from-bracket"></i> <a href="login.html" style="color:black;">Đăng nhập</a></li>
+        <li><i class="fa-solid fa-right-from-bracket"></i> <a href="register.html" style="color:black;">Đăng ký</a></li>
         `
     }
     toggleMenuDisplay.innerHTML = htmls();
@@ -84,9 +87,8 @@ function menuToggle() {
   else {
     var htmls = function () {
       return `
-          <li><i class="fa-solid fa-user"></i> <a href="#">Tài khoản của tôi</a></li>
-          <li><i class="fa-solid fa-pen-to-square"></i> <a href="#">Đơn hàng</a></li>
-          <li onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> <a href="#">Đăng xuất</a></li>`
+          <li><i class="fa-solid fa-user" style="color:black;"></i> <a href="UserSetting.html">Tài khoản của tôi</a></li>
+          <li onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket" style="color:black;"></i> <a href="#">Đăng xuất</a></li>`
 
     }
     toggleMenuDisplay.innerHTML = htmls();
@@ -157,20 +159,44 @@ const page_links = document.querySelectorAll('.page-link')
 var page_link_1 = page_links[0];
 var page_link_2 = page_links[1];
 page_link_1.classList.add('active');
-var current_page_link = 1;
-page_link_1.onclick = () => { handlePart(1); page_link_1.classList.add('active'); page_link_2.classList.remove('active'); };
-page_link_2.onclick = () => { handlePart(2); page_link_2.classList.add('active'); page_link_1.classList.remove('active'); };
+page_link_1.onclick = () => { handlePartPrev(Currentdatalink) };
+page_link_2.onclick = () => { handlePartNext(Currentdatalink) };
 
-function loadProduct() {
+var camItem = {
+  "url": "",
+  "data": []
+}
+var currentURLOBJ;
+var SanPhamTotal;
+var SanPhamCurrent_page;
+var SanPhamFrom;//int;
+var SanPhamLast_page;
+var SanPhamLinks //array;
+var SanPhamPer_page //int;
+var SanPhamTo;//int;
+
+function loadProduct(currentURL, notJump) {
+  var lanNayThemKhz = (camItem.url != undefined && camItem.url != "") ? false : true;
+  console.log(currentURL);
+  console.log("lanNayThemKhz", lanNayThemKhz);
   allItems = [];
   const collection_lists = document.querySelector('.collection-list')
-  fetch('http://127.0.0.1:8000/api/products')
+  fetch(currentURL)
     .then(res => res.json())
     .then(data => {
-      var htmls = data.data.map((item) => {
-        var kq = ` 
+      console.log(data)
+      SanPhamLast_page = data.last_page;
+      SanPhamCurrent_page = data.current_page;
+      currentURLOBJ = data.links;
+      // var itemFilter=data.data.filter(item=>item.deletedAt!=1)
+      var itemFilter=data.data;
+
+      var htmls ="";
+      for(const index in itemFilter){
+        var item=itemFilter[index];
+        htmls+= ` 
         <div class="collection-list__list col-md-6 col-lg-4 col-xl-3 px-5 py-3">
-        <a href="product.html?id=${item.id}"" style="text-decoration:none;" class=" text-dark">
+        <a href="product.html?id=${item.id}" style="text-decoration:none;" class=" text-dark">
               <div class="collection-img">
                   <img src="${item.img}" class="collection-img_img">
               </div>
@@ -188,50 +214,77 @@ function loadProduct() {
               <button class="btn btn-primary mt-3 addToCart" data-product-id="1" onclick="handleAdd(${item.id});"  style="font-size:15px;">Thêm vào giỏ hàng</button>
             </div>
         </div>`
-        var price = parseInt(item.price);
-        allItems.push({ "price": price, "html": kq });
-        return kq;
-      })
-      collection_lists.innerHTML = htmls.join('')
+      }
+      
+        //var price = parseInt(item.price);
+        //allItems.push({ "price": price, "html": kq });
+        // if (lanNayThemKhz) {
+        //   console.log("duoi " + parseInt(currentURL.substring(currentURL.length - 1, currentURL.length)));
+        //   if (item.categories[0].id == 1) camItem.data.push({ "price": price, "html": kq });
+        //   camItem.url = currentURL;
+        // }
+        // else
+        //   if (camItem.url.substring(camItem.url.length - 1, camItem.url.length) == "s" || (parseInt(camItem.url.substring(camItem.url.length - 1, camItem.url.length)) < parseInt(currentURL.substring(currentURL.length - 1, currentURL.length)))) {
+        //     if (currentURL.substring(currentURL.length - 1, currentURL.length) != "s") {
+        //       console.log("currentURL: " + currentURL)
+        //       console.log("item.categories[0]: " + item.categories[0])
+        //       if (item.categories.length > 0 && item.categories[0].id == 1) {
+        //         camItem.data.push({ "price": price, "html": kq });
+        //       }
+        //     }
+
+        //   }
+        // return kq;
+        collection_lists.innerHTML = htmls
       collection_lists.style.height = 'fit-content'
+      if (!notJump) jumpTo();
+
+      Currentdatalink.next_page_url=data.next_page_url;
+      Currentdatalink.path=data.path;
+      Currentdatalink.prev_page_url=data.prev_page_url;
+  
+      var sanPhamUl = document.querySelector(".sanPhamUl");
+      var ulHtml = '';
+      console.log("SanPhamLast_page");
+      console.log(SanPhamLast_page);
+      for (var i = 1; i <= SanPhamLast_page; i++) {
+        ulHtml += `<li id="PageNumber" style="display: inline-block ;padding:6px 8px 8px 8px ;" class="page-item  ${SanPhamCurrent_page == i ? 'active' : ''}" >
+        ${i}
+    </li>`
+      }
+      sanPhamUl.innerHTML = ulHtml;
+      console.log(currentURLOBJ)
+      console.log("sanPhamUl");
+      console.log(sanPhamUl);
+      })
+      
     }
 
-    )
+//     )
+// }
+loadProduct(currentURL, true)
+
+function handlePartPrev() {
+  if (Currentdatalink.prev_page_url == null) {
+    page_link_1.classList.add('active');
+    page_link_2.classList.remove('active');
+  }
+  else {
+    currentURL = Currentdatalink.prev_page_url
+    loadProduct(currentURL)
+  }
+  //console.log(Currentdatalink[0].prev)
 }
-loadProduct()
-function handlePart(index) {
-  if (current_page_link == index) return;
-  current_page_link = index;
-  const collection_lists = document.querySelector('.collection-list')
-  fetch(`http://127.0.0.1:8000/api/products?page=${index}`)
-    .then(res => res.json())
-    .then(data => {
-      var htmls = data.data.map((item) => {
-        return ` 
-        <div class="collection-list__list col-md-6 col-lg-4 col-xl-3 px-5 py-3" >
-              <a href="product.html?id=${item.id}"" style="text-decoration:none;" class=" text-dark">
-              <div class="collection-img">
-                  <img src="${item.img}" class="collection-img_img">
-              </div>
-              <div class="text-center">
-                <div class="rating mt-3">
-                  <span class="text-primary"><i class="fas fa-star"></i></span>
-                  <span class="text-primary"><i class="fas fa-star"></i></span>
-                  <span class="text-primary"><i class="fas fa-star"></i></span>
-                  <span class="text-primary"><i class="fas fa-star"></i></span>
-                  <span class="text-primary"><i class="fas fa-star"></i></span>
-                </div>
-              <p class="text-capitalize my-1 product-name" style="font-size:15px;">${item.name}</p>
-              <span class=" fw-bold d-block" style="font-size:15px;">${changeFormat(item.price)} VNĐ</span>
-              </a>
-              <button class="btn btn-primary mt-3 addToCart" data-product-id="1" onclick="handleAdd(${item.id});" style="font-size:15px;">Thêm vào giỏ hàng</button>
-            </div>
-        </div>`
-      })
-      collection_lists.innerHTML = htmls.join('')
-      collection_lists.style.height = 'fit-content'
-      jumpTo();
-    })
+function handlePartNext() {
+
+  if (Currentdatalink.next_page_url == null) {
+    page_link_2.classList.add('active');
+    page_link_1.classList.remove('active');
+  }
+  else {
+    currentURL = Currentdatalink.next_page_url
+    loadProduct(currentURL)
+  }
 }
 function jumpTo() {
   var url = location.href;               //Saving URL without hash.
@@ -244,7 +297,7 @@ function handleAdd(id) {
   var checkCook = getCookie("encryptedToken");
   if (checkCook == undefined || checkCook == "" || checkCook == "undefined") {
     alert("Bạn chưa đăng nhập !");
-    document.location.href = "login.html";
+    document.location.href = "http://127.0.0.1:5500/login.html";
     return
   }
   var realToken;
@@ -287,8 +340,7 @@ function handleAdd(id) {
 
 }
 function renderCartView(tokenReal) {
-  console.log(tokenReal)
-  fetch('http://127.0.0.1:8000/api/user/cart?page=1', {
+  fetch('http://127.0.0.1:8000/api/user/cart/state=all', {
     method: 'GET',
     headers: new Headers({
       'Authorization': 'Bearer ' + tokenReal,
@@ -297,28 +349,31 @@ function renderCartView(tokenReal) {
   })
     .then(data => data.json())
     .then(data => {
-      console.log(data.data)
-      renderCartViewWithArray(data.data)
+      renderCartViewWithArray(data)
+      console.log(data)
     })
 }
 var cartNumbertext = 0
 function renderCartViewWithArray(array) {
   var parent = document.querySelector(".cart-list");
-  var cartNumber= document.querySelector('#cartNumber')
+  var cartNumber = document.querySelector('#cartNumber')
   var cartTittle = `
   <h4 class="text-dark" id="cart_view_tittle" style="font-weight:500; font-size: 16px;">Sản phẩm đã thêm</h4>
+  <div class="scroller ">
   `
-  var cartViewProduct=`
+  var cartViewProduct = `
+  </div>
   <div style="text-align:center;" id="cart_view_product">
   <a href="cart.html">
       <button class="cart-list_view m-2 text-dark checkout hidden">Xem giỏ hàng</button>
     </a>
   </div>
+  
   `
   var html = "";
-  if (array != undefined) {
-    cartNumbertext = 0 
-    html+= cartTittle; 
+  if (array != undefined && array.errors == undefined) {
+    cartNumbertext = 0
+    html += cartTittle;
     array.forEach(item => {
       cartNumbertext += item.quantity;
       html += ` 
@@ -328,24 +383,25 @@ function renderCartViewWithArray(array) {
                   <div class="cart-item-info" style=" width: 100%; margin-right: 10px;">
                       <div class="cart-item-head"
                           style="display:flex; justify-content: space-between; width: 100%; padding-top: 25px;">
-                          <h5 style="font-size:13px;font-weight: 500;">${item.name}</h5>
-                          <span id="sum-price" style="font-size: 10px; font-weight: 500;">${changeFormat(item.price)} VNĐ&nbsp;&nbsp; x ${item.quantity}</span>
+                          <h5 style="font-size:13px;font-weight:500; color:black;">${item.name}</h5>
+                          <span id="sum-price" style="font-size: 10px;font-weight:500;color:black;">${changeFormat(item.price)} VNĐ&nbsp;&nbsp; x ${item.quantity}</span>
                       </div>
                       <div class="cart-item-body" style="display: flex; justify-content: space-between;">
-                          <span style="font-size: 10px;">Phân loại: ${item.categories[0].name}</span>
+                          <span style="font-size: 10px;color:black;">Phân loại: ${item.categories[0].name}</span>
                           <span class="cart-item-body_delete" onclick="deleteProduct(${item.id})"
-                              style="font-size: 10px; font-weight: 800;">Xóa</span>
+                              style="font-size: 10px;font-weight: 800;color:black;">Xóa</span>
                       </div>
                   </div>
               </li>
-          </ul>`
+          </ul>
+          `
     })
-    cartNumber.innerHTML='' + cartNumbertext;
-    html+= cartViewProduct; 
+    cartNumber.innerHTML = '' + cartNumbertext;
+    html += cartViewProduct;
     parent.innerHTML = html;
   }
   else {
-    cartNumber.innerHTML= '0';
+    cartNumber.innerHTML = '0';
     parent.innerHTML = `
         <div style="width:240px;">
         <h4 class="text-dark p-2" style="font-weight:500; font-size: 16px; text-align: center;">Sản phẩm đã thêm</h4>
@@ -356,27 +412,73 @@ function renderCartViewWithArray(array) {
   }
   console.log(parent)
 }
-function deleteProduct(id){
-  fetch('http://127.0.0.1:8000/api/user/cart/destroy/'+ id, { 
-    method: 'DELETE', 
+function deleteProduct(id) {
+  fetch('http://127.0.0.1:8000/api/user/cart/destroy/' + id, {
+    method: 'DELETE',
     headers: new Headers({
-        'Authorization': 'Bearer '+tokenReal,
-        'Content-Type': 'application/x-www-form-urlencoded'
+      'Authorization': 'Bearer ' + tokenReal,
+      'Content-Type': 'application/x-www-form-urlencoded'
     })
   })
-  .then(data=>data.json())
-  .then(data=>{
-    if(data.success=='true' || data.success== true ){
-      renderCartView(tokenReal)
-      alert('Xóa sản phẩm thành công !')
-      var item = document.getElementById(id)
-      item.remove();
-    }
-    else{
-      alert('Xóa sản phẩm không thành công !')
-    }
-  })
+    .then(data => data.json())
+    .then(data => {
+      if (data.success == 'true' || data.success == true) {
+        renderCartView(tokenReal)
+        alert('Xóa sản phẩm thành công !')
+        var item = document.getElementById(id)
+        item.remove();
+      }
+      else {
+        alert('Xóa sản phẩm không thành công !')
+      }
+    })
 }
+
+//load Special product
+const specials_list = document.querySelector('.special-list')
+console.log(specials_list)
+function loadProductSpecial() {
+  fetch('http://127.0.0.1:8000/api/product/bestSeller', {
+    method: 'GET',
+    headers: new Headers({
+      'Authorization': 'Bearer ' + tokenReal,
+      'Content-Type': 'application/x-www-form-urlencoded'
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+      var htmls="";
+      console.log(data)
+      for(const index in data){
+        var item=data[index];
+        console.log(item)
+        htmls+=`
+        <div class="p-5 col-lg-3 special-list_list">
+            <a href="product.html?id=${item.productId}" style="text-decoration:none;">
+              <div class="special-img">
+                  <img src="${item.img}" class="special-img_img">
+              </div>
+              </a>
+              <div class="text-center">
+                  <div class="rating mt-2 mb-2">
+                      <span class="text-primary"><i class="fas fa-star"></i></span>
+                      <span class="text-primary"><i class="fas fa-star"></i></span>
+                      <span class="text-primary"><i class="fas fa-star"></i></span>
+                      <span class="text-primary"><i class="fas fa-star"></i></span>
+                      <span class="text-primary"><i class="fas fa-star"></i></span>
+                  </div>
+                  <p class="text-capitalize mt-1 mb-1" style="font-size:14px; color:black;">${item.name}</p>
+                  <span class="fw-bold d-block" style="font-size: 14px;color:black;">${changeFormat(item.price)} VNĐ</span>
+                  <button class="btn btn-primary mt-3 addToCart" data-product-id="1" onclick="handleAdd(${item.productId});"  style="font-size:15px;">Thêm vào giỏ hàng</button>
+              </div>
+        </div>`
+      }
+      specials_list.innerHTML = htmls
+      specials_list.style.height = 'fit-content'
+      })
+      
+    }
+loadProductSpecial();
 
 //special
 $('.owl-carousel').owlCarousel({

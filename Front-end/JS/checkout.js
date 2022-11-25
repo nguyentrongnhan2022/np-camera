@@ -154,7 +154,7 @@ getTokenReal()
 //add to cart
 function loadCartCheckout(tokenReal) {
     console.log(tokenReal)
-    fetch('http://127.0.0.1:8000/api/user/cart', {
+    fetch('http://127.0.0.1:8000/api/user/cart/state=all', {
         method: 'GET',
         headers: new Headers({
             'Authorization': 'Bearer ' + tokenReal,
@@ -164,13 +164,13 @@ function loadCartCheckout(tokenReal) {
         .then(data => data.json())
         .then(data => {
             console.log(data.data)
-            renderCartCheckout(data.data)
+            renderCartCheckout(data)
         })
 }
 var totalPrice = document.querySelector("#totalPrice_product")
 var totalNumber = document.querySelector("#totalNumber_product")
 
-var totalNumber_product = 0 
+var totalNumber_product = 0
 var totalPrice_product = 0
 function renderCartCheckout(array) {
     totalPrice_product = 0
@@ -187,9 +187,9 @@ function renderCartCheckout(array) {
     if (array != undefined) {
         html += cartTittleCheck;
         array.forEach(item => {
-            totalNumber_product+=item.quantity
-            totalPrice_product+=item.price*item.quantity
-            var price=changeFormat(parseInt(item.price)*parseInt(item.quantity));
+            totalNumber_product += item.quantity
+            totalPrice_product += item.price * item.quantity
+            var price = changeFormat(parseInt(item.price) * parseInt(item.quantity));
             html += ` 
             <p class="mt-3"><a href="#" class="text-dark" style="text-decoration:none;">${item.name}</a> 
             <span style="color:red;"id="totalNumber_product">&nbsp;&nbsp;x${item.quantity}</span>
@@ -198,14 +198,12 @@ function renderCartCheckout(array) {
         html += cartCheckoutPay;
         parent.innerHTML = html;
         var totalPrice = document.querySelector("#totalPrice_product")
-        //var totalNumber = document.querySelector("#totalNumber_product")
-       // totalNumber.innerHTML=''+ '&nbsp;&nbsp;&nbsp;&nbsp;' +'x'+ totalNumber_product
-        totalPrice.innerHTML=''+ changeFormat(totalPrice_product) + '&nbsp;VNĐ'
+        totalPrice.innerHTML = '' + changeFormat(totalPrice_product) + '&nbsp;VNĐ'
     }
     else {
-    
+
     }
-   
+
     console.log(parent)
 }
 function deleteProduct(id) {
@@ -230,69 +228,139 @@ function deleteProduct(id) {
         })
 }
 
+var todayDate = new Date();
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
-var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+var mm = String(today.getMonth() + 1).padStart(2, '0');
 var yyyy = today.getFullYear();
+var H = today.getHours();
+var i = today.getMinutes();
+var s = today.getSeconds();
 
-today = yyyy + '-' + mm + '-' + dd;
-document.write(today);
-console.log(today)
+//today = yyyy + '-' + mm + '-' + dd+' '+H+':'+i+':'+s;
+
 
 var nameUser = document.getElementById('nameUser');
 var address = document.getElementById('adrUser');
 console.log(address)
 
-
-
-function loadMomo(){
-    console.log(nameUser.value)
-    console.log(address.value)
-    console.log(JSON.stringify({
+function pad(number) {
+    if (number < 10) {
+        return '0' + number;
+    }
+    return number;
+}
+var cc = todayDate.toLocaleString('en-CA', {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'});
+async function loadOrder() {
+    meData = JSON.stringify({
         voucherCode: "",
-       dateOrder : today,
-       address: address.value.trim(),
-       nameReceiver: nameUser.value.trim(),
-       phoneReceiver: "0372963918",
-       paidType: 2}))
-    console.log(tokenReal)
-    fetch('http://127.0.0.1:8000/api/user/order/placeorder',
-       {
-        method:'POST',
-        headers:{
-            'Authorization': 'Bearer ' + tokenReal,
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: JSON.stringify({
-         voucherCode: "",
-        dateOrder : today,
+        dateOrder: today,
         address: address.value.trim(),
         nameReceiver: nameUser.value.trim(),
         phoneReceiver: "0372963918",
-        paidType: 2})
-    })
-    
-    .then(data => data.json())
-    .then(data => {
-        console.log("bhghbgh")
-        console.log(data.data)
-        //renderloadMomo(data.data)
+        paidType: 2
+    });
+    console.log(meData);
+    // today = pad(todayDate.getFullYear()) + '-' + pad(todayDate.getMonth() + 1) + '-' + pad(todayDate.getDate()) + '- ' + pad(todayDate.getHours()) + ':' + pad(todayDate.getMinutes()) + ':' + pad(todayDate.getSeconds())
+    // console.log("today" + today)
+    // console.log(today)
+
+    var today = todayDate.toLocaleString('en-CA', {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'});
+    console.log(today)
+    console.log(today)
+    if(cc.indexOf('p')!=-1){
+        today=today.substr(0,cc.indexOf('p'))
+    } else {
+        today=today.substr(0,cc.indexOf('a'))
     }
-    )
+    
+    var todayArr=today.split(',')
+    var newToday=todayArr[0].trim()+' '+todayArr[1].trim()
+    console.log(newToday)
+   
+    $.ajax({
+        url: "http://127.0.0.1:8000/api/user/order/placeorderPaypal",
+        beforeSend: function (xhr) {
+            /* Authorization header */
+            xhr.setRequestHeader("Authorization", 'Bearer ' + tokenReal);
+        },
+        type: "Post",
+        dataType: 'JSON',
+        data: {
+            "voucherCode": "",
+            "dateOrder": newToday,
+            "address": address.value.trim(),
+            "nameReceiver": nameUser.value.trim(),
+            "phoneReceiver": "0372963918",
+            "paidType": 2
+        },
+
+        success: function (data) {
+            if (data.success == "true" || data.success == true) {
+                alert('Thanh toán thành công');
+                document.location.href = "paySucces.html";
+            }
+            else {
+                alert('Vui lòng thử lại');
+            }
+
+        },
+        error: function (msg) {
+            alert(msg);
+            console.log(msg);
+        }
+    });
 }
 
-var my_func = function(event) {
+// async function loadMomo() {
+//     meData = JSON.stringify({
+//         voucherCode: "",
+//         dateOrder: today,
+//         address: address.value.trim(),
+//         nameReceiver: nameUser.value.trim(),
+//         phoneReceiver: "0372963918",
+//         paidType: 1
+//     });
+//     console.log(meData);
+//     $.ajax({
+//         url: "http://127.0.0.1:8000/api/user/order/placeorder",
+//         beforeSend: function (xhr) {
+//             /* Authorization header */
+//             xhr.setRequestHeader("Authorization", 'Bearer ' + tokenReal);
+//         },
+//         type: "Post",
+//         dataType: 'JSON',
+//         data: {
+//             "voucherCode": "",
+//             "dateOrder": today,
+//             "address": address.value.trim(),
+//             "nameReceiver": nameUser.value.trim(),
+//             "phoneReceiver": "0372963918",
+//             "paidType": 1
+//         },
 
+//         success: function (data) {
+//             if (data.success == "true" || data.success == true) {
+//                 alert('Thanh toán thành công');
+//                 document.location.href = "paySucces.html";
+//             }
+//             else {
+//                 alert('Vui lòng thử lại');
+//             }
+
+//         },
+//         error: function (msg) {
+//             alert(msg);
+//             console.log(msg);
+//         }
+//     });
+// }
+
+var my_func = function (event) {
     event.preventDefault();
-    if(pay_nhanhang.checked) {
-        document.location.href = "paySucces.html";
-    } else loadMomo();
+    if (pay_nhanhang.checked) { loadOrder() }
 };
 var form = document.getElementById("meForm");
 form.addEventListener("submit", my_func, true);
 var pay_nhanhang = document.getElementById('pay_nhanhang')
 var pay_momo = document.getElementById('pay_momo')
-
-
-
-

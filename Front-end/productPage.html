@@ -98,7 +98,7 @@
     <section id="collection" class="py-5 mt-5">
         <div class="container ">
             <div class="title text-center pt-5 pb-4">
-                <h2 class="position-relative d-inline-block" id="product_name">Sản Phẩm</h2>
+                <h2 class="position-relative d-inline-block" id="product_namePage">Sản Phẩm</h2>
             </div>
             <div class="row g-0">
                 <div class="d-flex flex-wrap justify-content-center filter-button-group container__sort">
@@ -121,6 +121,7 @@
                 <div class="collection-list mt-xl-0 row gx-0 gy-0 list">
                 </div>
             </div>
+
             <nav aria-label="Page navigation example">
                 <ul class="pagination col d-flex justify-content-center">
                     <li class="page-item">
@@ -128,6 +129,13 @@
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination col d-flex justify-content-center sanPhamUl"  style="cursor: pointer;" >
+                            <!-- <li style="display: inline-block;"class="page-item">
+                                1
+                            </li> -->
+                        </ul>
+                    </nav>
                     <li class="page-item">
                         <a class="page-link" aria-label="Next" style="cursor: pointer;">
                             <span aria-hidden="true">&raquo;</span>
@@ -382,7 +390,6 @@
     <!--bootstrap js-->
     <script src="bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
     <!--custom js-->
-    <script src="JS/script.js"></script>
     <script src="JS/productPage.js"></script>
     <script src="JS/suggestions.js"></script>
 </body>

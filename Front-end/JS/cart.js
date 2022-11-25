@@ -188,10 +188,12 @@ function assignButtonAddRemove() {
     let $input = $(`.qty_input[data-id='${$(this).data("id")}']`);
     if ($input.val() > 1 && $input.val() <= 10) {
       $input.val(function (i, oldval) {
+        handleDelete($(this).data("id"),1)
         return --oldval;
+        
       });
     }
-    handleDelete($(this).data("id"),1)
+    
   });
 }
 
@@ -268,10 +270,11 @@ function renderCartViewWithArray(array) {
   console.log(parent)
 }
 
+
 //cart
 function renderCart(tokenReal) {
   console.log(tokenReal)
-  fetch('http://127.0.0.1:8000/api/user/cart?page=1', {
+  fetch('http://127.0.0.1:8000/api/user/cart/state=all', {
     method: 'GET',
     headers: new Headers({
       'Authorization': 'Bearer ' + tokenReal,
@@ -280,7 +283,7 @@ function renderCart(tokenReal) {
   })
     .then(data => data.json())
     .then(data => {
-      renderCartWithArray(data.data)
+      renderCartWithArray(data)
     })
 }
 var totalNumber_product = 0 

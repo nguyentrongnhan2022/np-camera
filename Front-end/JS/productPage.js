@@ -1,5 +1,9 @@
-// init Isotope
+// init IsotopecurrentURL
 var currentURL = 'http://127.0.0.1:8000/api/products'
+var currentURLAll = 'http://127.0.0.1:8000/api/products'
+var currentURLCam = "http://127.0.0.1:8000/api/products/filter/search=M%C3%A1y%%E1%BA%A3nh"
+var currentURLongKinh = 'http://127.0.0.1:8000/api/products/filter/search=ong%kinh'
+var prelink = 'http://127.0.0.1:8000/api/products?orderBy=asc&page=';
 var Currentdatalink = []
 var $grid = $('.collection-list').isotope({
   // options
@@ -167,8 +171,30 @@ const page_links = document.querySelectorAll('.page-link')
 var page_link_1 = page_links[0];
 var page_link_2 = page_links[1];
 page_link_1.classList.add('active');
-page_link_1.onclick = () => { handlePartPrev(Currentdatalink) };
-page_link_2.onclick = () => { handlePartNext(Currentdatalink) };
+page_link_1.onclick = () => { handlePartPrev() };
+page_link_2.onclick = () => { handlePartNext() };
+function handlePartPrev() {
+  if (Currentdatalink.prev_page_url == null) {
+    page_link_1.classList.add('active');
+    page_link_2.classList.remove('active');
+  }
+  else {
+    currentURL = Currentdatalink.prev_page_url
+    loadProductPage(currentURL)
+  }
+  //console.log(Currentdatalink[0].prev)
+}
+function handlePartNext() {
+
+  if (Currentdatalink.next_page_url == null) {
+    page_link_2.classList.add('active');
+    page_link_1.classList.remove('active');
+  }
+  else {
+    currentURL = Currentdatalink.next_page_url
+    loadProductPage(currentURL)
+  }
+}
 const container__sort = document.querySelector('.container__sort')
 const container__sort_price = container__sort.children[3].children
 const butAll = container__sort.children[0];
@@ -177,6 +203,26 @@ const butLen = container__sort.children[2];
 const butUp = container__sort_price[0]
 const butDown = container__sort_price[1]
 
+var currentURLOBJ;
+var SanPhamTotal;
+var SanPhamCurrent_page;
+var SanPhamFrom;//int;
+var SanPhamLast_page;
+var SanPhamLinks //array;
+var SanPhamPer_page //int;
+var SanPhamTo;//int;
+var begin;
+var end;
+function setBenginEndValue(data) {
+  console.log("setBenginEndValue");
+  begin = data.first[data.first.length - 1];
+  end = data.last[data.last.length - 1];
+}
+function setBenginEndValue2(data) {
+  console.log("setBenginEndValue");
+  begin = data.first_page_url[data.first_page_url.length - 1];
+  end = data.last_page_url[data.last_page_url.length - 1];
+}
 function loadProduct(currentURL, idcte) {
   var lanNayThemKhz = (camItem.url != undefined && camItem.url != "") ? false : true;
   console.log(currentURL);
@@ -186,8 +232,13 @@ function loadProduct(currentURL, idcte) {
   fetch(currentURL)
     .then(res => res.json())
     .then(data => {
-      var htmls = data.data.map((item) => {
-
+      setBenginEndValue(data.links);
+      console.log(data.meta)
+      SanPhamLast_page = data.meta.last_page;
+      SanPhamCurrent_page = data.meta.current_page;
+      currentURLOBJ = data.links;
+      var itemFilter = data.data.filter(item => item.deletedAt != 1)
+      var htmls = itemFilter.map((item) => {
         var kq = ` 
         <div class="collection-list__list col-md-6 col-lg-4 col-xl-3 px-5 py-3">
               <a href="product.html?id=${item.id}" style="text-decoration:none;" class=" text-dark">
@@ -210,20 +261,22 @@ function loadProduct(currentURL, idcte) {
         </div>`
         var price = parseInt(item.price);
         allItems.push({ "price": price, "html": kq });
-        if (lanNayThemKhz) {
-          console.log("duoi " + parseInt(currentURL.substring(currentURL.length - 1, currentURL.length)));
-          if (item.categories[0].id == 1) camItem.data.push({ "price": price, "html": kq });
-          camItem.url = currentURL;
-        }
-        else
-          if (camItem.url.substring(camItem.url.length - 1, camItem.url.length) == "s" || (parseInt(camItem.url.substring(camItem.url.length - 1, camItem.url.length)) < parseInt(currentURL.substring(currentURL.length - 1, currentURL.length)))) {
-            if (currentURL.substring(currentURL.length - 1, currentURL.length) == "s") {
-            }
-            console.log("tren " + parseInt(currentURL.substring(currentURL.length - 1, currentURL.length)));
-            if (item.categories[0].id == 1) {
-              camItem.data.push({ "price": price, "html": kq });
-            }
-          }
+        // if (lanNayThemKhz) {
+        //   console.log("duoi " + parseInt(currentURL.substring(currentURL.length - 1, currentURL.length)));
+        //   if (item.categories[0].id == 1) camItem.data.push({ "price": price, "html": kq });
+        //   camItem.url = currentURL;
+        // }
+        //else
+        // if (camItem.url.substring(camItem.url.length - 1, camItem.url.length) == "s" || (parseInt(camItem.url.substring(camItem.url.length - 1, camItem.url.length)) < parseInt(currentURL.substring(currentURL.length - 1, currentURL.length)))) {
+        //   if (currentURL.substring(currentURL.length - 1, currentURL.length) != "s") {
+        //     console.log("currentURL: "+currentURL)
+        //     console.log("item.categories[0]: "+item.categories[0])
+        //     if (item.categories.length>0&&item.categories[0].id == 1) {
+        //       camItem.data.push({ "price": price, "html": kq });
+        //     }
+        //   } 
+
+        // }
         return kq;
       })
       collection_lists.innerHTML = htmls.join('')
@@ -234,104 +287,161 @@ function loadProduct(currentURL, idcte) {
       if (Currentdatalink.length == 2) {
         Currentdatalink.shift();
       }
-
+      console.log("heeheheheheh");
+      var sanPhamUl = document.querySelector(".sanPhamUl");
+      var ulHtml = '';
+      console.log("SanPhamLast_page");
+      console.log(SanPhamLast_page);
+      for (var i = 1; i <= SanPhamLast_page; i++) {
+        ulHtml += `<li id="PageNumber" style="display: inline-block ;padding:6px 8px 8px 8px;" class="page-item ${SanPhamCurrent_page == i ? 'active' : ''}" >
+        ${i}
+    </li>`
+      }
+      sanPhamUl.innerHTML = ulHtml;
+      console.log(currentURLOBJ)
+      console.log("sanPhamUl");
+      console.log(sanPhamUl);
+      const page_links = document.querySelectorAll('.page-link')
+var page_link_1 = page_links[0];
+var page_link_2 = page_links[1];
+page_link_1.classList.add('active');
+page_link_1.onclick = () => { handlePartPrev() };
+page_link_2.onclick = () => { handlePartNext() };
     }
 
     )
 }
-loadProduct(currentURL)
-function handlePartPrev(Currentdatalink) {
-  if (Currentdatalink[0].prev == null) {
-    page_link_1.classList.add('active');
-    page_link_2.classList.remove('active');
-  }
-  else {
-    currentURL = Currentdatalink[0].prev
-    loadProduct(currentURL)
-  }
-  console.log(Currentdatalink[0].prev)
-}
-function handlePartNext(Currentdatalink) {
-  if (Currentdatalink[0].next == null) {
-    page_link_2.classList.add('active');
-    page_link_1.classList.remove('active');
-  }
-  else {
-    currentURL = Currentdatalink[0].next
-    loadProduct(currentURL)
+loadProductPage(currentURL)
+function loadProductPage(currentURL, notJump) {
+  var lanNayThemKhz = (camItem.url != undefined && camItem.url != "") ? false : true;
+  console.log(currentURL);
+  console.log("lanNayThemKhz", lanNayThemKhz);
+  allItems = [];
+  const collection_lists = document.querySelector('.collection-list')
+  fetch(currentURL)
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+      SanPhamLast_page = data.last_page;
+      SanPhamCurrent_page = data.current_page;
+      currentURLOBJ = data.links;
+      // var itemFilter=data.data.filter(item=>item.deletedAt!=1)
+      var itemFilter=data.data;
 
-  }
-}
+      var htmls ="";
+      for(const index in itemFilter){
+        var item=itemFilter[index];
+        htmls+= ` 
+        <div class="collection-list__list col-md-6 col-lg-4 col-xl-3 px-5 py-3">
+        <a href="product.html?id=${item.id}" style="text-decoration:none;" class=" text-dark">
+              <div class="collection-img">
+                  <img src="${item.img}" class="collection-img_img">
+              </div>
+              <div class="text-center">
+                <div class="rating mt-3">
+                    <span class="text-primary"><i class="fas fa-star"></i></span>
+                    <span class="text-primary"><i class="fas fa-star"></i></span>
+                    <span class="text-primary"><i class="fas fa-star"></i></span>
+                    <span class="text-primary"><i class="fas fa-star"></i></span>
+                    <span class="text-primary"><i class="fas fa-star"></i></span>
+                </div>
+              <p class="text-capitalize my-1 product-name" style="font-size:15px;">${item.name}</p>
+              <span class=" fw-bold d-block"style="font-size:15px;"> ${changeFormat(item.price)} VNĐ</span>
+              </a>
+              <button class="btn btn-primary mt-3 addToCart" data-product-id="1" onclick="handleAdd(${item.id});"  style="font-size:15px;">Thêm vào giỏ hàng</button>
+            </div>
+        </div>`
+      }
+      
+        //var price = parseInt(item.price);
+        //allItems.push({ "price": price, "html": kq });
+        // if (lanNayThemKhz) {
+        //   console.log("duoi " + parseInt(currentURL.substring(currentURL.length - 1, currentURL.length)));
+        //   if (item.categories[0].id == 1) camItem.data.push({ "price": price, "html": kq });
+        //   camItem.url = currentURL;
+        // }
+        // else
+        //   if (camItem.url.substring(camItem.url.length - 1, camItem.url.length) == "s" || (parseInt(camItem.url.substring(camItem.url.length - 1, camItem.url.length)) < parseInt(currentURL.substring(currentURL.length - 1, currentURL.length)))) {
+        //     if (currentURL.substring(currentURL.length - 1, currentURL.length) != "s") {
+        //       console.log("currentURL: " + currentURL)
+        //       console.log("item.categories[0]: " + item.categories[0])
+        //       if (item.categories.length > 0 && item.categories[0].id == 1) {
+        //         camItem.data.push({ "price": price, "html": kq });
+        //       }
+        //     }
+
+        //   }
+        // return kq;
+
+        collection_lists.innerHTML = htmls
+      collection_lists.style.height = 'fit-content'
+      if (!notJump) jumpTo();
+      setBenginEndValue2(data)
+      Currentdatalink.next_page_url=data.next_page_url;
+      Currentdatalink.path=data.path;
+      Currentdatalink.prev_page_url=data.prev_page_url;
+  
+      var sanPhamUl = document.querySelector(".sanPhamUl");
+      var ulHtml = '';
+      console.log("SanPhamLast_page");
+      console.log(SanPhamLast_page);
+      for (var i = 1; i <= SanPhamLast_page; i++) {
+        ulHtml += `<li id="PageNumber" style="display: inline-block ;padding:6px 8px 8px 8px ;" class="page-item  ${SanPhamCurrent_page == i ? 'active' : ''}" >
+        ${i}
+    </li>`
+      }
+      sanPhamUl.innerHTML = ulHtml;
+      console.log(currentURLOBJ)
+      console.log("sanPhamUl");
+      console.log(sanPhamUl);
+      })
+      
+    }
+// function handlePartPrev(Currentdatalink) {
+//   if (Currentdatalink[0].prev == null) {
+//     page_link_1.classList.add('active');
+//     page_link_2.classList.remove('active');
+//   }
+//   else {
+//     currentURL = Currentdatalink[0].prev
+//     loadProduct(currentURL)
+//   }
+//   console.log(Currentdatalink[0].prev)
+// }
+// function handlePartNext(Currentdatalink) {
+//   if (Currentdatalink[0].next == null) {
+//     page_link_2.classList.add('active');
+//     page_link_1.classList.remove('active');
+//   }
+//   else {
+//     currentURL = Currentdatalink[0].next
+//     loadProduct(currentURL)
+//   }
+// }
 function jumpTo() {
   var url = location.href;               //Saving URL without hash.
   location.href = "#product_name";                 //Navigate to the target element.
   history.replaceState(null, null, url);   //method modifies the current history entry.
 }
-butUp.onclick = () => {
-  console.log("butUp");
-  sortDown = false;
-  sortUp = true;
+var currentIndexUp = 0;
+async function fetchUrl() {
   const collection_lists = document.querySelector('.collection-list')
-  itemsUp = allItems;
-  itemsUp.sort((a, b) => (a.price - b.price));
-
-
-  var html = "";
-  itemsUp.forEach(item => {
-    html += item.html;
-  });
-  collection_lists.innerHTML = html;
-  collection_lists.style.height = 'fit-content'
-
-}
-butDown.onclick = () => {
-  console.log("butDown");
-  sortUp = false;
-  sortDown = true;
-  const collection_lists = document.querySelector('.collection-list')
-  itemsDown = allItems;
-  itemsDown.sort((a, b) => (b.price - a.price));
-
-  var html = "";
-  itemsDown.forEach(item => {
-    html += item.html;
-  });
-  collection_lists.innerHTML = html;
-  collection_lists.style.height = 'fit-content'
-}
-butAll.onclick = () => {
-  loadProduct(currentURL)
-}
-butCam.onclick = () => {
-  // fetch(currentURL)
-  // .then(res=>res.json())
-  // .then(data=>{
-  //   console.log(data.data)
-  //   data.data.forEach(item => {
-  //     item.categories[0].id==1?
-  //   });
-  // })
-  const collection_lists = document.querySelector('.collection-list')
-  var htmls = "";
-  camItem.data.forEach(item => {
-    htmls += item.html;
-    collection_lists.innerHTML = htmls;
-  })
-  console.log(htmls);
-}
-butLen.onclick = () => {
-  var htmls = [];
-  const collection_lists = document.querySelector('.collection-list')
-  fetch('http://127.0.0.1:8000/api/products')
-    .then(res => res.json())
-    .then(data => {
-      data.data.forEach(item => {
-        item.categories.forEach(i => {
-          if (i.id == 2) {
-            var html =
-              ` 
+  allItems = []
+  itemsUp = [];
+  for (var i = begin; i <= end; i++) {
+    var curLink = prelink + i;
+    await fetch(curLink)
+      .then(res => res.json())
+      .then(data => {
+        //var itemFilter = data.data.filter(item => item.deletedAt != 1)
+        var htmls="";
+        var itemFilter=data.data;
+        for(var index in itemFilter){
+          var item=itemFilter[index];
+          
+          var kq=` 
           <div class="collection-list__list col-md-6 col-lg-4 col-xl-3 px-5 py-3">
-                <a href="product.html" style="text-decoration:none;" class=" text-dark">
+                <a href="product.html?id=${item.id}" style="text-decoration:none;" class=" text-dark">
                 <div class="collection-img">
                     <img src="${item.img}" class="collection-img_img">
                 </div>
@@ -344,20 +454,260 @@ butLen.onclick = () => {
                       <span class="text-primary"><i class="fas fa-star"></i></span>
                   </div>
                 <p class="text-capitalize my-1 product-name" style="font-size:15px;">${item.name}</p>
-                <span class="d-block fw-bold"style="font-size:15px;">${changeFormat(item.price)} VNĐ</span>
-                <button class="btn btn-primary mt-3 addToCart" data-product-id="1"  style="font-size:15px;">Thêm vào giỏ hàng</button>
+                <span class="d-block fw-bold"style="font-size:15px;"> ${changeFormat(item.price)} VNĐ</span>
+                </a>
+                <button class="btn btn-primary mt-3 addToCart" data-product-id="1"  style="font-size:15px;" onclick="handleAdd(${item.id});">Thêm vào giỏ hàng</button>
               </div>
-            </a>
           </div>`
-            htmls.push(html)
-            collection_lists.innerHTML = htmls.join('');
-            collection_lists.style.height = 'fit-content'
-            jumpTo();
-          }
+          htmls+=kq
+          console.log("response: " + curLink);
+          var price = parseInt(item.price);
+          itemsUp.push({ "price": price, "html": kq });
+        }
 
-        })
-      });
-    })
+      })
+  }
+  console.log("itemsUp.length");
+  console.log(itemsUp.length);
+  itemsUp.sort((a, b) => (a.price - b.price));
+  var eachPage = 8;
+  var html = "";
+  var toIndex = itemsUp.length > eachPage ? eachPage : itemsUp.length;
+  for (var k = 0; k < toIndex; k++) {
+    html += itemsUp[k].html;
+
+  }
+  currentIndexUp = toIndex - 1;
+  collection_lists.innerHTML = html;
+  collection_lists.style.height = 'fit-content'
+  jumpTo();
+  //phan trang 
+  // 8 cai 
+
+  var length = itemsUp.length;
+  var numPage;
+  if (length % eachPage == 0) numPage = length / eachPage;
+  else numPage = parseInt(length / eachPage) + 1;
+  console.log("numPage" + numPage);
+  var sanPhamUl = document.querySelector('.sanPhamUl');
+  var ulHtml = '';
+  for (var j = 1; j <= numPage; j++) {
+    ulHtml += `<li id="PageNumber" style="display: inline-block ;padding:6px 8px 8px 8px;" onclick="handlePartUp(${j})"class="pt${j} page-item ${j == 1 ? ' active' : ''}">
+  ${j}
+</li>`
+  }
+  //alert("sanPhamUl"+ulHtml);
+  sanPhamUl.innerHTML = ulHtml;
+
+
+}
+function handlePartUp(pageIndex) {
+  console.log("handlePartUp " + pageIndex);
+  const collection_lists = document.querySelector('.collection-list')
+  var id = "pt" + pageIndex;
+  var pageActive = document.querySelector('.' + id);
+  var currentPage = document.querySelector('li.active');
+  console.log(pageActive)
+  console.log(currentPage)
+
+  pageActive.classList.add('active');
+
+  currentPage.classList.remove('active');
+  var fromIndex = (pageIndex - 1) * 8;
+  var toIndex = ((pageIndex * 8 - 1) > (itemsUp.length - 1)) ? itemsUp.length - 1 : (pageIndex * 8 - 1);
+  console.log("render from item: " + fromIndex + "  to " + toIndex);
+  var html = ''
+  for (var k = fromIndex; k <= toIndex; k++) {
+    html += itemsUp[k].html;
+  }
+  //currentIndexUp=toIndex;
+  collection_lists.innerHTML = html;
+}
+butUp.onclick = () => {
+  console.log("butUp");
+  fetchUrl()
+  //end for
+
+  //asdasdasdasda
+}
+var currentIndexDown = 0;
+async function fetchUrlDown() {
+  const collection_lists = document.querySelector('.collection-list')
+  allItems = []
+  itemsDown = [];
+  for (var i = begin; i <= end; i++) {
+    var curLink = prelink + i;
+    await fetch(curLink)
+      .then(res => res.json())
+      .then(data => {
+        //var itemFilter = data.data.filter(item => item.deletedAt != 1)
+        var htmls="";
+        var itemFilter=data.data;
+        for(var index in itemFilter){
+          var item=itemFilter[index];
+          
+          var kq=` 
+          <div class="collection-list__list col-md-6 col-lg-4 col-xl-3 px-5 py-3">
+                <a href="product.html?id=${item.id}" style="text-decoration:none;" class=" text-dark">
+                <div class="collection-img">
+                    <img src="${item.img}" class="collection-img_img">
+                </div>
+                <div class=" text-center">
+                  <div class="rating mt-3">
+                      <span class="text-primary"><i class="fas fa-star"></i></span>
+                      <span class="text-primary"><i class="fas fa-star"></i></span>
+                      <span class="text-primary"><i class="fas fa-star"></i></span>
+                      <span class="text-primary"><i class="fas fa-star"></i></span>
+                      <span class="text-primary"><i class="fas fa-star"></i></span>
+                  </div>
+                <p class="text-capitalize my-1 product-name" style="font-size:15px;">${item.name}</p>
+                <span class="d-block fw-bold"style="font-size:15px;"> ${changeFormat(item.price)} VNĐ</span>
+                </a>
+                <button class="btn btn-primary mt-3 addToCart" data-product-id="1"  style="font-size:15px;" onclick="handleAdd(${item.id});">Thêm vào giỏ hàng</button>
+              </div>
+          </div>`
+          htmls+=kq
+          console.log("response: " + curLink);
+          var price = parseInt(item.price);
+          itemsDown.push({ "price": price, "html": kq });
+        }
+
+      })
+  }
+  console.log("itemsDown.length");
+  console.log(itemsDown.length);
+  itemsDown.sort((a, b) => (b.price - a.price));
+  var eachPage = 8;
+  var html = "";
+  var toIndex = itemsDown.length > eachPage ? eachPage : itemsDown.length;
+  for (var k = 0; k < toIndex; k++) {
+    html += itemsDown[k].html;
+
+  }
+  currentIndexDown = toIndex - 1;
+  collection_lists.innerHTML = html;
+  collection_lists.style.height = 'fit-content'
+  jumpTo();
+  //phan trang 
+  // 8 cai 
+
+  var length = itemsDown.length;
+  var numPage;
+  if (length % eachPage == 0) numPage = length / eachPage;
+  else numPage = parseInt(length / eachPage) + 1;
+  console.log("numPage" + numPage);
+  var sanPhamUl = document.querySelector('.sanPhamUl');
+  var ulHtml = '';
+  for (var j = 1; j <= numPage; j++) {
+    ulHtml += `<li id="PageNumber" style="display: inline-block ;padding:6px 8px 8px 8px;" onclick="handlePartDown(${j})"class="pt${j} page-item ${j == 1 ? ' active' : ''}">
+  ${j}
+</li>`
+  }
+  //alert("sanPhamUl"+ulHtml);
+  sanPhamUl.innerHTML = ulHtml;
+
+
+
+}
+function handlePartDown(pageIndex) {
+  console.log("handlePartDown " + pageIndex);
+  const collection_lists = document.querySelector('.collection-list')
+  var id = "pt" + pageIndex;
+  var pageActive = document.querySelector('.' + id);
+  var currentPage = document.querySelector('li.active');
+  console.log(pageActive)
+  console.log(currentPage)
+
+  pageActive.classList.add('active');
+
+  currentPage.classList.remove('active');
+  var fromIndex = (pageIndex - 1) * 8;
+  var toIndex = ((pageIndex * 8 - 1) > (itemsDown.length - 1)) ? itemsDown.length - 1 : (pageIndex * 8 - 1);
+  console.log("render from item: " + fromIndex + "  to " + toIndex);
+  var html = ''
+  for (var k = fromIndex; k <= toIndex; k++) {
+    html += itemsDown[k].html;
+  }
+  //currentIndexUp=toIndex;
+  collection_lists.innerHTML = html;
+}
+butDown.onclick = () => {
+  console.log("butDown");
+  fetchUrlDown()
+}
+
+
+butAll.onclick = () => {
+  loadProductPage(currentURLAll)
+}
+butCam.onclick = () => {
+  loadProductCam(currentURLCam);
+}
+function loadProductCam(currentURL) {
+  const collection_lists = document.querySelector('.collection-list')
+  fetch(currentURL)
+    .then(res => res.json())
+    .then(data => {
+      console.log(data.meta)
+      SanPhamLast_page = data.meta.last_page;
+      SanPhamCurrent_page = data.meta.current_page;
+      currentURLOBJ = data.links;
+      var itemFilter = data.data.filter(item => item.deletedAt != 1)
+      var htmls = itemFilter.map((item) => {
+        var kq = ` 
+      <div class="collection-list__list col-md-6 col-lg-4 col-xl-3 px-5 py-3">
+            <a href="product.html?id=${item.id}" style="text-decoration:none;" class=" text-dark">
+            <div class="collection-img">
+                <img src="${item.img}" class="collection-img_img">
+            </div>
+            <div class=" text-center">
+              <div class="rating mt-3">
+                  <span class="text-primary"><i class="fas fa-star"></i></span>
+                  <span class="text-primary"><i class="fas fa-star"></i></span>
+                  <span class="text-primary"><i class="fas fa-star"></i></span>
+                  <span class="text-primary"><i class="fas fa-star"></i></span>
+                  <span class="text-primary"><i class="fas fa-star"></i></span>
+              </div>
+            <p class="text-capitalize my-1 product-name" style="font-size:15px;">${item.name}</p>
+            <span class="d-block fw-bold"style="font-size:15px;"> ${changeFormat(item.price)} VNĐ</span>
+            </a>
+            <button class="btn btn-primary mt-3 addToCart" data-product-id="1"  style="font-size:15px;" onclick="handleAdd(${item.id});">Thêm vào giỏ hàng</button>
+          </div>
+      </div>`
+        var price = parseInt(item.price);
+        //allItems.push({ "price": price, "html": kq });
+        return kq;
+      })
+      collection_lists.innerHTML = htmls.join('')
+      collection_lists.style.height = 'fit-content'
+      jumpTo();
+
+      Currentdatalink.push(data.links);
+      if (Currentdatalink.length == 2) {
+        Currentdatalink.shift();
+      }
+      console.log("heeheheheheh");
+      var sanPhamUl = document.querySelector(".sanPhamUl");
+      var ulHtml = '';
+      console.log("SanPhamLast_page");
+      console.log(SanPhamLast_page);
+      for (var i = 1; i <= SanPhamLast_page; i++) {
+        ulHtml += `<li id="PageNumber" style="display: inline-block ;padding:6px 8px 8px 8px;" class="page-item ${SanPhamCurrent_page == i ? 'active' : ''}" >
+      ${i}
+  </li>`
+      }
+      sanPhamUl.innerHTML = ulHtml;
+      console.log(currentURLOBJ)
+      console.log("sanPhamUl");
+      console.log(sanPhamUl);
+    }
+
+    )
+
+  console.log(htmls);
+}
+butLen.onclick = () => {
+  loadProductCam(currentURLongKinh);
 }
 
 //cart
@@ -365,6 +715,7 @@ function handleAdd(id) {
   var checkCook = getCookie("encryptedToken");
   if (checkCook == undefined || checkCook == "" || checkCook == "undefined") {
     alert("Bạn chưa đăng nhập !");
+    document.location.href = "http://127.0.0.1:5500/login.html";
     return
   }
   var realToken;
@@ -408,7 +759,7 @@ function handleAdd(id) {
 }
 function renderCartView(tokenReal) {
   console.log(tokenReal)
-  fetch('http://127.0.0.1:8000/api/user/cart?page=1', {
+  fetch('http://127.0.0.1:8000/api/user/cart/state=all', {
     method: 'GET',
     headers: new Headers({
       'Authorization': 'Bearer ' + tokenReal,
@@ -417,8 +768,9 @@ function renderCartView(tokenReal) {
   })
     .then(data => data.json())
     .then(data => {
-      console.log(data.data)
-      renderCartViewWithArray(data.data)
+      console.log(data)
+      renderCartViewWithArray(data)
+      console.log(data)
     })
 }
 var cartNumbertext = 0
@@ -427,16 +779,21 @@ function renderCartViewWithArray(array) {
   var cartNumber = document.querySelector('#cartNumber')
   var cartTittle = `
   <h4 class="text-dark" id="cart_view_tittle" style="font-weight:500; font-size: 16px;">Sản phẩm đã thêm</h4>
+  <div class="scroller ">
   `
   var cartViewProduct = `
+  </div>
   <div style="text-align:center;" id="cart_view_product">
   <a href="cart.html">
       <button class="cart-list_view m-2 text-dark checkout hidden">Xem giỏ hàng</button>
     </a>
   </div>
+  
   `
   var html = "";
-  if (array != undefined) {
+  console.log(typeof (array))
+
+  if (array != undefined && array.errors == undefined) {
     cartNumbertext = 0
     html += cartTittle;
     array.forEach(item => {
@@ -448,17 +805,18 @@ function renderCartViewWithArray(array) {
                   <div class="cart-item-info" style=" width: 100%; margin-right: 10px;">
                       <div class="cart-item-head"
                           style="display:flex; justify-content: space-between; width: 100%; padding-top: 25px;">
-                          <h5 style="font-size:13px;font-weight: 500;">${item.name}</h5>
-                          <span id="sum-price" style="font-size: 10px; font-weight: 500;">${changeFormat(item.price)} VNĐ&nbsp;&nbsp; x ${item.quantity}</span>
+                          <h5 style="font-size:13px;font-weight:500; color:black;">${item.name}</h5>
+                          <span id="sum-price" style="font-size: 10px;font-weight:500;color:black;">${changeFormat(item.price)} VNĐ&nbsp;&nbsp; x ${item.quantity}</span>
                       </div>
                       <div class="cart-item-body" style="display: flex; justify-content: space-between;">
-                          <span style="font-size: 10px;">Phân loại: ${item.categories[0].name}</span>
+                          <span style="font-size: 10px;color:black;">Phân loại: ${item.categories[0].name}</span>
                           <span class="cart-item-body_delete" onclick="deleteProduct(${item.id})"
-                              style="font-size: 10px; font-weight: 800;">Xóa</span>
+                              style="font-size: 10px;font-weight: 800;color:black;">Xóa</span>
                       </div>
                   </div>
               </li>
-          </ul>`
+          </ul>
+          `
     })
     cartNumber.innerHTML = '' + cartNumbertext;
     html += cartViewProduct;
@@ -518,3 +876,4 @@ $('.owl-carousel').owlCarousel({
     }
   }
 })
+

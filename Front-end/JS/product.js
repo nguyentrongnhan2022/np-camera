@@ -92,7 +92,7 @@ for (let pair of queryString.entries()) {
     var checkCook = getCookie("encryptedToken");
     if (checkCook == undefined || checkCook == "" || checkCook == "undefined") {
       alert("Bạn chưa đăng nhập !");
-      document.location.href = "login.html";
+      document.location.href = "http://127.0.0.1:5500/login.html";
     }
     var realToken;
     fetch('http://127.0.0.1:8000/api/retrieveToken', {
@@ -114,12 +114,9 @@ for (let pair of queryString.entries()) {
           dataType: 'JSON',
           data: {
             "productId": id,
-            "quantity": 1
+            "quantity": getQuantity()
           },
           success: function (data) {
-            // var cartNumber= document.querySelector('#cartNumber')
-            // cartNumbertext += 1
-            // cartNumber.innerHTML='' + cartNumbertext
             renderCartView(tokenReal)
             alert('Thêm sản phẩm thành công');
             console.log(data);
@@ -133,7 +130,7 @@ for (let pair of queryString.entries()) {
   }
   function renderCartView(tokenReal) {
     console.log(tokenReal)
-    fetch('http://127.0.0.1:8000/api/user/cart?page=1', {
+    fetch('http://127.0.0.1:8000/api/user/cart/state=all', {
       method: 'GET',
       headers: new Headers({
         'Authorization': 'Bearer ' + tokenReal,
@@ -142,8 +139,9 @@ for (let pair of queryString.entries()) {
     })
       .then(data => data.json())
       .then(data => {
-        console.log(data.data)
-        renderCartViewWithArray(data.data)
+        console.log(data)
+        renderCartViewWithArray(data)
+        console.log(data)
       })
   }
   var cartNumbertext = 0
@@ -152,16 +150,21 @@ for (let pair of queryString.entries()) {
     var cartNumber = document.querySelector('#cartNumber')
     var cartTittle = `
     <h4 class="text-dark" id="cart_view_tittle" style="font-weight:500; font-size: 16px;">Sản phẩm đã thêm</h4>
+    <div class="scroller ">
     `
     var cartViewProduct = `
+    </div>
     <div style="text-align:center;" id="cart_view_product">
     <a href="cart.html">
         <button class="cart-list_view m-2 text-dark checkout hidden">Xem giỏ hàng</button>
       </a>
     </div>
+    
     `
     var html = "";
-    if (array != undefined) {
+    console.log(typeof (array))
+
+    if (array != undefined && array.errors == undefined) {
       cartNumbertext = 0
       html += cartTittle;
       array.forEach(item => {
@@ -173,17 +176,18 @@ for (let pair of queryString.entries()) {
                     <div class="cart-item-info" style=" width: 100%; margin-right: 10px;">
                         <div class="cart-item-head"
                             style="display:flex; justify-content: space-between; width: 100%; padding-top: 25px;">
-                            <h5 style="font-size:13px;font-weight: 500;">${item.name}</h5>
-                            <span id="sum-price" style="font-size: 10px; font-weight: 500;">${changeFormat(item.price)} VNĐ&nbsp;&nbsp; x ${item.quantity}</span>
+                            <h5 style="font-size:13px;font-weight:500; color:black;">${item.name}</h5>
+                            <span id="sum-price" style="font-size: 10px;font-weight:500;color:black;">${changeFormat(item.price)} VNĐ&nbsp;&nbsp; x ${item.quantity}</span>
                         </div>
                         <div class="cart-item-body" style="display: flex; justify-content: space-between;">
-                            <span style="font-size: 10px;">Phân loại: ${item.categories[0].name}</span>
+                            <span style="font-size: 10px;color:black;">Phân loại: ${item.categories[0].name}</span>
                             <span class="cart-item-body_delete" onclick="deleteProduct(${item.id})"
-                                style="font-size: 10px; font-weight: 800;">Xóa</span>
+                                style="font-size: 10px;font-weight: 800;color:black;">Xóa</span>
                         </div>
                     </div>
                 </li>
-            </ul>`
+            </ul>
+            `
       })
       cartNumber.innerHTML = '' + cartNumbertext;
       html += cartViewProduct;
@@ -231,7 +235,6 @@ for (let pair of queryString.entries()) {
         <div class="col-sm-6" style="text-align:center;">
               <img src="${data.data.img}" alt="product" class="mt-5"style="width:45%;">
               <div class="form-row" style="margin-top:13%;">
-                      <button type="submit" class="btn m-1 text-dark">Mua hàng</button>
                       <button type="submit" class="btn m-1 text-dark" onclick="handleAdd(${data.data.id});">Thêm vào giỏ hàng</button>
               </div>
           </div>
@@ -259,9 +262,9 @@ for (let pair of queryString.entries()) {
               <div class="qty d-flex mt-3 mb-2">
                   <h6 class="font-baloo" style="margin-top:4px;">Số lượng</h6>
                   <div class="px-3 d-flex font-rale qty">
-                      <button class="qty-up bg-light" data-id="pro1" style="border: 0.5px solid rgba(0,0,0,0.05);border-radius:6px 0px 0px 6px;"><i class="fa-solid fa-caret-up" style="font-size:12px;"></i></button>
-                      <input type="text" data-id="${data.data.id}" class="qty_input border px-2 w-25 bg-light"style="text-align:center; "disabled value="1" placeholder="1">
-                      <button data-id="pro1" class="qty-down bg-light" style="border: 0.5px solid rgba(0,0,0,0.05);border-radius:0px 6px 6px 0px;"><i class="fa-solid fa-caret-down" style="font-size:12px;"></i></button>
+                      <button class="qty-up bg-light" data-id="${data.data.id}" style="border: 0.5px solid rgba(0,0,0,0.05);border-radius:6px 0px 0px 6px;"><i class="fa-solid fa-caret-up" style="font-size:12px;"></i></button>
+                      <input id="input_quantity"type="text" data-id="${data.data.id}" class="qty_input border px-2 w-25 bg-light"style="text-align:center; "disabled value="1" placeholder="1">
+                      <button data-id="${data.data.id}" class="qty-down bg-light" style="border: 0.5px solid rgba(0,0,0,0.05);border-radius:0px 6px 6px 0px;"><i class="fa-solid fa-caret-down" style="font-size:12px;"></i></button>
                   </div>
               </div>
                   <div id="policy">
@@ -352,7 +355,7 @@ for (let pair of queryString.entries()) {
     console.log(toggleMenuDisplay)
     toggleMenu.classList.toggle('active')
     var token = 'encryptedToken'
-  
+
     var checkCook = getCookie(token);
     if (checkCook == null || checkCook == "" || checkCook == ' undefined') {
       var htmls = function () {
@@ -369,14 +372,14 @@ for (let pair of queryString.entries()) {
               <li><i class="fa-solid fa-user"></i> <a href="#">Tài khoản của tôi</a></li>
               <li><i class="fa-solid fa-pen-to-square"></i> <a href="#">Đơn hàng</a></li>
               <li onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> <a href="#">Đăng xuất</a></li>`
-  
+
       }
       toggleMenuDisplay.innerHTML = htmls();
     }
-  
+
     // htmls = $.parseHTML(htmls);
-  
-  
+
+
   }
   function handleLogout() {
     setCookie("encryptedToken", '', 0);
@@ -387,7 +390,7 @@ for (let pair of queryString.entries()) {
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     let expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-  
+
   }
   function changeFormat(price) {
     var numFloat = parseFloat(price);
@@ -421,6 +424,10 @@ for (let pair of queryString.entries()) {
         });
       }
     });
+  }
+  function getQuantity() {
+    var inputQuantity = document.getElementById('input_quantity');
+    return inputQuantity.value.trim();
   }
   assignButtonAddRemove();
 
