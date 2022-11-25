@@ -23,8 +23,7 @@ class ProductQueryController extends Controller
 
         $starting_point = ($current_page * $per_page) - $per_page;
 
-        $arr = array_slice($arr, $starting_point, $per_page, true);
-;
+        $arr = array_slice($arr, $starting_point, $per_page, true);;
         $arr = new LengthAwarePaginator($arr, $total, $per_page, $current_page, [
             'path' => $request->url(),
             'query' => $request->query(),
@@ -273,7 +272,7 @@ class ProductQueryController extends Controller
     {
         $data = Product::find($request->id);
 
-        if (empty($data)) {
+        if (empty($data) || $data->deleted_at !== null) {
             return response()->json([
                 "success" => false,
                 "errors" => "Product doesn't not exist"
@@ -326,6 +325,32 @@ class ProductQueryController extends Controller
         ]);
     }
 
+    public function filterProducts(Request $request)
+    {
+        $search_category = Category::where("id", "like", $request->filter)->get();
+
+        $data = [];
+        $index = 0;
+
+        if ($search_category->count() !== 0) {
+            for ($i = 0; $i < sizeof($search_category); $i++) {
+                $products = DB::table("category_product")
+                    ->where("category_id", "=", $search_category[$i]->id)
+                    ->get();
+
+                for ($j = 0; $j < sizeof($products); $j++) {
+                    $product = Product::where("id", "=", $products[$j]->id)->first();
+                    if ($product->deleted_at !== null) {
+                        continue;
+                    }
+                    $data[$index] = $product;
+                    $index++;
+                }
+            }
+        }
+        return new ProductListCollection($this->paginator($data, $request));
+    }
+
     // Use for searching bar
     public function searchProduct(Request $request)
     {
@@ -349,6 +374,9 @@ class ProductQueryController extends Controller
 
                     for ($j = 0; $j < sizeof($products); $j++) {
                         $product = Product::where("id", "=", $products[$j]->id)->first();
+                        if ($product->deleted_at !== null) {
+                            continue;
+                        }
                         $data[$index] = $product;
                         $index++;
                     }

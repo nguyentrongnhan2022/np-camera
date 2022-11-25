@@ -105,6 +105,7 @@ class CheckoutController extends Controller
         //Just a example, please check more in there
 
         return [
+            "success" => true,
             "data" => $data,
             "link" => $jsonResult
         ];

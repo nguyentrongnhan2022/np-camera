@@ -219,7 +219,7 @@ class ProductController extends Controller
     {
         $data = Product::find($request->id);
 
-        if (empty($data)) {
+        if (empty($data) || $data->deleted_at !== null) {
             return response()->json([
                 "success" => false,
                 "errors" => "Product doesn't not exist"
