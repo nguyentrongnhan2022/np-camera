@@ -94,6 +94,7 @@ class ProductController extends Controller
             $arr[$i]['img'] = $data[$i]->img;
             $arr[$i]['quantity'] = $data[$i]->quantity;
             $arr[$i]['status'] = $data[$i]->status;
+            $arr[$i]['createdAt'] = date_format($data[$i]->created_at, "d/m/Y");
 
             for ($j = 0; $j < sizeof($data[$i]->categories); $j++) {
                 $arr[$i]['categories'][$j]['id'] = $data[$i]->categories[$j]->id;

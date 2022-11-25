@@ -54,6 +54,7 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::group(["prefix" => "admin"], function () {
         Route::get("/userInfo", [AdminAuthController::class, "userInfo"]);
         Route::get("/dashboard", [AdminAuthController::class, "dashboard"]);
+        Route::get("/dashboardOop", [AdminAuthController::class, "dashboardOop"]);
         Route::get("/profile", [AdminAuthController::class, "profile"]);
         Route::put("/update", [AdminAuthController::class, "update"]);
         Route::put("/changePassword", [AdminAuthController::class, "changePassword"]);

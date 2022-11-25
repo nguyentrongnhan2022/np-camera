@@ -29,7 +29,30 @@ class AdminAuthController extends Controller
         $this->middleware("auth:sanctum", ["except" => ["setup", "login", "retrieveToken"]]);
     }
 
+    // Thuc tap to nghiep
     public function dashboard(GetAdminBasicRequest $request)
+    {
+        $total_sales = Order::where("status", "=", 2)->get(); // Orders have status Completed considered as Sales
+
+        $sum_price = 0;
+        for ($i = 0; $i < sizeof($total_sales); $i++) {
+            $sum_price = $sum_price + $total_sales[$i]->total_price;
+        }
+        
+        $products = Product::get()->count(); // Total products has been created so far
+        $pending_orders = Order::where("status", "=", 0)->get()->count(); // Orders have status = 0 will be considered as Pending
+        $recent_orders = Order::orderBy('created_at', 'DESC')->get()->count();
+        
+        return response()->json([
+            "totalSales" => $sum_price,
+            "totalProducts" => $products,
+            "totalOrdersPending" => $pending_orders,
+            "recentOrders" => $recent_orders
+        ]);
+    }
+
+    // XD OOP
+    public function dashboardOop(GetAdminBasicRequest $request)
     {
         if (Order::get()->count() === 0) {
             $display_recent_orders = "There is no any Recent Orders";
