@@ -17,6 +17,7 @@ class OrderListResource extends JsonResource
         return [
             "id" => $this->id,
             "customerId" => $this->customer_id,
+            "idDelivery" => $this->id_delivery,
             // "description" => $this->description,
             // "voucher_id" => $this->voucher_id,
             "dateOrder" => date("d/m/Y H:i:s", strtotime($this->date_order)),

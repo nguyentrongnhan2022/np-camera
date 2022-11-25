@@ -135,7 +135,7 @@ class CheckoutController extends Controller
     public function redirect(GetCustomerBasicRequest $request)
     {
         // Get Order, Customer and Momo (table) info
-        $order = Order::where("id", '=', $request->id)->first();
+        $order = Order::where("id_delivery", '=', $request->orderId)->first();
         $customer = Customer::where("id", "=", $request->user()->id)->first();
         // $customer = Customer::where("id", "=", $order->customer_id)->first();
         $momo = Momo::where("order_id", "=", $order->id)->first();
@@ -147,7 +147,7 @@ class CheckoutController extends Controller
                 "errors" => "Oops! Something went wrong. This order has already been cancelled"
             ]);
         }
-        
+
         // If request message is "Successful." Then proceed to add the rest of products in cart to intermediate table "order_product"
         if ($request->message === "Successful." || $request->message === "Giao dịch thành công.") {
             $arr = [];
@@ -173,8 +173,8 @@ class CheckoutController extends Controller
             $momo->save();
 
             return $this->completeOrderProcess($arr, $order, $customer);
-        // if customer cancels order, change deleted_by value to 0 (order cancelled by customer) and change momo order status to -1
-        } else {            
+            // if customer cancels order, change deleted_by value to 0 (order cancelled by customer) and change momo order status to -1
+        } else {
             $order->deleted_by = 0;
             $order->save();
 
@@ -188,7 +188,7 @@ class CheckoutController extends Controller
 
             // Restore voucher usage
             if (empty($order->voucher_id)) {
-                return response()->json($json_return); 
+                return response()->json($json_return);
             }
 
             $voucher_query = Voucher::where("id", "=", $order->voucher_id);
@@ -351,7 +351,8 @@ class CheckoutController extends Controller
             $total_price = $total_price + (($value->price - $sale_price) * $data[$i]->quantity);
         }
 
-        $order = Order::where("customer_id", "=", $customer->id)->get()->count();
+        $orderCount = Order::where("customer_id", "=", $customer->id)->get()->count();
+
         $id_delivery = $this->generateDeliveryCode($request->paidType);
 
         $filtered = $request->except("voucherCode", "dateOrder", "nameReceiver", "phoneReceiver", "paidType");
