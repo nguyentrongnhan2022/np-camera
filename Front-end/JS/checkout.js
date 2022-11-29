@@ -302,7 +302,17 @@ async function loadOrder(paidType) {
 
     console.log(today)
     var todayArr = today.split(',')
-    var newToday = todayArr[0].trim() + ' ' + todayArr[1].trim()
+
+    // Checking if hour reach to 24, if so then immediately change to 0
+    var checkHour = todayArr[1].split(':')
+    var newToday = '';
+    if (checkHour[0].trim() === '24') {
+        newToday = todayArr[0].trim() + ' ' + '00' + ':' + checkHour[1].trim() + ':' + checkHour[2].trim()
+    }
+    else {
+        newToday = todayArr[0].trim() + ' ' + todayArr[1].trim()
+    }
+
     console.log(newToday)
 
     $.ajax({

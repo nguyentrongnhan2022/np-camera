@@ -278,7 +278,7 @@ Route::middleware('auth:sanctum')->group(function () {
         )->name("return.page");
         Route::post("/order/complete/payment", [CheckoutController::class, "redirect"]); // Use this when front-end can't get header redirect URL
 
-        Route::delete("/order/placeorder&cancel={id}", [OrderController::class, "destroy"]); // {id} is order_id; Cancel order
+        Route::delete("/order/{id}/cancel", [OrderController::class, "destroy"]); // {id} is order_id; Cancel order
         Route::put("/order/{id}/status", [OrderController::class, "updateStatus"]); // Customer only allow to confirm "Completed" state for order
 
         // Create-Review-Update-Delete (May be reconsider about soft delete instead) Feedback function
