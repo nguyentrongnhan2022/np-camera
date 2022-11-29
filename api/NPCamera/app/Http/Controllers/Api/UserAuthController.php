@@ -341,6 +341,14 @@ class UserAuthController extends Controller
     {
         $customer = Customer::where("id", "=", $request->user()->id)->first();
 
+        // Check old Password
+        if (!Hash::check($request->oldPassword, $customer->password)) {
+            return response()->json([
+                "success" => false,
+                "errors" => "Mật khẩu cũ không chính xác."
+            ]);
+        }
+
         if (Hash::check($request->password, $customer->password)) {
             return response()->json([
                 "success" => false,

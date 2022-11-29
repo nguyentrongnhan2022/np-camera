@@ -259,10 +259,26 @@ class AdminAuthController extends Controller
     {
         $admin = Admin::where("id", "=", $request->user()->id)->first();
 
+        // Check old Password
+        if (!Hash::check($request->oldPassword, $admin->password)) {
+            return response()->json([
+                "success" => false,
+                "errors" => "Mật khẩu cũ không chính xác."
+            ]);
+        }
+
         if (Hash::check($request->password, $admin->password)) {
             return response()->json([
                 "success" => false,
                 "errors" => "Can't replace password with the same old one"
+            ]);
+        }
+
+        // Check confirm password and password are the same or not
+        if ($request->password !== $request->confirmPassword) {
+            return response()->json([
+                "success" => false,
+                "errors" => "Mật khẩu không khớp."
             ]);
         }
 
