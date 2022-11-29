@@ -1,7 +1,9 @@
 <h1>BACKEND</h1> <br>
 <h3>** Đây là phiên bản Laravel 9 **</h3> <br>
 
-Để chạy localhost thì chỉ cần sử dụng lệnh <b>php artisan serv</b><br>
+Cần phải chạy 2 terminal/ 2 cmd tương ứng với từng nhiệm vụ sau:
+- Terminal 1: Chạy localhost bằng cách sử dụng lệnh <b>php artisan serv</b><br>
+- Terminal 2: Chạy Queue để gửi mail bằng cách sử dụng lệnh <b>php artisan queue:work</b><br>
 
 <b>Đối với Laravel thì cần thực hiện những việc sau trước khi chạy dự án:</b><br>
 <b>CHÚ Ý: Nếu đã cài đặt composer cho PHP 8.1.10 thì bỏ qua 2 bước đầu tiên</b><br>
@@ -22,4 +24,4 @@
       - Ở phần <b>Integrations</b> chọn <b>Laravel 7+</b><br>
       - Vào file <b>.env</b> và điền theo giống với những gì mà trang <b>mailtrap.io</b> cung cấp ở phần dưới <b>Integrations</b> vào trong file đó từ phần <b>MAIL_MAILER</b> đến <b>MAIL_ENCRYPTION</b><br>
       - Còn phần MAIL_FROM_ADDRESS thì điền bất cứ mail nào cũng được và không nhất thiết là mail đã tồn tại
-      - Cuối cùng là đổi tên phần <b>APP_NAME</b> thành tên theo ý muốn (Nếu muốn thêm tên có dấu cách thì nên thêm dấu "" vào để tránh gây báo lỗi)
+      - Cuối cùng là đổi tên phần <b>APP_NAME</b> thành tên theo ý muốn (Nếu muốn thêm tên có dấu cách thì nên thêm dấu "" vào để tránh gây báo lỗi)<br>
