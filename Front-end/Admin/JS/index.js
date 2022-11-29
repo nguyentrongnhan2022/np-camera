@@ -17,11 +17,8 @@ function loadDashboard() {
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-6">
-                                <h5 class="text-muted font-weight-normal mt-0 text-truncate" title="Campaign Sent">Sản phẩm</h5>
+                                <h3 class="text-muted font-weight-normal mt-0 text-truncate" title="Campaign Sent">Sản phẩm</h3>
                                 <h3 class="my-2 py-1">${data.totalProducts}</h3>
-                                <p class="mb-0 text-muted">
-                                    <span class="text-success mr-2"><i class="mdi mdi-arrow-up-bold"></i> 3.27%</span>
-                                </p>
                             </div>
                             <div class="col-6">
                                 <div class="text-right">
@@ -37,11 +34,8 @@ function loadDashboard() {
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-6">
-                                <h5 class="text-muted font-weight-normal mt-0 text-truncate" title="New Leads">Sale</h5>
+                                <h3 class="text-muted font-weight-normal mt-0 text-truncate" title="New Leads">Doanh thu</h3>
                                 <h3 class="my-2 py-1">${changeFormat(data.totalSales)} VNĐ</h3>
-                                <p class="mb-0 text-muted">
-                                    <span class="text-danger mr-2"><i class="mdi mdi-arrow-down-bold"></i> 5.38%</span>
-                                </p>
                             </div>
                             <div class="col-6">
                                 <div class="text-right">
@@ -57,11 +51,8 @@ function loadDashboard() {
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-6">
-                                <h5 class="text-muted font-weight-normal mt-0 text-truncate" title="Deals">Đơn hàng</h5>
+                                <h3 class="text-muted font-weight-normal mt-0 text-truncate" title="Deals">Đơn hàng</h3>
                                 <h3 class="my-2 py-1">${data.recentOrders}</h3>
-                                <p class="mb-0 text-muted">
-                                    <span class="text-success mr-2"><i class="mdi mdi-arrow-up-bold"></i> 11.87%</span>
-                                </p>
                             </div>
                             <div class="col-6">
                                 <div class="text-right">
@@ -78,11 +69,8 @@ function loadDashboard() {
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-6">
-                                <h5 class="text-muted font-weight-normal mt-0 text-truncate" title="Booked Revenue">Đơn hàng đang xử lí</h5>
+                                <h3 class="text-muted font-weight-normal mt-0 text-truncate" title="Booked Revenue">Đơn hàng đang xử lí</h3>
                                 <h3 class="my-2 py-1">${data.totalOrdersPending}</h3>
-                                <p class="mb-0 text-muted">
-                                    <span class="text-success mr-2"><i class="mdi mdi-arrow-up-bold"></i> 4.7%</span>
-                                </p>
                             </div>
                             <div class="col-6">
                                 <div class="text-right">
@@ -260,7 +248,7 @@ function loadOrder() {
                 </td>
                 <td class="text-center">
                     <button class="btn-primary ${(item.status == 2 && item.deletedBy == null) ? 'nutmautoi' : ''}" style="border:none;${item.deletedBy == null ? 'display:block;' : 'display:none;'} cursor:pointer;" id=${item.orderId + 'ok'} onclick="xacNhanCmm(${item.orderId},'ok')">Xác nhận</button>
-                    <button class="btn-primary ${(item.status == 0 && item.deletedBy != null) ? 'nutmautoi' : ''}" style="border:none; ${((item.deletedBy == null&&item.status!=2)||(item.deletedBy!=null&&item.status==0))? 'display:block;' : 'display:none;'} cursor:pointer;"id=${item.orderId + 'notok'} onclick="xacNhanCmm(${item.orderId},'notok')" ">Hủy</button>
+                    <button class="btn-primary ${(item.status == 0 && item.deletedBy != null) ? 'nutmautoi' : ''}" style="border:none; ${((item.deletedBy == null&&item.status!=2)||(item.deletedBy!=null&&item.status==0))? 'display:block;' : 'display:none;'} cursor:pointer;"id=${item.orderId + 'notok'} onclick="xacNhanCmm(${item.orderId},'notok')" ">Xử lý sau</button>
                 </td>
                 <td>
                     <a href="#" class="action-icon"> <i

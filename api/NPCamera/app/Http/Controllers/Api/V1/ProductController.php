@@ -329,6 +329,13 @@ class ProductController extends Controller
             $product->categories()->attach($category);
         }
 
+         // Check product status
+        if ($data['status'] === 0) { // if new status product is 0, then proceed to delete product out of "customer_product_cart"
+            DB::table("customer_product_cart")
+                ->where("product_id", "=", $product->id)
+                ->delete();
+        }
+
         return response()->json([
             'success' => true,
             "message" => "Updated product successfully"
@@ -376,6 +383,11 @@ class ProductController extends Controller
                     "errors" => "An unexpected error has occurred"
                 ]);
             }
+
+            // Delete product out of "customer_product_cart"
+            DB::table("customer_product_cart")
+                ->where("product_id", "=", $data->id)
+                ->delete();
 
             return response()->json(
                 [

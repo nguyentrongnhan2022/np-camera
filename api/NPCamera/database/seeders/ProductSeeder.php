@@ -23,6 +23,7 @@ class ProductSeeder extends Seeder
         }
 
         $path = $path_get . "\\" . "camera.json";
+        // $path = $path_get . "\\" . "camera_edited.json"; // edited camera.json file
 
         // Read the JSON file 
         $json = file_get_contents($path);

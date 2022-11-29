@@ -66,7 +66,7 @@ class CheckoutController extends Controller
         // ]);
         $redirectUrl = "http://127.0.0.1:5500/paySucces.html";
         // $redirectUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
-        $ipnUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
+        $ipnUrl = "http://127.0.0.1:5500/index.html";
         $extraData = "";
 
         if ((int) $requestType === 1) {
