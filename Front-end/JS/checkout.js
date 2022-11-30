@@ -286,7 +286,17 @@ function pad(number) {
     return number;
 }
 var today = todayDate.toLocaleString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: "h24" });
+
+// Place order function
 async function loadOrder(paidType) {
+    // If price is above 50 millions, check if paid type is momo then procceed to stop customer from make place order
+    if (parseInt(paidType) === 1 || parseInt(paidType) === 2) {
+        if (totalPrice_product > 50000000) {
+            alert("Momo chỉ cho phép thanh toán đơn hàng dưới 50,000,000 VNĐ. Quý khách vui lòng chọn hình thức thanh toán khác");
+            return;
+        }
+    }
+
     meData = JSON.stringify({
         voucherCode: "",
         dateOrder: today,
@@ -359,4 +369,5 @@ var form = document.getElementById("meForm");
 form.addEventListener("submit", my_func, true);
 var pay_nhanhang = document.getElementById('pay_nhanhang')
 var pay_nhanhang_momo_atm = document.getElementById('pay_momo_atm')
+var totalPrice_product = document.getElementById('totalPrice_product')
 var pay_nhanhang_momo_qr = document.getElementById('pay_momo_qr')
