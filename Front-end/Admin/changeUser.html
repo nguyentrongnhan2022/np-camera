@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Thông tin khách hàng</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:400,700"
+    />
+    <!-- https://fonts.google.com/specimen/Roboto -->
+    <link rel="stylesheet" href="css/fontawesome.min.css" />
+    <!-- https://fontawesome.com/ -->
+    <link rel="stylesheet" href="jquery-ui-datepicker/jquery-ui.min.css" type="text/css" />
+    <!-- http://api.jqueryui.com/datepicker/ -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <!-- https://getbootstrap.com/ -->
+    <link rel="stylesheet" href="css/templatemo-style.css">
+    <!--
+	Product Admin CSS Template
+	https://templatemo.com/tm-524-product-admin
+	-->
+  </head>
+
+  <body>
+
+    <div class="container tm-mt-big tm-mb-big">
+      <div class="row">
+        <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
+          <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+            <div class="row">
+              <div class="col-12">
+                <h2 class="tm-block-title d-inline-block text-uppercase">Thông tin khách hàng</h2>
+              </div>
+            </div>
+            <div class="row  user_view">
+              <div class="col-xl-12 col-lg-12 col-md-12">
+                <form action="" class="" id="meForm">
+                  <div class="form-group mb-3">
+                    <label for="name">Username</label>
+                    <input id="nameProductAdd"name="name"type="text"class="form-control validate"placeholder="Nhập username..."required/>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="name">Firstname</label>
+                    <input id="priceProductAdd"type="text"class="form-control validate"placeholder="Nhập username..."required/>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="name">Lastname</label>
+                    <input id="quantityProductAdd"type="text"class="form-control validate"placeholder="Nhập username..."required/>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="description">Email</label>
+                    <input id="descriptionProductAdd" type="email"class="form-control validate"placeholder="Nhập username..."required/>
+                  </div>
+                 
+                  </form>
+              </div>
+              <div class="col-12">
+                <button onclick="handleUpdateInfoUser();" type="submit" class="btn btn-primary btn-block text-uppercase">lưu thay đổi</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- https://jqueryui.com/download/ -->
+    <script src="JS/jquery-3.3.1.min.js"></script>
+    <!-- https://getbootstrap.com/ -->
+    <script src="JS/changeUser.js"></script>
+    <script src="JS/jquery-3.3.1.min.js" ></script>
+  </body>
+</html>

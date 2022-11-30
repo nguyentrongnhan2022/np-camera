@@ -53,6 +53,7 @@ function loadDashboard() {
                             <div class="col-6">
                                 <h3 class="text-muted font-weight-normal mt-0 text-truncate" title="Deals">Đơn hàng</h3>
                                 <h3 class="my-2 py-1">${data.recentOrders}</h3>
+                               
                             </div>
                             <div class="col-6">
                                 <div class="text-right">
@@ -71,6 +72,7 @@ function loadDashboard() {
                             <div class="col-6">
                                 <h3 class="text-muted font-weight-normal mt-0 text-truncate" title="Booked Revenue">Đơn hàng đang xử lí</h3>
                                 <h3 class="my-2 py-1">${data.totalOrdersPending}</h3>
+                                
                             </div>
                             <div class="col-6">
                                 <div class="text-right">
@@ -143,7 +145,7 @@ function loadProduct() {
         </td>
                         
         <td class="table-action">
-            <a href="#" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
+            <a href="#"onclick="loadProductreview(${item.id})"class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
             <a href="#"onclick="deleteProduct(${item.id});"  class="action-icon"><i class="mdi mdi-delete"></i></a>
         </td>
     </tr>`
@@ -195,8 +197,8 @@ function loadUser() {
                 </td>
 
                 <td style="width: 100px;">
-                    <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                    <a href="#" onclick="deleteProduct(${item.id});" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+                    <a href="#" onclick="loadUserView2(${item.id})" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
+                    <a href="#" onclick="deleteUser(${item.id});" class="action-icon"> <i class="mdi mdi-delete"></i></a>
                 </td>
             </tr>`
 
@@ -206,7 +208,9 @@ function loadUser() {
         }
         )
 }
-
+function loadUserView2(id) {
+    document.location.href = "http://127.0.0.1:5500/Admin/changeUser.html?id=" + id;
+  }
 //order admin
 function loadOrder() {
     const order_lists = document.querySelector('.order_list')
@@ -248,7 +252,7 @@ function loadOrder() {
                 </td>
                 <td class="text-center">
                     <button class="btn-primary ${(item.status == 2 && item.deletedBy == null) ? 'nutmautoi' : ''}" style="border:none;${item.deletedBy == null ? 'display:block;' : 'display:none;'} cursor:pointer;" id=${item.orderId + 'ok'} onclick="xacNhanCmm(${item.orderId},'ok')">Xác nhận</button>
-                    <button class="btn-primary ${(item.status == 0 && item.deletedBy != null) ? 'nutmautoi' : ''}" style="border:none; ${((item.deletedBy == null&&item.status!=2)||(item.deletedBy!=null&&item.status==0))? 'display:block;' : 'display:none;'} cursor:pointer;"id=${item.orderId + 'notok'} onclick="xacNhanCmm(${item.orderId},'notok')" ">Xử lý sau</button>
+                    <button class="btn-primary ${(item.status == 0 && item.deletedBy != null) ? 'nutmautoi' : ''}" style="border:none; ${((item.deletedBy == null&&item.status!=2)||(item.deletedBy!=null&&item.status==0))? 'display:block;' : 'display:none;'} cursor:pointer;"id=${item.orderId + 'notok'} onclick="xacNhanCmm(${item.orderId},'notok')" ">Xử lí sau</button>
                 </td>
                 <td>
                     <a href="#" class="action-icon"> <i

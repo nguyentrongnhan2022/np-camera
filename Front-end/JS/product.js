@@ -350,9 +350,7 @@ for (let pair of queryString.entries()) {
       </div>`
         //var price= parseInt(item.price);
         //allItems.push({"price":price,"html":kq});
-        console.log(product_views)
         product_views.innerHTML = kq
-        console.log(product_views)
         assignButtonAddRemove();
         product_views.style.height = 'fit-content'
       }

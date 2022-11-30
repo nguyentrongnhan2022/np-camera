@@ -302,17 +302,7 @@ async function loadOrder(paidType) {
 
     console.log(today)
     var todayArr = today.split(',')
-
-    // Checking if hour reach to 24, if so then immediately change to 0
-    var checkHour = todayArr[1].split(':')
-    var newToday = '';
-    if (checkHour[0].trim() === '24') {
-        newToday = todayArr[0].trim() + ' ' + '00' + ':' + checkHour[1].trim() + ':' + checkHour[2].trim()
-    }
-    else {
-        newToday = todayArr[0].trim() + ' ' + todayArr[1].trim()
-    }
-
+    var newToday = todayArr[0].trim() + ' ' + todayArr[1].trim()
     console.log(newToday)
 
     $.ajax({
@@ -335,6 +325,7 @@ async function loadOrder(paidType) {
         success: function (data) {
             if (data.success == "true" || data.success == true) {
                 if (parseInt(paidType) !== 0) {
+                    console.log( data.link.payUr)
                     window.location.href = data.link.payUrl;
                 }
                 alert('Thanh toán thành công');
@@ -352,49 +343,6 @@ async function loadOrder(paidType) {
     });
 }
 
-// async function loadMomo() {
-//     meData = JSON.stringify({
-//         voucherCode: "",
-//         dateOrder: today,
-//         address: address.value.trim(),
-//         nameReceiver: nameUser.value.trim(),
-//         phoneReceiver: "0372963918",
-//         paidType: 1
-//     });
-//     console.log(meData);
-//     $.ajax({
-//         url: "http://127.0.0.1:8000/api/user/order/placeorder",
-//         beforeSend: function (xhr) {
-//             /* Authorization header */
-//             xhr.setRequestHeader("Authorization", 'Bearer ' + tokenReal);
-//         },
-//         type: "Post",
-//         dataType: 'JSON',
-//         data: {
-//             "voucherCode": "",
-//             "dateOrder": today,
-//             "address": address.value.trim(),
-//             "nameReceiver": nameUser.value.trim(),
-//             "phoneReceiver": "0372963918",
-//             "paidType": 1
-//         },
-
-//         success: function (data) {
-//             if (data.success == "true" || data.success == true) {
-//                 alert('Thanh toán thành công');
-//                 document.location.href = "paySucces.html";
-//             }
-//             else {
-//                 alert('Vui lòng thử lại');
-//             }
-
-//         },
-//         error: function (msg) {
-//             alert(msg);
-//             console.log(msg);
-//         }
-//     });
-// }
 
 var my_func = function (event) {
     event.preventDefault();

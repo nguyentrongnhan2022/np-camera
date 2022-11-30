@@ -1,4 +1,4 @@
-function deleteProduct(id) {
+function deleteUser(id) {
     fetch('http://127.0.0.1:8000/api/v1/users/'+id+'/disable=1' , {
         method: 'DELETE',
         headers: new Headers({
